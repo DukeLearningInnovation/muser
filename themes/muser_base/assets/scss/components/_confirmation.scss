@@ -1,0 +1,13 @@
+.ui-dialog .ui-dialog-buttonpane {
+  border: 0;
+  background: transparent;
+  .button {
+    @include button;
+    margin: $site-padding / 2;
+  }
+  .ui-dialog-buttonset {
+    float: none;
+    width: 100%;
+    text-align: center;
+  }
+}

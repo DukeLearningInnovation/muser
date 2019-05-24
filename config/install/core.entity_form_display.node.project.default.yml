@@ -1,0 +1,243 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.project.body
+    - field.field.node.project.field_categories
+    - field.field.node.project.field_compensation
+    - field.field.node.project.field_contact_email
+    - field.field.node.project.field_contact_person
+    - field.field.node.project.field_contact_position
+    - field.field.node.project.field_hours_per_week
+    - field.field.node.project.field_lab_name
+    - field.field.node.project.field_lab_website
+    - field.field.node.project.field_num_students
+    - field.field.node.project.field_pi_approved
+    - field.field.node.project.field_pi_email
+    - field.field.node.project.field_pi_name
+    - field.field.node.project.field_representative_pub
+    - field.field.node.project.field_student_qualifications
+    - field.field.node.project.field_student_ranks_applicable
+    - field.field.node.project.field_techniques_learned
+    - field.field.node.project.field_why_lab
+    - node.type.project
+  module:
+    - field_group
+    - file
+    - link
+    - maxlength
+    - path
+    - text
+third_party_settings:
+  field_group:
+    group_logistics_information:
+      children:
+        - field_num_students
+        - field_student_ranks_applicable
+        - field_student_qualifications
+        - field_techniques_learned
+        - field_hours_per_week
+        - field_compensation
+      parent_name: ''
+      weight: 7
+      format_type: details
+      format_settings:
+        label: 'Logistics Information'
+        open: true
+        id: ''
+        classes: ''
+        required_fields: false
+      label: 'Logistics Information'
+    group_contact_information:
+      children:
+        - field_pi_name
+        - field_pi_email
+      parent_name: ''
+      weight: 8
+      format_type: details
+      format_settings:
+        label: 'Contact Information'
+        open: true
+        id: ''
+        classes: ''
+        required_fields: false
+      label: 'Contact Information'
+id: node.project.default
+targetEntityType: node
+bundle: project
+mode: default
+content:
+  body:
+    type: text_textarea_with_summary
+    weight: 1
+    settings:
+      rows: 9
+      placeholder: ''
+      summary_rows: 3
+    third_party_settings:
+      maxlength:
+        maxlength_js: null
+        maxlength_js_label: 'Description text limited to @limit characters, remaining: <strong>@remaining</strong>'
+        maxlength_js_summary: 200
+        maxlength_js_label_summary: 'Summary text limited to @limit characters, remaining: <strong>@remaining</strong>'
+        maxlength_js_enforce: false
+        maxlength_js_truncate_html: false
+    region: content
+  created:
+    type: datetime_timestamp
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_categories:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_compensation:
+    weight: 16
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_hours_per_week:
+    weight: 15
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_lab_name:
+    weight: 3
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_lab_website:
+    weight: 4
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+    region: content
+  field_num_students:
+    weight: 11
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_pi_approved:
+    weight: 9
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_pi_email:
+    weight: 12
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: email_default
+    region: content
+  field_pi_name:
+    weight: 11
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_representative_pub:
+    weight: 6
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+    region: content
+  field_student_qualifications:
+    weight: 13
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_student_ranks_applicable:
+    weight: 12
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_techniques_learned:
+    weight: 14
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_why_lab:
+    weight: 5
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  path:
+    type: path
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 14
+    region: content
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings:
+      maxlength:
+        maxlength_js: 70
+        maxlength_js_label: 'Title limited to @limit characters, remaining: <strong>@remaining</strong>'
+  uid:
+    type: entity_reference_autocomplete
+    weight: 10
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    region: content
+    third_party_settings: {  }
+  url_redirects:
+    weight: 13
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_contact_email: true
+  field_contact_person: true
+  field_contact_position: true
+  promote: true
+  sticky: true

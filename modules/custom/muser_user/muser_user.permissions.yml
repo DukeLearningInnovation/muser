@@ -1,0 +1,4 @@
+administer user applications:
+  title: 'Administer User Applications'
+  description: 'Allows administers view and manage mentors applications.'
+  restrict access: TRUE

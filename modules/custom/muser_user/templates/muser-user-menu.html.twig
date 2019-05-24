@@ -1,0 +1,19 @@
+<nav role="navigation" aria-labelledby="{{ nav.label_id }}" id="{{ nav.id }}">
+    <h2 class="visually-hidden" id="{{ nav.label_id }}">{{ nav.label }}</h2>
+    <ul class="menu">
+        {% for menu_item in menu_items %}
+        <li class="menu-item {{ menu_item.classes }}">
+            {{ menu_item.link }}
+            {% if menu_item.children %}
+            <ul class="menu">
+                {% for link in menu_item.children %}
+                <li class="menu-item">
+                    {{ link }}
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</nav>

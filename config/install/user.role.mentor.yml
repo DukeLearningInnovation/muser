@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: mentor
+label: Mentor
+weight: 4
+is_admin: null
+permissions:
+  - 'create project content'
+  - 'delete own project content'
+  - 'edit own project content'

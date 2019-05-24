@@ -1,0 +1,12 @@
+.page-type--cards {
+  .region-content {
+    .block:not(.block-system-main-block) {
+      @include card;
+      margin: $site-padding 0 $site-padding / 2;
+      padding: $site-padding;
+    }
+    .block-system-main-block:first-child {
+      margin-top: $site-padding / 2;
+    }
+  }
+}

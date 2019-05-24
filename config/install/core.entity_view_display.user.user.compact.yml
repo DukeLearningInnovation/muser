@@ -1,0 +1,48 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.compact
+    - field.field.user.user.field_about_me
+    - field.field.user.user.field_do_not_send_emails
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_star
+    - field.field.user.user.field_how_hear_about
+    - field.field.user.user.field_lab_affiliation
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_major
+    - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_netid
+    - field.field.user.user.field_programs
+    - field.field.user.user.field_resume
+    - field.field.user.user.field_transcript
+    - field.field.user.user.field_user_type
+    - field.field.user.user.field_yr_in_college
+  module:
+    - user
+id: user.user.compact
+targetEntityType: user
+bundle: user
+mode: compact
+content: {  }
+hidden:
+  contact_email: true
+  field_about_me: true
+  field_do_not_send_emails: true
+  field_first_name: true
+  field_has_star: true
+  field_how_hear_about: true
+  field_lab_affiliation: true
+  field_last_name: true
+  field_major: true
+  field_mentor_yesno: true
+  field_netid: true
+  field_programs: true
+  field_resume: true
+  field_transcript: true
+  field_user_type: true
+  field_yr_in_college: true
+  langcode: true
+  masquerade: true
+  member_for: true
+  realname: true

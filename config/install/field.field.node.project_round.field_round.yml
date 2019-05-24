@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_round
+    - node.type.project_round
+    - node.type.round
+id: node.project_round.field_round
+field_name: field_round
+entity_type: node
+bundle: project_round
+label: Round
+description: 'The round for this project.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      round: round
+    sort:
+      field: status
+      direction: DESC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

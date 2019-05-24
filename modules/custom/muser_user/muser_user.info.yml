@@ -1,0 +1,7 @@
+name: Muser User
+type: module
+description: Muser User module.
+core: 8.x
+package: Muser
+dependencies:
+  - muser_system

@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_compensation
+    - node.type.project
+    - taxonomy.vocabulary.compensation
+id: node.project.field_compensation
+field_name: field_compensation
+entity_type: node
+bundle: project
+label: Compensation
+description: 'Please indicate how students will be compensated for their participation.<br/>Be aware a project cannot be both paid and taken for independent study credit, and projects taken for credit must be a minimum of 8-10 hours/week.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      compensation: compensation
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

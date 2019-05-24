@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.flagging.field_status
+    - flag.flag.favorites
+  module:
+    - options
+id: flagging.favorites.field_status
+field_name: field_status
+entity_type: flagging
+bundle: favorites
+label: Status
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: pending
+default_value_callback: ''
+settings: {  }
+field_type: list_string

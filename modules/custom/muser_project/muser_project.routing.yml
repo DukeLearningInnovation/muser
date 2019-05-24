@@ -1,0 +1,29 @@
+muser_project.action_activate_project:
+  path: '/round/activate/{entity_id}'
+  defaults:
+    _controller: '\Drupal\muser_project\Controller\ActionLinkController::activate'
+  requirements:
+    _muser_project_activate_access: 'TRUE'
+    _format: 'html'
+    _csrf_token: 'TRUE'
+
+muser_project.action_inactivate_project:
+  path: '/round/inactivate/{entity_id}'
+  defaults:
+    _controller: '\Drupal\muser_project\Controller\ActionLinkController::inactivate'
+  requirements:
+    _muser_project_activate_access: 'TRUE'
+    _format: 'html'
+    _csrf_token: 'TRUE'
+
+muser_project.update_flagging_status:
+  path: '/muser/application/update-status/{flagging}'
+  defaults:
+    _form: '\Drupal\muser_project\Form\UpdateFlaggingStatus'
+    _title: 'Change status'
+  requirements:
+    _update_flagging_status_access_check: 'TRUE'
+  options:
+    parameters:
+      flagging:
+        type: entity:flagging

@@ -1,0 +1,75 @@
+
+
+.block-muser-my-projects-header-block {
+  .button--primary,
+  .button--standard,
+  .button--secondary,
+  .button--outline {
+    margin-top: $site-padding;
+  }
+}
+
+.node--type-project.node--view-mode-teaser {
+  @include card;
+}
+
+.node--type-project.node--view-mode-teaser {
+  &, a {
+    color: $text-color;
+    text-decoration: none;
+  }
+}
+
+.no-vert-flex-projects {
+  .node--type-project.node--view-mode-teaser {
+    height: auto;
+    .node__content,
+    .project__internal-wrapper {
+      display: block;
+      height: auto;
+    }
+  }
+}
+
+.node--type-project.node--view-mode-teaser {
+  height: 100%;
+  .project__internal-wrapper {
+    height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+  }
+  .node__content {
+    display: flex;
+    flex-flow: column nowrap;
+    height: 100%;
+  }
+  .details-bar {
+    margin-top: auto;
+  }
+  h3 {
+    font-weight: 600;
+  }
+}
+
+.ajax-progress {
+  //display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //filter: blur(3px);
+  .throbber {
+    //transform: scale(3);
+    @include spin-animation;
+    height: 50px;
+    width: 50px;
+    background-image: url("/profiles/muser/themes/muser_base/icons/spinner.svg");
+  }
+}

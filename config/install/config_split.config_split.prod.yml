@@ -1,0 +1,16 @@
+langcode: en
+status: false
+dependencies: {  }
+id: prod
+label: Prod
+description: 'Production server configuration'
+folder: ../config/prod
+module:
+  google_analytics: 0
+  basicshib: 0
+theme: {  }
+blacklist: {  }
+graylist: {  }
+graylist_dependents: true
+graylist_skip_equal: true
+weight: 0

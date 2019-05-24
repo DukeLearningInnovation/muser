@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag
+id: flag_action.favorites_unflag
+label: 'Unfavorite this item'
+type: node
+plugin: 'flag_action:favorites_unflag'
+configuration:
+  flag_id: favorites
+  flag_action: unflag

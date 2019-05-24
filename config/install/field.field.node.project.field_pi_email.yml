@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pi_email
+    - node.type.project
+id: node.project.field_pi_email
+field_name: field_pi_email
+entity_type: node
+bundle: project
+label: 'Email address of project director or principal investigator'
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: email

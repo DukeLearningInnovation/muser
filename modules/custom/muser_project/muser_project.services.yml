@@ -1,0 +1,21 @@
+services:
+  muser_project.access_checker:
+    class: Drupal\muser_project\Access\ProjectActivateAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _muser_project_activate_access }
+  muser_project.flagging_access_check:
+    class: \Drupal\muser_project\Access\UpdateFlaggingStatusAccess
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _update_flagging_status_access_check }
+  muser_project.bundle_access_check:
+    class: \Drupal\muser_project\Access\BundleAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _muser_project_bundle_access_check }
+  muser_project.current_user_access_check:
+    class: \Drupal\muser_project\Access\CurrentUserAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _muser_project_user_access_check }

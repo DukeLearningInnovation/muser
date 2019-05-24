@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_mentor_yesno
+  module:
+    - user
+id: user.user.field_mentor_yesno
+field_name: field_mentor_yesno
+entity_type: user
+bundle: user
+label: 'Are you a mentor?'
+description: 'Please check this box in order to receive further instructions for mentors.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

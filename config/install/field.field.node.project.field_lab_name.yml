@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_lab_name
+    - node.type.project
+id: node.project.field_lab_name
+field_name: field_lab_name
+entity_type: node
+bundle: project
+label: 'Name of research group, project, or lab'
+description: 'Where the work will be done (e.g. The Selden Lab).'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

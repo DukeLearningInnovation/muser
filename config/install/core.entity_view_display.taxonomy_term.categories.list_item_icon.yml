@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.taxonomy_term.list_item_icon
+    - field.field.taxonomy_term.categories.field_icon
+    - taxonomy.vocabulary.categories
+  module:
+    - fontawesome_iconpicker
+id: taxonomy_term.categories.list_item_icon
+targetEntityType: taxonomy_term
+bundle: categories
+mode: list_item_icon
+content:
+  field_icon:
+    weight: 0
+    label: hidden
+    settings:
+      size: fa-1x
+    third_party_settings: {  }
+    type: fontawesome_iconpicker_formatter_type
+    region: content
+hidden:
+  description: true
+  langcode: true

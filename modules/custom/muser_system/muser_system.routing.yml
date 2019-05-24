@@ -1,0 +1,69 @@
+muser_system.config:
+  path: '/admin/config/system/muser'
+  defaults:
+    _form: '\Drupal\muser_system\Form\MuserConfig'
+    _title: 'Muser settings'
+  requirements:
+    _permission: 'manage muser settings'
+
+muser_system.email_settings:
+  path: '/admin/config/system/muser/email'
+  defaults:
+    _form: '\Drupal\muser_system\Form\MuserEmailSettings'
+    _title: 'Muser email settings'
+  requirements:
+    _permission: 'manage muser settings'
+
+muser_system.essay_guidelines:
+  path: '/muser/essay-guidelines'
+  defaults:
+    _title: 'Essay guidelines'
+    _controller: '\Drupal\muser_system\Controller\BasicController::essayGuidelines'
+  requirements:
+    _permission: 'access content'
+
+muser_system.send_emails:
+  path: '/muser/send-emails/{key}'
+  defaults:
+    _controller: '\Drupal\muser_system\Controller\ScheduledTasksController::sendEmails'
+  options:
+    no_cache: TRUE
+  requirements:
+    _access_system_cron: 'TRUE'
+
+muser_system.run_send_emails:
+  path: '/muser/run-send-emails'
+  defaults:
+    _controller: '\Drupal\muser_system\Controller\ScheduledTasksController::sendEmailsManually'
+  options:
+    no_cache: TRUE
+  requirements:
+    _permission: 'manage muser settings'
+    _csrf_token: 'TRUE'
+
+muser_system.set_current_round:
+  path: '/muser/set-current-round/{key}'
+  defaults:
+    _controller: '\Drupal\muser_system\Controller\ScheduledTasksController::setCurrentRound'
+  options:
+    no_cache: TRUE
+  requirements:
+    _access_system_cron: 'TRUE'
+
+muser_system.run_set_current_round:
+  path: '/muser/run-set-current-round'
+  defaults:
+    _controller: '\Drupal\muser_system\Controller\ScheduledTasksController::setCurrentRoundManually'
+  options:
+    no_cache: TRUE
+  requirements:
+    _permission: 'manage muser settings'
+    _csrf_token: 'TRUE'
+
+muser_system.item_with_tokens:
+  path: '/muser/config-item-with-tokens/{config_key}'
+  defaults:
+    _title: 'Item display'
+    _controller: '\Drupal\muser_system\Controller\BasicController::configItemWithTokens'
+  requirements:
+    _permission: 'manage muser settings'

@@ -1,0 +1,18 @@
+.ui-widget.ui-widget-content {
+  .ui-dialog-content {
+    .details-bar {
+      position: sticky;
+      bottom: -1 * $site-padding;
+      left: 0;
+      right: 0;
+      width: 100%;
+      background-color: white;
+      padding: $site-padding;
+      box-sizing: content-box;
+      margin: $site-padding -1 * $site-padding -1 * $site-padding;
+    }
+  }
+  .node--type-project {
+
+  }
+}

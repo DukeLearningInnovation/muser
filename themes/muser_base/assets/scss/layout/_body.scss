@@ -1,0 +1,130 @@
+.page__main {
+  background-color: $background-color;
+}
+
+
+.page-type--sheet {
+  .main__hero {
+    padding-bottom: $sheet-overlap;
+  }
+}
+
+.main__hero {
+  min-height: 250px;
+  background-color: $primary;
+  display: flex;
+  flex-flow: column nowrap;
+  @at-root .page--restricted & {
+    background-color: $secondary;
+  }
+}
+
+//.page-type--sheet {
+//  .main__hero {
+//    min-height: 300px;
+//  }
+//}
+
+.hero__options {
+  max-width: $content-width-with-paddings;
+  padding: 0 $site-padding;
+  width: 100%;
+  margin: auto auto 0;
+  @include breakpoint(mobile) {
+    padding: 0;
+  }
+}
+
+.main__content {
+  max-width: $content-width-with-paddings;
+  padding: 0 $site-padding 80px;
+  margin: 0 auto;
+  @include breakpoint(mobile) {
+    padding-left: $site-padding / 2;
+    padding-right: $site-padding / 2;
+  }
+}
+
+.page-title {
+  margin-top: 0;
+}
+
+.page-type--cards {
+  .content--sheet {
+    background-color: transparent;
+    margin: 0;
+    box-shadow: none;
+  }
+}
+
+.page-type--sheet {
+  .content--sheet {
+    width: 100%;
+    min-height: 200px;
+    margin: $sheet-overlap * -1 0 0;
+    background: white;
+    box-shadow: $box-shadow;
+    border-radius: 3px;
+    padding: $site-padding;
+    @include breakpoint(mobile) {
+      padding: $site-padding $site-padding / 2;
+    }
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    transform: translateY($sheet-overlap);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.content--sheet {
+  //@include fade-in;
+  animation: fade-in 2s, slide-up 1s;
+  animation-iteration-count: 1;
+}
+//
+//.content--sheet {
+//  @include nt($prop: opacity);
+//  position: relative;
+//  opacity: 1;
+//  &.content--sheet--disable {
+//    opacity: 0;
+//    animation: none;
+//    pointer-events: none;
+//  //  &:after {
+//  //    display: block;
+//  //    position: absolute;
+//  //    top: 0;
+//  //    left: 0;
+//  //    height: 100%;
+//  //    width: 100%;
+//  //    background: rgba(255,255,255,0.5);
+//  //    content: '';
+//  //    z-index: 20;
+//  //    border-radius: $border-radius--small;
+//  //    //pointer-events: none;
+//  //  }
+//  }
+//}
+//
+.main__content {
+  @include nt($prop: opacity);
+  position: relative;
+  opacity: 1;
+  &.main__content--disable {
+    opacity: 0;
+    animation: none;
+    pointer-events: none;
+  }
+}
+
+.region-content-secondary {
+  margin-top: $site-padding;
+  h2 {
+  }
+  //margin-top
+}

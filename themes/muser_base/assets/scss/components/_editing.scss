@@ -1,0 +1,16 @@
+a.tabledrag-handle .handle {
+  height: 24px;
+  width: 22px;
+  margin-top: 0;
+}
+
+.delta-order {
+  padding-left: $site-padding;
+  .chosen-container {
+    min-width: 50px;
+  }
+}
+
+.link-edit-summary {
+  color: $secondary;
+}

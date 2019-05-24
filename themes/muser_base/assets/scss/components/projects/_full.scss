@@ -1,0 +1,64 @@
+.node--type-project.node--view-mode-full {
+  .field--name-body {
+    p:first-child {
+      margin-top: 0;
+    }
+  }
+  &.node--unpublished {
+    background-color: $background-color;
+    margin: $site-padding * -1;
+    padding: $site-padding;
+    border-radius: $border-radius--small;
+    opacity: 0.7;
+  }
+}
+
+
+
+.node--type-project.node--view-mode-full {
+  .project__info-area .fieldset-wrapper > .field,
+  .project__main-container > .field:not(:first-child) {
+    margin: $site-padding / 2 0;
+  }
+  .node__content {
+
+  }
+  .field__label {
+    font-weight: 600;
+  }
+}
+
+.project__info-area {
+  display: flex;
+  flex-flow: row wrap;
+  margin: 0 $site-padding * -1;
+  .fieldset-legend {
+    font-weight: bold;
+    @extend h3;
+  }
+  fieldset {
+    flex: 1 1 300px;
+    border: 0;
+    padding: 0 $site-padding;
+    margin: 0;
+  }
+}
+
+.project__main-container {
+  margin: 0 0 $site-padding;
+  .field--name-field-hours-per-week,
+  .field--name-field-student-ranks-applicable {
+    .field__item {
+      display: inline;
+      &:not(:last-child):after {
+        content: ',';
+      }
+    }
+  }
+
+  .field--name-field-categories {
+    .icon {
+      align-self: center;
+    }
+  }
+}

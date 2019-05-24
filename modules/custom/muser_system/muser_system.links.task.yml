@@ -1,0 +1,11 @@
+muser_system.config:
+  title: 'Settings'
+  route_name: muser_system.config
+  base_route: muser_system.config
+  weight: 0
+
+muser_system.email_settings:
+  route_name: muser_system.email_settings
+  base_route: muser_system.config
+  title: 'Email settings'
+  weight: 10

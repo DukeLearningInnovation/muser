@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_representative_pub
+    - node.type.project
+  module:
+    - file
+id: node.project.field_representative_pub
+field_name: field_representative_pub
+entity_type: node
+bundle: project
+label: 'Representative publication'
+description: 'Please upload a research example (e.g., publication, image) that represents the focus of your research group or lab.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'publications/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf'
+  max_filesize: '20 MB'
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

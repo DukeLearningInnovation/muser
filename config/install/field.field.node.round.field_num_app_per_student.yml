@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_num_app_per_student
+    - node.type.round
+id: node.round.field_num_app_per_student
+field_name: field_num_app_per_student
+entity_type: node
+bundle: round
+label: 'Number of applications per student allowed'
+description: 'Set this to 0 for no limit.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

@@ -1,0 +1,4 @@
+administer project rounds:
+  title: 'Administer projects in rounds'
+  description: 'A permission that allows administers to override what projects are in a round outside of project posting periods.'
+  restrict access: TRUE

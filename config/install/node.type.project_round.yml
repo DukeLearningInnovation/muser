@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'Project Round'
+type: project_round
+description: 'This is the entity that is flagged for a project in a given round, it is used to maintain an association to both a round and a project.'
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: false

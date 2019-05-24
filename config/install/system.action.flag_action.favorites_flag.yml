@@ -1,0 +1,12 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag
+id: flag_action.favorites_flag
+label: 'Favorite this item'
+type: node
+plugin: 'flag_action:favorites_flag'
+configuration:
+  flag_id: favorites
+  flag_action: flag

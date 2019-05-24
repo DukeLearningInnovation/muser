@@ -1,0 +1,164 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.application
+    - field.field.node.project.body
+    - field.field.node.project.field_categories
+    - field.field.node.project.field_compensation
+    - field.field.node.project.field_contact_email
+    - field.field.node.project.field_contact_person
+    - field.field.node.project.field_contact_position
+    - field.field.node.project.field_hours_per_week
+    - field.field.node.project.field_lab_name
+    - field.field.node.project.field_lab_website
+    - field.field.node.project.field_num_students
+    - field.field.node.project.field_pi_approved
+    - field.field.node.project.field_pi_email
+    - field.field.node.project.field_pi_name
+    - field.field.node.project.field_representative_pub
+    - field.field.node.project.field_student_qualifications
+    - field.field.node.project.field_student_ranks_applicable
+    - field.field.node.project.field_techniques_learned
+    - field.field.node.project.field_why_lab
+    - node.type.project
+  module:
+    - field_group
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_details_bar:
+      children:
+        - project_availability
+        - hours_per_week
+        - categories
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: details-bar
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Details bar'
+    group_main_content:
+      children:
+        - group_application_body
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        label: 'Main content'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: application__main
+      label: 'Main content'
+    group_application_main_height:
+      children:
+        - body
+        - application_form
+      parent_name: group_application_body
+      weight: 21
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: application__body-height
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Application body height'
+    group_application_body:
+      children:
+        - group_application_main_height
+      parent_name: group_main_content
+      weight: 20
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: application__body
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Application body'
+id: node.project.application
+targetEntityType: node
+bundle: project
+mode: application
+content:
+  application_form:
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  application_status_and_submitted:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 21
+    settings:
+      trim_length: 200
+    third_party_settings: {  }
+    region: content
+  categories:
+    weight: 23
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  favorite_link:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  hours_per_week:
+    weight: 22
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  project_availability:
+    weight: 21
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  activate_link: true
+  field_categories: true
+  field_compensation: true
+  field_contact_email: true
+  field_contact_person: true
+  field_contact_position: true
+  field_hours_per_week: true
+  field_lab_name: true
+  field_lab_website: true
+  field_num_students: true
+  field_pi_approved: true
+  field_pi_email: true
+  field_pi_name: true
+  field_representative_pub: true
+  field_student_qualifications: true
+  field_student_ranks_applicable: true
+  field_techniques_learned: true
+  field_why_lab: true
+  langcode: true
+  links: true
+  mentor_info: true
+  project_info: true

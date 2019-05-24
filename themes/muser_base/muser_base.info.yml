@@ -1,0 +1,38 @@
+name: Muser Base theme
+type: theme
+description: A base theme for Muser sites.
+core: 8.x
+
+base theme: classy
+
+ckeditor_stylesheets:
+  - css/styles.css
+  - css/ckeditor.css
+  - //fonts.googleapis.com/css?family=Open+Sans:400,400i,500,600,700,700i
+
+accent_color_light_change_factor: 0.2
+accent_color_text_change_factor: 0.2
+
+libraries:
+  - muser_base/global-styling
+  - muser_base/fonts
+  - muser_base/global-js
+  - muser_base/fontawesome
+  - core/jquery
+  - core/jquery.once
+  - core/drupal
+
+libraries-extend:
+  tour/tour-styling:
+    - muser_base/tour-styling
+
+regions:
+  header_branding: Header Branding
+  header_menu: Header Menu
+  header_menu_messages: Header Menu Messages
+  hero: Hero
+  hero_options: Hero Options
+  actions: Actions
+  content: Content
+  content_secondary: Secondary Content
+  footer: Footer

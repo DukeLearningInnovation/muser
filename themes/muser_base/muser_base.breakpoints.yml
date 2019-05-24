@@ -1,0 +1,20 @@
+muser_base.small:
+  label: small
+  mediaQuery: '(min-width: 0px)'
+  weight: 0
+  multipliers:
+    - 1x
+
+muser_base.medium:
+  label: medium
+  mediaQuery: '(min-width: 601px)'
+  weight: 1
+  multipliers:
+    - 1x
+
+muser_base.large:
+  label: large
+  mediaQuery: '(min-width: 992px)'
+  weight: 2
+  multipliers:
+    - 1x

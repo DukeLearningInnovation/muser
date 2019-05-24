@@ -1,0 +1,242 @@
+.multiple-terms {
+  position: relative;
+}
+
+
+
+.node--type-project {
+  @include fade-in;
+}
+
+.project__internal-wrapper {
+  position: relative;
+  margin-bottom: -1px;
+}
+
+.project__favorite--invisible {
+  display: none;
+}
+
+.favorite-button__abs-wrapper + .node--type-project {
+  .project__favorite--invisible {
+    display: inline-block;
+  }
+}
+
+.project__favorite--invisible {
+  opacity: 0;
+  pointer-events: none;
+  float: right;
+  top: 0;
+  right: 0;
+  padding: $site-padding / 2;
+  margin: $site-padding / -2;
+  margin-left: 26px;
+}
+
+.favorite-button__abs-wrapper .project__favorite--button {
+  position: absolute;
+  top: $site-padding;
+  right: $site-padding;
+  padding: $site-padding / 2;
+}
+
+.flag-favorites {
+  .ajax-progress {
+    position: absolute;
+    //display: none;
+
+  }
+}
+
+.project__favorite-float-placeholder {
+  pointer-events: none;
+}
+
+
+.project__favorite {
+  z-index: 5;
+  display: flex;
+  align-items: flex-start;
+  font-size: $font-size - 3;
+  color: $text-color;
+  text-decoration: none;
+  @at-root a.project__favorite {
+    align-items: center;
+  }
+  .favorite__icon {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    font-size: $font-size + 2;
+    margin-right: 4px;
+    position: relative;
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  .favorite__text {
+    @include breakpoint(halfmobile) {
+      display: none;
+      @at-root .project__favorite--invisible {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  .active-icon,
+  .inactive-icon {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 24px;
+  }
+  svg {
+    //transform: translateY(2px);
+  }
+  @at-root .action-flag {
+    .active-icon {
+      display: none;
+    }
+  }
+  @at-root .action-unflag {
+    .inactive-icon {
+      display: none;
+    }
+  }
+}
+
+.multiple-terms {
+  .tooltip {
+    pointer-events: none;
+    opacity: 0;
+    display: none;
+    @include nt($prop: opacity);
+  }
+  &.tooltip--active .tooltip {
+    display: block;
+    pointer-events: auto;
+    opacity: 1;
+  }
+}
+
+.details-bar {
+  flex-flow: row wrap;
+  display: flex;
+  justify-content: space-between;
+  margin: -4px;
+  text-align: center;
+  > * {
+    max-width: 45%;
+    @include breakpoint(mobile) {
+      max-width: none;
+    }
+  }
+  .project-detail__value {
+    text-align: left;
+    //@at-root .node--type-project.node--view-mode-teaser .details-bar .project {
+    //  margin-top: 4px;
+    //  margin-bottom: 4px;
+    //}
+  }
+  .sr-only--in-bar {
+    @include sr-only;
+  }
+
+  .flag,
+  .project-detail {
+    font-size: $font-size - 3;
+    line-height: $font-size + 2;
+    padding: 4px;
+    //@at-root .node--type-project:not(.node--view-mode-full) & {
+      @include breakpoint(halfmobile) {
+        flex: 1 1 100px;
+      }
+    //}
+  }
+  .flag {
+    a {
+      margin: $site-padding / -2;
+      padding: $site-padding / 2;
+
+    }
+  }
+  .project-detail {
+    display: flex;
+  }
+}
+
+.field--name-field-categories .field__item {
+  display: flex;
+}
+
+.field--name-field-categories .svg-inline--fa,
+.project-detail__icon {
+  font-size: $font-size + 2;
+  line-height: 1;
+  padding-right: $site-padding / 4;
+}
+
+.vocabulary-categories {
+  display: flex;
+  .icon {
+    padding-right: $site-padding / 4;
+  }
+}
+
+.node--type-project.node--view-mode-full {
+  line-height: $line-height;
+  p:first-child {
+    margin-top: 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+  .field--name-body {
+    margin-bottom: 1em;
+  }
+}
+//.project__info-area {
+//
+//}
+//.field--name-field-techniques-learned {
+//
+//}
+
+.view-more {
+  font-weight: 600;
+}
+
+.node--type-project {
+  .view-more {
+    display: inline-block;
+    margin-right: 100%;
+    white-space: nowrap;
+  }
+}
+
+.essay-guidelines {
+  font-weight: 600;
+  text-align: center;
+  display: inherit;
+}
+
+.essay-guidelines__text {
+  max-width: 600px;
+}
+
+.mentor-status-icon--star {
+  color: $color-gold;
+}
+
+.extra-term {
+  display: block;
+  .field--name-field-hours-per-week & {
+    display: inline-block;
+    &:not(:last-child):after {
+      content: ',';
+      margin-right: 3px;
+    }
+  }
+}

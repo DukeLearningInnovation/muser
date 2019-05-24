@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_contact_position
+    - node.type.project
+id: node.project.field_contact_position
+field_name: field_contact_position
+entity_type: node
+bundle: project
+label: 'Contact position'
+description: 'Examples: lab manager, graduate student, principal investigator, etc.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

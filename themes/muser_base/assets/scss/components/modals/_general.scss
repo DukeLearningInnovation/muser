@@ -1,0 +1,42 @@
+.ui-widget.ui-widget-content {
+  border: 1px solid $secondary;
+  border-radius: $border-radius--small;
+  overflow: hidden;
+  .ui-dialog-title {
+    @extend h1;
+    margin-top: 0;
+    margin-bottom: $site-padding / 2;
+    white-space: unset;
+  }
+  .ui-dialog-titlebar {
+    background-color: transparent;
+    border: 0;
+    padding: $site-padding $site-padding 0;
+  }
+  .ui-icon-closethick {
+    transform: scale(2); // todo use fontawesome for closing icon.
+    background-image: url("/profiles/muser/themes/muser_base/icons/times.svg");
+    transform-origin: top right;
+    opacity: 0.6;
+    @include nt($prop: opacity);
+    &:hover {
+      opacity: 0.8;
+    }
+    color: $text-color;
+    background-position: 0 0;
+    margin: -10px -5px 0 0;
+  }
+  .ui-dialog-titlebar-close {
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: 0;
+  }
+  .ui-dialog-content {
+    padding: 0 $site-padding $site-padding; // details bar padding
+    @include breakpoint(mobile) {
+      padding: 0 $site-padding / 2 $site-padding; // details bar padding
+    }
+    position: relative;
+  }
+}

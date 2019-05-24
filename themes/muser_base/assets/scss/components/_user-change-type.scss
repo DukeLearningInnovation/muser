@@ -1,0 +1,90 @@
+.change-user-type {
+  display: flex;
+  font-size: $font-size + 8px;
+  input {
+    margin: 0 0 0 auto;
+    font-size: $font-size - 2;
+    background-color: $background-color;
+    color: #4f4f4f;
+    padding: $site-padding / 4 $site-padding;
+    font-weight: 400;
+  }
+  #edit-change-use-type-after {
+    display: none;
+  }
+  &.change-user-type--changed-once {
+    #edit-change-use-type-after {
+      display: block;
+    }
+    #edit-change-use-type {
+      display: none;
+    }
+  }
+}
+
+.field--name-field-user-type .placeholder {
+  font-weight: 600;
+  font-style: normal;
+  color: $secondary;
+}
+
+#edit-field-user-type--wrapper {
+  //display: none;
+  @include sr-only;
+}
+
+.user-type-changer__label {
+  @include button;
+  padding: 12px 48px;
+}
+
+.user-type-changer__description {
+  color: white;
+  //text-align: left;
+}
+
+.main__hero--user-type {
+  min-height: 340px;
+}
+
+.user-type-changer {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.user-type-changer__type {
+  flex: 1 1 300px;
+  text-align: center;
+  max-width: 400px;
+}
+
+.region-hero--new {
+  .page-title {
+    margin-bottom: 20px;
+  }
+}
+
+.region-hero--new {
+  display: none;
+  //padding-bottom: $sheet-overlap;
+}
+
+.main__hero--onboarding-active {
+  .region-hero--original {
+    display: none;
+  }
+  .region-hero--new {
+    display: block;
+  }
+
+  .region-hero-options {
+    opacity: 0;
+    height: 0;
+    pointer-events: none;
+  }
+}
+
+
+.user-form {
+  min-height: 300px;
+}

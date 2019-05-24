@@ -1,0 +1,30 @@
+[
+  {
+    "id": "home",
+    "title": "Home",
+    "text": "<p>This is the <em>Home<\/em> page.<\/p>",
+    "config": "page.front"
+  },
+  {
+    "id": "not_found",
+    "title": "Page not Found",
+    "text": "<p>That page does not exist.<\/p>",
+    "config": "page.404"
+  },
+  {
+    "id": "access_denied",
+    "title": "Access Denied",
+    "text": "<p>You cannot access this page right now.<\/p>",
+    "config": "page.403"
+  },
+  {
+    "id": "about",
+    "title": "About us",
+    "text": "<p>This is the <em>About us<\/em> page.<\/p>"
+  },
+  {
+    "id": "faq",
+    "title": "FAQ",
+    "text": "<p>This is the <em>FAQ<\/em> page.<\/p>"
+  }
+]

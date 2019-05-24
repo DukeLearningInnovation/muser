@@ -1,0 +1,141 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.applicant_info
+    - field.field.user.user.field_about_me
+    - field.field.user.user.field_do_not_send_emails
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_star
+    - field.field.user.user.field_how_hear_about
+    - field.field.user.user.field_lab_affiliation
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_major
+    - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_netid
+    - field.field.user.user.field_programs
+    - field.field.user.user.field_resume
+    - field.field.user.user.field_transcript
+    - field.field.user.user.field_user_type
+    - field.field.user.user.field_yr_in_college
+  module:
+    - field_group
+    - file
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_personal_info:
+      children:
+        - field_first_name
+        - field_last_name
+        - contact_email
+        - field_about_me
+      parent_name: ''
+      weight: 0
+      format_type: fieldset
+      format_settings:
+        description: ''
+        classes: ''
+        id: ''
+      label: 'Personal Information'
+    group_student_info:
+      children:
+        - field_yr_in_college
+        - field_major
+        - field_programs
+        - field_resume
+        - field_transcript
+      parent_name: ''
+      weight: 1
+      format_type: fieldset
+      format_settings:
+        description: ''
+        classes: ''
+        id: ''
+      label: 'Student Information'
+id: user.user.applicant_info
+targetEntityType: user
+bundle: user
+mode: applicant_info
+content:
+  contact_email:
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_about_me:
+    weight: 5
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_first_name:
+    weight: 2
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_last_name:
+    weight: 3
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_major:
+    weight: 3
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_programs:
+    weight: 4
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_resume:
+    weight: 5
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    region: content
+    type: file_default
+    label: inline
+  field_transcript:
+    weight: 6
+    label: inline
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    type: file_default
+    region: content
+  field_yr_in_college:
+    weight: 2
+    label: inline
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden:
+  field_do_not_send_emails: true
+  field_has_star: true
+  field_how_hear_about: true
+  field_lab_affiliation: true
+  field_mentor_yesno: true
+  field_netid: true
+  field_user_type: true
+  langcode: true
+  masquerade: true
+  member_for: true
+  realname: true

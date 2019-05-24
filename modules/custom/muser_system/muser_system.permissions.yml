@@ -1,0 +1,4 @@
+manage muser settings:
+  title: 'Manage Muser settings'
+  description: 'Allows administers manage Muser site configuration settings.'
+  restrict access: TRUE

@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_weight
+    - node.type.staff
+id: node.staff.field_weight
+field_name: field_weight
+entity_type: node
+bundle: staff
+label: Weight
+description: 'Use this to set the order of Staff members in a list. Items with lower numbers will appear at the top of the list, those with higher numbers will appear at the bottom.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

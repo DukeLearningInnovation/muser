@@ -1,0 +1,18 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_contact_person
+    - node.type.project
+id: node.project.field_contact_person
+field_name: field_contact_person
+entity_type: node
+bundle: project
+label: 'Contact person'
+description: 'This can be the same as the principal investigator information, or different information if someone else is serving as the research mentor.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

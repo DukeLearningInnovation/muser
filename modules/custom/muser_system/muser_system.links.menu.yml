@@ -1,0 +1,11 @@
+muser_system.config:
+  title: 'Muser settings'
+  parent: system.admin_config_system
+  description: 'Manage settings for the Muser site.'
+  route_name: muser_system.config
+
+muser_system.email_settings:
+  title: 'Email settings'
+  parent: muser_system.config
+  description: 'Manage email settings for the Muser site.'
+  route_name: muser_system.email_settings

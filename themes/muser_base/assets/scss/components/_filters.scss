@@ -1,0 +1,198 @@
+.view-id-applications .view-filters,
+.region-hero-options {
+  .views-exposed-form {
+    .form-item-search {
+      margin: $filter-padding;
+      //flex: 0 0 100%;
+      label {
+        display: none;
+      }
+      input {
+        border: 0;
+        padding: $site-padding / 2 $site-padding * 3 $site-padding / 2 $site-padding;
+        font-weight: 600;
+        box-sizing: padding-box;
+        max-width: 100%;
+        width: 250px;
+      }
+    }
+    .search__wrapper {
+      position: relative;
+      display: inline-block;
+    }
+    .search__icon {
+      position: absolute;
+      padding: $site-padding / 2;
+      right: 0;
+      top: 0;
+      cursor: pointer;
+      //border: 1px solid #ccc;
+      //border: 0;
+      //background: #ddd;
+      //background: $background-color;
+      background: 0;
+      border: 0;
+
+      border-top-right-radius: $border-radius;
+      border-bottom-right-radius: $border-radius;
+      svg {
+        opacity: 0.6;
+        @include nt($prop: opacity);
+      }
+      svg:hover,
+      svg:focus {
+        opacity: 0.8;
+      }
+    }
+    .muser-view-filters-wrapper,
+    .form--inline {
+      display: flex;
+      flex-flow: row nowrap;
+      margin: 0 $filter-padding * -1 $filter-padding;
+      @include breakpoint(mobile) {
+        margin: 0 $filter-padding $filter-padding;
+      }
+      @include breakpoint(halfmobile) {
+        flex-flow: row wrap;
+      }
+      .form-actions {
+        align-self: flex-end;
+        height: 100%;
+        margin: 0 0 0 auto;
+        display: flex;
+        flex-flow: row wrap;
+        //padding: $filter-padding;
+        a, button, input {
+          @include small-button;
+          line-height: 22px;
+        }
+      }
+      .muser-view-filters-wrapper {
+        margin: 0;
+        flex-flow: row wrap;
+      }
+      details {
+        color: $text-color;
+        border: 0;
+        padding: $filter-padding;
+        margin: 0;
+        position: relative;
+        .form-checkboxes .form-item {
+          margin: $site-padding 0;
+          &:last-child {
+            margin-bottom: 0;
+          }
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+        label {
+          cursor: pointer;
+        }
+        .checkbox__wrapper,
+        .checkbox__wrapper ~ label {
+          color: $text-color;
+          @include nt($prop: color);
+        }
+        .checkbox__wrapper.checked,
+        .checkbox__wrapper.checked ~ label {
+          color: $secondary;
+        }
+
+        input:checked ~ .checkbox__check,
+        input:focus ~ .checkbox__check,
+        .js-form-type-checkbox:hover .checkbox__wrapper .checkbox__check,
+        input:checked ~ .checkbox__box,
+        input:focus ~ .checkbox__box,
+        .js-form-type-checkbox:hover .checkbox__wrapper .checkbox__box {
+          color: $secondary
+        }
+      }
+      summary {
+        // button
+        display: block;
+        background-color: white;
+        box-shadow: $box-shadow;
+        border-radius: $border-radius;
+        padding: $site-padding / 2 $site-padding;
+        color: $text-color;
+        @include nt($prop: unquote('background-color, color'));
+        &.summary--has-selected {
+          background-color: $secondary;
+          color: white;
+        }
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+        font-weight: 600;
+      }
+
+      details {
+        z-index: 49;
+      }
+      details[open] {
+        z-index: 51;
+      }
+
+      details[open] summary {
+        background-color: $secondary;
+        color: white;
+      }
+
+      .details-wrapper {
+        // dropdown
+        position: absolute;
+        top: 100%;
+        min-width: 240px;
+        border-radius: $border-radius--small;
+        border: 1px solid $secondary;
+        background-color: white;
+        padding: $site-padding;
+        padding-bottom: 0;
+        max-height: 400px;
+        overflow-y: auto;
+        &.details-wrapper--fall-right {
+          right: 3px;
+        }
+        //box-shadow: 0 0 1px 10000px rgba(0,0,0,0.4);
+        .filter__actions {
+          padding: $site-padding 0;
+          background-color: white;
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+          position: sticky;
+          //bottom: $site-padding * -1;
+          bottom: 0;
+        }
+        .filter__action {
+          background-color: transparent;
+          border: 0;
+          padding: $filter-padding;
+          margin: -1 * $filter-padding;
+          font-weight: 600;
+        }
+        .filter__action--submit {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}
+
+.filter-overlay {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  background-color: rgba(0,0,0,0.4);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 50;
+  @include nt($prop: opacity);
+}
+
+.filter-overlay--active {
+  pointer-events: auto;
+  opacity: 1;
+}

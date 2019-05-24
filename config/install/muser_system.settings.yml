@@ -1,0 +1,62 @@
+default_num_applications: 3
+mentor_request_recipients: null
+mentor_request_email_subject: '[[site:name]] New request for mentor role'
+mentor_request_email_body: "[user:display-name] has requested to become a Muser mentor.\r\n\r\n[user:display-name]\r\n[user:field_netid]\r\n[user:mail]\r\n[user:field_lab_affiliation]\r\n\r\nAfter validating via the [muser:school-name] internal system that this person has appropriate status to serve as a mentor, grant mentor status here:\r\n\r\n[user:edit-url]\r\n\r\nThe mentor will automatically receive an email that they have been authenticated as soon as you save the new status in the system.\r\n\r\nIf this person does not have sufficient status to serve as a mentor, email them directly at [user:mail] as to why they are not eligible."
+new_project_email_subject: '[[site:name]] New project created'
+new_project_email_body: "Dear [muser:project-contacts]\r\n\r\nA new project, entitled \"[node:title]\", has been posted to the [site:name] website and will be included in this round of the program.\r\n\r\n[node:url]\r\n\r\nOn [muser:review-applications-start], you will be able to begin reviewing applicants.  The deadline for finishing application review is [muser:review-applications-end].\r\n\r\nThank you for participating in [site:name].\r\n\r\nBest wishes,\r\n\r\nThe [site:name] Team"
+user_login_method: drupal
+user_management_restricted: false
+mentor_grant_email_subject: '[[site:name]] You''ve been granted the mentor role'
+mentor_grant_email_body: "Dear [user:display-name],\r\n\r\nWelcome to [site:name]! You have been granted mentor status and can now participate in posting projects.\r\n\r\n[site:url]\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"
+after_round_email_subject: '[[site:name]] Round is over'
+after_round_email_body: "Thank you very much for taking the time and making the effort to apply to positions posted at [[site:name]].  This round has ended - please visit us again for new, exciting projects posted during the next round.\r\n\r\nIf you have a moment, we would appreciate your feedback.  \r\n\r\nBest regards,\r\nThe [[site:name]] Team"
+post_projects_start_email_subject: '[[site:name]] Project posting is starting'
+post_projects_start_email_body: "Dear [site:name] mentors,\r\n \r\nWe are now running our [muser:round-title] round. If you would like to post a project, this round's deadline for posting projects is on [muser:post-projects-end]. \r\n\r\nGo here to post projects and see the timing of our three [site:name] rounds per year:\r\n\r\n[site:url]\r\n \r\nThank you for participating in [site:name].\r\n \r\nThe [site:name] Team\r\n"
+post_projects_end_email_subject: '[[site:name]] Project posting is ending'
+post_projects_end_email_body: "Dear [site:name] mentors,\r\n \r\nTomorrow is the last day to upload projects for the [site:name] [muser:round-title] round. \r\n\r\nGo here to post projects and see the timing of our three [site:name] rounds per year:\r\n\r\n[site:url]\r\n \r\nThank you for participating in [site:name].\r\n \r\nThe [site:name] Team\r\n\r\n"
+review_applications_start_email_subject: '[[site:name]] It''s almost time to review applications'
+review_applications_start_email_body: "Dear [site:name] mentors,\r\n \r\nThank you for posting a project for the [site:name] [muser:round-title] round. Your applications are ready to review. The deadline for reviewing applicants is [muser:review-applications-end]. You may review applications for your projects here:\r\n\r\n[muser:review-applications-url]\r\n\r\nHere are some key things to remember about how [site:name] works for mentors:\r\n\r\n1. Use your own method for choosing students:  \r\nYou can assess applicants based on their essays only or you may wish to interview them in person.  Either way, this process must be completed by the end of the review period on [muser:review-applications-end]. You are responsible for sorting applications and making a final designation of accept or reject. Once you do that, the website will send an automated email that you can edit, and that will inform the students of your decision.   \r\n\r\nYou are not obligated to accept students if you do not find any great matches. However, you must assign applicants to accept or reject status after they have been placed in the review category. As an incentive, the [site:name] website will automatically place a star next to mentor names who completed the process of accepting or rejecting applications.  Students will see these stars when they apply for projects in the next round.\r\n\r\n2.   Communicate directly with your applicants.\r\nIf you accept a student, you are responsible for setting up the research project. [site:name] solely serves to match mentors and students and does not coordinate the projects, meeting times, etc.\r\n \r\nThe deadline for choosing students is [muser:review-applications-end].\r\n \r\nThank you for participating in [site:name].\r\n \r\nThe [site:name] Team\r\n\r\n"
+review_applications_end_email_subject: '[[site:name]] Review time almost over'
+review_applications_end_email_body: "Dear [site:name] mentors,\r\n \r\nTomorrow is the last day to review your [site:name] applications.\r\n\r\nYou are not obligated to accept students if you do not find any great matches. However, you must assign applicants to accept or reject status after they have been placed in the review category.  You may review applications for your projects here:\r\n\r\n[muser:review-applications-url]\r\n\r\nAs an incentive, the [site:name] website will automatically place a star next to mentor names who fully completed the process of accepting or rejecting applications. Students will see these stars when they apply for projects in the next round.\r\n\r\nThank you for participating in [site:name].\r\n \r\nThe [site:name] Team\r\n\r\n"
+student_accepted_email_subject: '[[site:name]] You''ve been accepted!'
+student_accepted_email_body: "Dear [muser:applicant-name],\r\n\r\nThank you for applying for the project that I posted at [site:name], entitled \"[muser:application-project-name]\".\r\n\r\nI am pleased to inform you that you have been accepted to the position.  Please reply to me at [muser:application-project-mentor-email] to set up our first meeting and start the research project.\r\n\r\nSincerely,\r\n[muser:application-project-mentor-name]\r\n[muser:application-project-mentor-email]"
+student_rejected_email_subject: '[[site:name]] Application status update'
+student_rejected_email_body: "Dear [muser:applicant-name],\r\n\r\nThank you for applying for the project that was posted at [site:name], entitled \"[muser:application-project-name]\".\r\n\r\nI am sorry to inform you that your application did not make it to the final round and was not accepted to this project.\r\n\r\nWe appreciate your effort applying to this project.   We hope that this outcome does not dissuade you from applying to new projects in future rounds of [site:name].\r\n\r\nSincerely,\r\nThe [site:name] team\r\n"
+role_description_student:
+  value: "<p>As a student, browse available projects and apply for positions that interest you.</p>\r\n"
+  format: basic_html
+role_description_mentor:
+  value: "<p>As a mentor, create and manage your projects, and view students who apply for your projects. Muser staff will confirm that you are eligible for this role before granting it.</p>\r\n"
+  format: basic_html
+hero_block_anonymous:
+  value: "<p>Muser provides undergraduates with regularly-scheduled, clearly articulated, and equitable access to research opportunities across all&nbsp;fields.</p>\r\n\r\n<p>Research mentors are members of the community who can&nbsp;provide meaningful research experiences for undergraduates, including&nbsp;graduate students, postdocs,&nbsp;lab technicians, and professors.</p>\r\n"
+  format: basic_html
+hero_block_student:
+  value: "<p>To set up your profile, click on the tab with your name. &nbsp;</p>\r\n\r\n<p>To apply for projects, click on the projects tab.</p>\r\n"
+  format: basic_html
+hero_block_mentor:
+  value: "<p>To create projects&nbsp;and view applicants, click on the Mentor tasks tab. &nbsp;</p>\r\n"
+  format: basic_html
+school_name: University
+post_projects_start_email_offset: now
+post_projects_end_email_offset: '-1 day'
+review_applications_start_email_offset: now
+review_applications_end_email_offset: '-1 day'
+after_round_email_offset: now
+application_status_pending:
+  value: "<p>These application essays are assessed to determine if they warrant a full review. At this stage, mentors are not able to see the identity of the applicants.</p>\r\n"
+  format: basic_html
+application_status_in_review:
+  value: "<p>These applicants receive a full review, possibly including an interview. At this point, mentors can see applicant identifying information to allow direct contact for interviews. Before making a final decision to accept candidates, mentors contact the student directly to make sure that they are still available and interested in the position.</p>\r\n"
+  format: basic_html
+application_status_rejected:
+  value: "<p>These applicants are not accepted to the position after full review.</p>\r\n"
+  format: basic_html
+application_status_accepted:
+  value: "<p>These applicants are accepted to the position.</p>\r\n"
+  format: basic_html
+application_essay_guidelines:
+  value: "<p>The application essay should be 1-2 paragraphs long. Please do not include your name in the essay, so that we can successfully maintain an initial \"blind\" stage to the application process.</p>\r\n\r\n<p>Each application essay should be written specifically for each project. Investigate the research group, so that you can gain a basic understanding of their work and express how your particular interests and skills match the project. The research group may have their own website, or you may be able to find them online.</p>\r\n\r\n<p>Many research labs have research mentors that are not the principal investigators or professors. These may include graduate students, postdocs, visiting scientists, lab coordinators, or research administrators. If you are interested in a project that lists a mentor within a principal investigator's lab, you may also wish to look up that particular mentor to learn about their role in the primary lab.</p>\r\n"
+  format: basic_html
+blog_title: Blog
+copyright_message: ''

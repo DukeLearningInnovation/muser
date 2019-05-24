@@ -1,0 +1,32 @@
+.node--type-blog-post {
+  .field--name-field-image {
+    float: right;
+    margin-left: $site-padding;
+    margin-bottom: $site-padding;
+    max-width: 50%;
+    img {
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    @include breakpoint(mobile) {
+      float: none;
+      max-width: 100%;
+      margin: 0 auto;
+      img {
+        width: auto;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.view-blog {
+  .more-link {
+    text-align: center;
+    a {
+      @include button;
+    }
+  }
+}

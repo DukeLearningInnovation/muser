@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - masquerade
+  theme:
+    - muser_base
+id: masquerade
+theme: muser_base
+region: footer
+weight: -8
+provider: null
+plugin: masquerade
+settings:
+  id: masquerade
+  label: Masquerade
+  provider: masquerade
+  label_display: visible
+  show_unmasquerade_link: true
+visibility: {  }

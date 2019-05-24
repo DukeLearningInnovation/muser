@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_do_not_send_emails
+  module:
+    - user
+id: user.user.field_do_not_send_emails
+field_name: field_do_not_send_emails
+entity_type: user
+bundle: user
+label: 'Do not send emails'
+description: 'The system may send you periodic reminders to let you know about deadlines, etc. Check this box to opt out of most of these emails. You may still receive email reminders if action is required on your part.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

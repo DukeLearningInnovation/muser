@@ -1,0 +1,38 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag_conditional_confirm
+    - node
+id: favorites
+label: Favorites
+bundles:
+  - project_round
+entity_type: node
+global: false
+weight: 0
+flag_short: 'Add to Favorites'
+flag_long: 'Add to Favorites'
+flag_message: ''
+unflag_short: 'Remove from Favorites'
+unflag_long: 'Remove from Favorites'
+unflag_message: ''
+unflag_denied_text: ''
+flag_type: 'entity:node'
+link_type: confirm_on_condition
+flagTypeConfig:
+  show_in_links: {  }
+  show_as_field: true
+  show_on_form: false
+  show_contextual_link: false
+  extra_permissions:
+    owner: '0'
+linkTypeConfig:
+  flag_confirmation: 'Add this to your Favorites?'
+  unflag_confirmation: 'Remove this from your Favorites?'
+  flag_create_button: 'Add to Favorites'
+  flag_delete_button: 'Remove from Favorites'
+  form_behavior: modal
+  conditional_type: custom
+  edit_flagging: 'Edit flagging details'
+  flag_update_button: 'Update flagging'

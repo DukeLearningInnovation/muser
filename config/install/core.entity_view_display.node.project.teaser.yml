@@ -1,0 +1,111 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.project.body
+    - field.field.node.project.field_categories
+    - field.field.node.project.field_compensation
+    - field.field.node.project.field_contact_email
+    - field.field.node.project.field_contact_person
+    - field.field.node.project.field_contact_position
+    - field.field.node.project.field_hours_per_week
+    - field.field.node.project.field_lab_name
+    - field.field.node.project.field_lab_website
+    - field.field.node.project.field_num_students
+    - field.field.node.project.field_pi_approved
+    - field.field.node.project.field_pi_email
+    - field.field.node.project.field_pi_name
+    - field.field.node.project.field_representative_pub
+    - field.field.node.project.field_student_qualifications
+    - field.field.node.project.field_student_ranks_applicable
+    - field.field.node.project.field_techniques_learned
+    - field.field.node.project.field_why_lab
+    - node.type.project
+  module:
+    - field_group
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_de:
+      children:
+        - project_availability
+        - hours_per_week
+        - categories
+      parent_name: ''
+      weight: 2
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: details-bar
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Details bar'
+id: node.project.teaser
+targetEntityType: node
+bundle: project
+mode: teaser
+content:
+  available_spaces:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 1
+    settings:
+      trim_length: 200
+    third_party_settings: {  }
+    region: content
+  categories:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  favorite_link:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  hours_per_week:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  project_availability:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  activate_link: true
+  application_form: true
+  application_status_and_submitted: true
+  field_categories: true
+  field_compensation: true
+  field_contact_email: true
+  field_contact_person: true
+  field_contact_position: true
+  field_hours_per_week: true
+  field_lab_name: true
+  field_lab_website: true
+  field_num_students: true
+  field_pi_approved: true
+  field_pi_email: true
+  field_pi_name: true
+  field_representative_pub: true
+  field_student_qualifications: true
+  field_student_ranks_applicable: true
+  field_techniques_learned: true
+  field_why_lab: true
+  langcode: true
+  links: true
+  mentor_info: true
+  project_info: true

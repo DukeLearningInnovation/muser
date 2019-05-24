@@ -1,0 +1,273 @@
+.view-id-applications {
+  .view-content {
+    display: flex;
+    flex-flow: row wrap;
+    //margin: $site-padding / -2;
+    margin: $site-padding * -1 $site-padding / -2;
+    padding: $site-padding 0;
+    > * {
+      padding: $site-padding / 2;
+      position: relative; // important for favorite link positioning
+      width: 100%;
+      &.spacer-item {
+        padding: 0
+      }
+    }
+  }
+  &.view-display-id-page {
+    .view-content > * {
+      flex: 1 1 100%;
+    }
+  }
+  .view-empty {
+    @include card;
+    padding: $site-padding;
+    margin: $site-padding 0;
+  }
+  .view-filters form {
+    @include card;
+    padding: $site-padding;
+    margin: $site-padding 0;
+  }
+}
+
+.view-empty {
+  @include card;
+  padding: $site-padding;
+  margin: $site-padding 0;
+  p:first-child {
+    margin-top: 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.flagging--type-favorites {
+  @include card;
+  position: relative;
+  h3 {
+    font-weight: 600;
+  }
+  .details-bar {
+
+  }
+  .field__label {
+    margin: 0 0 $site-padding / 2;
+    clear: left;
+  }
+  .field--label-above {
+    .field__label {
+      margin-bottom: 0;
+    }
+    .field__item {
+      p:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.application__header {
+  display: flex;
+  flex-flow: row nowrap;
+  //margin: $site-padding / -2;
+  padding: $site-padding / 2;
+  .field--name-field-status {
+    margin-left: auto;
+  }
+  .application__project-title,
+  .field--name-field-status,
+  .application__status-change {
+    padding: $site-padding / 2;
+  }
+  .field--name-field-status,
+  .application__status-change {
+    display: flex;
+    align-items: flex-start;
+  }
+  .application-status {
+    display: flex;
+    align-items: center;
+    margin: 2px 0;
+    svg {
+      font-size: $icon-size;
+    }
+    .application-status__label {
+      margin-left: $site-padding / 4;
+      white-space: nowrap;
+    }
+  }
+  .application__status-change {
+    //margin
+  }
+  a {
+    white-space: nowrap;
+    text-decoration: none;
+    color: $primary;
+    font-weight: 600;
+    border: 2px solid $primary;
+    border-radius: $border-radius * 2;
+    font-size: $font-size - 2;
+    line-height: 1.4;
+    display: inline-block;
+    padding: $site-padding / 4 $site-padding / 2;
+  }
+}
+
+.application__body {
+  padding: 0 $site-padding;
+}
+
+
+.toggle-application {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: $site-padding * 3 / 4 $site-padding;
+  font-size: $icon-size;
+  line-height: 1;
+  z-index: 4;
+  color: $text-color;
+  background-color: transparent;
+  border: 0;
+}
+
+.application__details-bar {
+  padding: $site-padding;
+  margin: 0;
+  .flagging--type-favorites & {
+    justify-content: center;
+    margin: 0;
+  }
+}
+
+.field--label-inline {
+  clear: both;
+}
+
+.flagging--type-favorites {
+
+  .application__body {
+    position: relative;
+    overflow: hidden;
+    @include nt($prop: max-height);
+    @at-root .flagging--type-favorites.application--closed .application__body[style] {
+      max-height: 100px !important;
+    }
+    &:after {
+      content: '';
+      @include nt($prop: opacity);
+      position: absolute;
+      display: block;
+      width: 100%;
+      height: 80px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+      opacity: 1;
+      left: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+  }
+  .application__essay-wrapper,
+  .field--name-field-essay {
+    margin: 0 0 $site-padding;
+  }
+  &.application--open {
+    .application__body {
+      height: auto;
+      max-height: none;
+      &:after {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.application__essay-wrapper {
+  .messages__wrapper {
+    margin-top: 0;
+    margin-bottom: $site-padding;
+  }
+}
+
+.view-id-applications .view-filters form {
+  margin-bottom: 0;
+  &.views-exposed-form {
+    .form--inline {
+      margin: $site-padding / -4;
+      @include breakpoint(mobile) {
+        margin: $site-padding / -4;
+      }
+      .form-actions {
+        a, button, input {
+          @include small-button;
+          background-color: $primary;
+          color: white;
+        }
+      }
+      details {
+        //background-color: white;
+        //color: white;
+        .checkbox__wrapper,
+        .checkbox__wrapper ~ label {
+          //color: white;
+          //@include nt($prop: color);
+        }
+        .checkbox__wrapper.checked,
+        .checkbox__wrapper.checked ~ label {
+          //color: $secondary;
+        }
+
+        input:checked ~ .checkbox__check,
+        input:focus ~ .checkbox__check,
+        .js-form-type-checkbox:hover .checkbox__wrapper .checkbox__check,
+        input:checked ~ .checkbox__box,
+        input:focus ~ .checkbox__box,
+        .js-form-type-checkbox:hover .checkbox__wrapper .checkbox__box {
+          color: $secondary
+        }
+      }
+      summary {
+        color: white;
+        background-color: $primary;
+        &.summary--has-selected {
+          background-color: $secondary;
+          color: white;
+        }
+      }
+      //details[open] summary {
+      //  background-color: $secondary;
+      //  color: white;
+      //}
+
+      .details-wrapper {
+        // dropdown
+        position: absolute;
+        top: 100%;
+        min-width: 240px;
+        border-radius: $border-radius--small;
+        border: 1px solid $secondary;
+        background-color: white;
+        padding: $site-padding;
+        //box-shadow: 0 0 1px 10000px rgba(0,0,0,0.4);
+        .filter__actions {
+          padding: $site-padding 0 0;
+          display: flex;
+          flex-flow: row wrap;
+          justify-content: space-between;
+        }
+        .filter__action {
+          background-color: transparent;
+          border: 0;
+          padding: $filter-padding;
+          margin: -1 * $filter-padding;
+          font-weight: 600;
+        }
+        .filter__action--submit {
+          margin-left: auto;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+features:
+  node_user_picture: true
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: 1
+logo:
+  use_default: 1
+logo_presets: custom
+favicon:
+  use_default: 1
+colorset: colorset_devil
+custom_primary_color: ''
+custom_secondary_color: ''
+custom_background_color: ''
+custom_title_color: ''
+custom_text_color: ''
+custom_status_message_color: ''
+custom_error_message_color: ''
+custom_warning_message_color: ''

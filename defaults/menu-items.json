@@ -1,0 +1,38 @@
+[
+    {
+        "id": "about",
+        "menu": "main",
+        "title": "About us",
+        "weight": -50
+    },
+    {
+        "menu": "main",
+        "title": "Projects",
+        "link": "internal:/projects",
+        "weight": -49
+    },
+    {
+        "menu": "main",
+        "title": "Blog",
+        "link": "internal:/blog",
+        "weight": -48
+    },
+    {
+        "id": "faq",
+        "menu": "main",
+        "title": "FAQ",
+        "weight": -47
+    },
+    {
+        "id": "about",
+        "menu": "footer",
+        "title": "About us",
+        "weight": 0
+    },
+    {
+        "menu": "footer",
+        "title": "Projects",
+        "link": "internal:/projects",
+        "weight": 0
+    }
+]

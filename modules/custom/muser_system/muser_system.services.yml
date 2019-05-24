@@ -1,0 +1,10 @@
+services:
+  muser_system.route_subscriber:
+    class: Drupal\muser_system\Routing\MuserSystemAlterRouteSubscriber
+    tags:
+      - { name: event_subscriber }
+  muser_system.add_node_access:
+    class: Drupal\muser_system\Access\AddNodeAccessCheck
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _muser_system_node_add_access }

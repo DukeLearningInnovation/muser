@@ -1,0 +1,9 @@
+:root {
+  --primary: PRIMARY_COLOR;
+  --secondary: SECONDARY_COLOR;
+  --background-color: BACKGROUND_COLOR;
+  --title-color: TITLE_COLOR;
+  --text-color: TEXT_COLOR;
+  --status-message-color: MESSAGE_STATUS;
+  --warning-message-color: MESSAGE_WARNING;
+  --error-message-color: MESSAGE_ERROR; }

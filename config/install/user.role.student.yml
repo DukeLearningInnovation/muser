@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies: {  }
+id: student
+label: Student
+weight: 5
+is_admin: null
+permissions:
+  - 'flag favorites'
+  - 'unflag favorites'

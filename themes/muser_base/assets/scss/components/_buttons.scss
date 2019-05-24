@@ -1,0 +1,19 @@
+.button--standard,
+.button--primary {
+  @include button;
+}
+
+.button--secondary {
+  @include button;
+  background-color: $secondary;
+}
+
+.button--outline {
+  @include button-outline;
+}
+
+.button--small {
+  @include small-button;
+  display: inline-block;
+  margin: 0;
+}

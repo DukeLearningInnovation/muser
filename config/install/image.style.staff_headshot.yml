@@ -1,0 +1,14 @@
+langcode: en
+status: true
+dependencies: {  }
+name: staff_headshot
+label: 'Staff headshot (200x200)'
+effects:
+  a534b629-9ff9-4537-9b23-ffd561f967b5:
+    uuid: a534b629-9ff9-4537-9b23-ffd561f967b5
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 200
+      height: 200
+      anchor: center-center

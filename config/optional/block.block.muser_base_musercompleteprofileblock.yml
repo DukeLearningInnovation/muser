@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_user
+    - system
+  theme:
+    - muser_base
+id: muser_base_musercompleteprofileblock
+theme: muser_base
+region: header_menu_messages
+weight: -10
+provider: null
+plugin: muser_complete_profile_block
+settings:
+  id: muser_complete_profile_block
+  label: 'Muser complete profile block'
+  provider: muser_user
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '/user/*/edit'
+    negate: true
+    context_mapping: {  }

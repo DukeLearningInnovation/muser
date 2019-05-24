@@ -1,0 +1,8 @@
+langcode: en
+status: true
+dependencies: {  }
+name: Majors
+vid: majors
+description: 'The majors required for projects.'
+hierarchy: 0
+weight: 0

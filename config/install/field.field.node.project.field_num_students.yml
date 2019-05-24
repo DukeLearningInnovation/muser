@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_num_students
+    - node.type.project
+id: node.project.field_num_students
+field_name: field_num_students
+entity_type: node
+bundle: project
+label: 'Number of openings'
+description: 'Please enter the number of students you hope to select for this position.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 1
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

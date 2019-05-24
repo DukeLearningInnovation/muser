@@ -1,0 +1,132 @@
+# Schema for the configuration files of muser_system module.
+
+muser_system.settings:
+  type: config_object
+  label: 'Muser settings'
+  mapping:
+    school_name:
+      label: 'School name'
+      type: string
+    blog_title:
+      label: 'Blog title'
+      type: string
+    copyright_message:
+      label: 'Copyright message text'
+      type: string
+    user_login_method:
+      label: 'User login method'
+      type: string
+    user_management_restricted:
+      label: 'Restrict user management?'
+      type: boolean
+    default_num_applications:
+      label: 'Default number of applications per Student per Round'
+      type: integer
+    role_description_student:
+      label: 'Description of Student role'
+      type: sequence
+    role_description_mentor:
+      label: 'Description of Mentor role'
+      type: sequence
+    hero_block_anonymous:
+      label: 'Hero block text for anonymous'
+      type: sequence
+    hero_block_student:
+      label: 'Hero block text for Students'
+      type: sequence
+    hero_block_mentor:
+      label: 'Hero block text for Mentors'
+      type: sequence
+    application_essay_guidelines:
+      label: 'Essay guidelines'
+      type: sequence
+    application_status_pending:
+      label: 'Description of Pending status'
+      type: sequence
+    application_status_in_review:
+      label: 'Description of In review status'
+      type: sequence
+    application_status_rejected:
+      label: 'Description of Rejected status'
+      type: sequence
+    application_status_accepted:
+      label: 'Description of Accepted status'
+      type: sequence
+    mentor_request_recipients:
+      label: 'Mentor request recipients'
+      type: sequence
+    mentor_request_email_subject:
+      label: 'Mentor request email subject'
+      type: string
+    mentor_request_email_body:
+      label: 'Mentor request email body'
+      type: string
+    mentor_grant_email_subject:
+      label: 'Mentor grant email subject'
+      type: string
+    mentor_grant_email_body:
+      label: 'Mentor grant email body'
+      type: string
+    new_project_email_subject:
+      label: 'New project email subject'
+      type: string
+    new_project_email_body:
+      label: 'New project email body'
+      type: string
+    post_projects_start_email_offset:
+      label: 'Start posting Projects email offset'
+      type: string
+    post_projects_start_email_subject:
+      label: 'Start posting Projects email subject'
+      type: string
+    post_projects_start_email_body:
+      label: 'Start posting Projects email body'
+      type: string
+    post_projects_end_email_offset:
+      label: 'End posting Projects email offset'
+      type: string
+    post_projects_end_email_subject:
+      label: 'End posting Projects email subject'
+      type: string
+    post_projects_end_email_body:
+      label: 'End posting Projects email body'
+      type: string
+    review_applications_start_email_offset:
+      label: 'Start reviewing Applications email offset'
+      type: string
+    review_applications_start_email_subject:
+      label: 'Start reviewing Applications email subject'
+      type: string
+    review_applications_start_email_body:
+      label: 'Start reviewing Applications email body'
+      type: string
+    review_applications_end_email_offset:
+      label: 'End reviewing Applications email offset'
+      type: string
+    review_applications_end_email_subject:
+      label: 'End reviewing Applications email subject'
+      type: string
+    review_applications_end_email_body:
+      label: 'End reviewing Applications email body'
+      type: string
+    after_round_email_offset:
+      label: 'After-Round email offset'
+      type: string
+    after_round_email_subject:
+      label: 'After-Round email subject'
+      type: string
+    after_round_email_body:
+      label: 'After-Round email body'
+      type: string
+    student_accepted_email_subject:
+      label: 'Student accepted email subject'
+      type: string
+    student_accepted_email_body:
+      label: 'Student accepted email body'
+      type: string
+    student_rejected_email_subject:
+      label: 'Student rejected email subject'
+      type: string
+    student_rejected_email_body:
+      label: 'Student rejected email body'
+      type: string

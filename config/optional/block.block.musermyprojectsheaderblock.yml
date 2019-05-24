@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_project
+    - system
+    - user
+  theme:
+    - muser_base
+id: musermyprojectsheaderblock
+theme: muser_base
+region: content
+weight: -7
+provider: null
+plugin: muser_my_projects_header_block
+settings:
+  id: muser_my_projects_header_block
+  label: 'Muser My projects header block'
+  provider: muser_project
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/mentor/*/projects\r\n/projects"
+    negate: false
+    context_mapping: {  }
+  user_role:
+    id: user_role
+    roles:
+      administrator: administrator
+      site_admin: site_admin
+      mentor: mentor
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

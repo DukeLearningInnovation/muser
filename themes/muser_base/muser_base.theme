@@ -1,0 +1,202 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+
+function muser_base_library_info_alter(&$libs, $extension) {
+
+  if ('chosen_lib' == $extension) {
+    if (isset($libs['chosen'])) {
+      // Set chosen library path.
+      unset($libs['chosen.css']);
+    }
+  }
+
+
+  if ($extension !== 'muser_base') {
+    return;
+  }
+
+  $full_path = file_create_url('public://site-css/site-variables.css');
+  $full_path = preg_replace('~^http(?:s)?:~', '', $full_path);
+  $libs['global-styling']['css']['theme'][$full_path] = [];
+}
+
+//function muser_base_preprocess_region(&$vars) {
+//  if ($vars['region'] === 'footer_contact') {
+//    $vars['copyright_holder'] = theme_get_setting('copyright_holder', 'muser_base');
+//    return;
+//  }
+//}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function muser_base_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  if ($variables['element']['#entity_type'] == 'node') {
+    $suggestions[] = 'field__node__' . $variables['element']['#field_name'] . '__' . $variables['element']['#bundle'] . '__' . $variables['element']['#view_mode'];
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter().
+ */
+function muser_base_theme_suggestions_form_element_alter(array &$suggestions, array $variables) {
+  if (!empty($variables['element']['#type']) && !empty($variables['element']['#name'])) {
+    $suggestions[] = 'form__element__' . $variables['element']['#type'] . '__' . $variables['element']['#name'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_hook().
+ */
+function muser_base_preprocess_html(&$variables) {
+  // Check for global override of date checking.
+  if (!empty($GLOBALS['ignore_date_checking'])) {
+    \Drupal::messenger()->addWarning(t('All date restrictions for the current Round are being ignored.'));
+  }
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  $variables['attributes']['class'][] = 'page-type--' . _muser_base_get_page_type($route_name);
+  if (_muser_base_get_page_is_restricted($route_name)) {
+    $variables['attributes']['class'][] = 'page--restricted';
+  }
+}
+
+function _muser_base_get_page_type($route_name) {
+  switch ($route_name) {
+    case 'entity.node.canonical':
+    case 'entity.node.edit_form':
+    case 'entity.user.canonical':
+    case 'entity.user.edit_form':
+      $type = 'sheet';
+      break;
+    // view.view_name.display (all views)
+    case (strpos($route_name, 'view.') === 0):
+      $type = 'cards';
+      break;
+    default:
+      $type = 'sheet';
+  }
+  return $type;
+}
+
+function _muser_base_get_page_is_restricted($route_name) {
+  switch ($route_name) {
+    case 'entity.node.edit_form':
+    case 'entity.user.canonical':
+    case 'entity.user.edit_form':
+    case 'view.my_projects.page':
+    case 'view.my_favorites.page':
+    case (strpos($route_name, 'view.applications.') === 0):
+      return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_preprocess_form_element().
+ */
+function muser_base_preprocess_form_element(&$variables) {
+  $types = [
+    'checkboxes',
+    'radio',
+    'radios',
+    'select',
+  ];
+  if (!empty($variables['type']) && in_array($variables['type'], $types)) {
+    $variables['description_display'] = 'before';
+  }
+  if ($variables['type'] == 'textarea' && !empty($variables['element']['#simple_element'])) {
+    $variables['attributes']['class'] = ['textarea--simple'];
+  }
+}
+
+/**
+ * Implements hook_preprocess_field_multiple_value_form().
+ */
+function muser_base_preprocess_field_multiple_value_form(&$variables) {
+  if (!empty($variables['elements'][0]['#type'])
+    && $variables['elements'][0]['#type'] == 'text_format'
+    && !empty($variables['element'][0]['#description'])) {
+    $variables['elements'][0]['value']['#description'] = $variables['element'][0]['#description'];
+    $variables['elements'][0]['value']['#description_display'] = 'before';
+  }
+}
+
+/**
+ * Implements hook_preprocess_text_format_wrapper().
+ */
+function muser_base_preprocess_text_format_wrapper(&$variables) {
+  $variables['description'] = NULL;
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function muser_base_preprocess_field(&$variables) {
+  if (isset($variables['element']['#object']) && method_exists($variables['element']['#object'], 'getType')) {
+    $variables['parent_type'] = $variables['element']['#object']->getType();
+  }
+
+  if ($variables['element']['#field_type'] !== 'entity_reference_revisions') {
+    return;
+  }
+
+  foreach ($variables['items'] as $delta => $item) {
+    if (empty($item['content']['#paragraph'])) {
+      continue;
+    }
+    $paragraph_type = $item['content']['#paragraph']->getParagraphType()->id;
+    $item['attributes']->addClass('field-item--paragraph--type-' . str_replace('_', '-', $paragraph_type));
+    $item['attributes']->addClass('field-item--paragraph');
+  }
+}
+
+/**
+ * Implements hook_preprocess_file_link().
+ *
+ * Open file links in a new window.
+ */
+function muser_base_preprocess_file_link(&$variables) {
+
+  if (is_string($variables['link']) || empty($variables['link']->getGeneratedLink())) {
+    // Don't have generated link.
+    return;
+  }
+
+  $file = $variables['file'];
+  $url = file_create_url($file->uri->value);
+
+  // Use the description as the link text, if available.
+  if (empty($variables['description'])) {
+    $link_text = $file->filename->value;
+  }
+  else {
+    $link_text = $variables['description']->__toString();
+  }
+
+  $link = Url::fromUri($url);
+
+  // All of these options are standard file link, with the exception
+  // of target and rel - the two attributes we actually want to add.
+  $link_options = array(
+    'attributes' => array(
+      'type' => $file->filemime->value . '; length=' . $file->filesize->value,
+      'title' => \Drupal\Component\Utility\Html::escape($file->filename->value),
+      'target' => '_blank',
+      'rel' => 'noopener',
+    ),
+  );
+
+  $link->setOptions($link_options);
+  $link_html = Link::fromTextAndUrl($link_text, $link)->toString();
+
+  $variables['link']->setGeneratedLink($link_html);
+
+}
+
+function muser_base_form_system_theme_settings_alter(&$form, &$form_state, $form_id = NULL) {
+  include_once drupal_get_path('theme', 'muser_base') . '/includes/theme_settings.inc';
+  _muser_base_form_system_theme_settings_alter($form, $form_state, $form_id);
+}

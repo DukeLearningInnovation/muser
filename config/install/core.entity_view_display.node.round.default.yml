@@ -1,0 +1,194 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.round.field_accept_applications
+    - field.field.node.round.field_accepted_student_email
+    - field.field.node.round.field_after_round_email
+    - field.field.node.round.field_apply
+    - field.field.node.round.field_is_current
+    - field.field.node.round.field_num_app_per_student
+    - field.field.node.round.field_post_projects
+    - field.field.node.round.field_post_projects_end_email
+    - field.field.node.round.field_post_projects_start_email
+    - field.field.node.round.field_rejected_student_email
+    - field.field.node.round.field_review_apps_end_email
+    - field.field.node.round.field_review_apps_start_email
+    - field.field.node.round.field_start_date
+    - node.type.round
+  module:
+    - datetime
+    - datetime_range
+    - field_group
+    - user
+third_party_settings:
+  field_group:
+    group_dates:
+      children:
+        - field_start_date
+        - field_post_projects
+        - field_apply
+        - field_accept_applications
+      parent_name: ''
+      weight: 2
+      format_type: details
+      format_settings:
+        label: Dates
+        open: true
+        id: ''
+        classes: ''
+      label: Dates
+    group_emails:
+      children:
+        - field_post_projects_start_email
+        - field_post_projects_end_email
+        - field_review_apps_start_email
+        - field_review_apps_end_email
+        - field_after_round_email
+        - field_accepted_student_email
+        - field_rejected_student_email
+      parent_name: ''
+      weight: 3
+      format_type: details
+      format_settings:
+        id: ''
+        classes: ''
+        open: false
+        required_fields: false
+      label: Emails
+id: node.round.default
+targetEntityType: node
+bundle: round
+mode: default
+content:
+  field_accept_applications:
+    weight: 15
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: long
+      separator: '-'
+    third_party_settings: {  }
+    type: daterange_default
+    region: content
+  field_accepted_student_email:
+    weight: 18
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_after_round_email:
+    weight: 17
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_apply:
+    weight: 14
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: long
+      separator: '-'
+    third_party_settings: {  }
+    type: daterange_default
+    region: content
+  field_is_current:
+    weight: 0
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_num_app_per_student:
+    weight: 1
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_post_projects:
+    weight: 13
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: long
+      separator: '-'
+    third_party_settings: {  }
+    type: daterange_default
+    region: content
+  field_post_projects_end_email:
+    weight: 14
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_post_projects_start_email:
+    weight: 13
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_rejected_student_email:
+    weight: 19
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_review_apps_end_email:
+    weight: 16
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_review_apps_start_email:
+    weight: 15
+    label: inline
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    type: boolean
+    region: content
+  field_start_date:
+    weight: 12
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: long
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+hidden:
+  langcode: true
+  links: true

@@ -1,0 +1,23 @@
+{% spaceless %}
+    {{ attach_library('muser_project/activate_link') }}
+    {# Depending on the flag action, set the appropriate action class. #}
+    {% if action == 'activate' %}
+        {% set action_class = 'action-project-activate' %}
+    {% else %}
+        {% set action_class = 'action-project-inactivate' %}
+    {% endif %}
+
+    {# Set the remaining Flag CSS classes. #}
+    {%
+    set classes = [
+    'project-activate',
+    'project-activate-' ~ project.id(),
+    action_class
+    ]
+    %}
+
+    {# Set nofollow to prevent search bots from crawling anonymous flag links #}
+    {% set attributes = attributes.setAttribute('rel', 'nofollow') %}
+
+    <div class="{{classes|join(' ')}}"><a{{ attributes }}>{{ title }}</a></div>
+{% endspaceless %}

@@ -1,0 +1,27 @@
+global-styling:
+  css:
+    theme:
+      css/styles.css: {}
+
+
+fonts:
+  css:
+    theme:
+      //fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i: { type: external }  # Body default
+
+fontawesome:
+  js:
+    https://use.fontawesome.com/releases/v5.6.3/js/all.js: { attributes: { data-search-pseudo-elements: ""} }
+
+global-js:
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once
+  js:
+    js/scripts.js: {}
+
+tour-styling:
+  css:
+    theme:
+      css/tour.theme.css: {}

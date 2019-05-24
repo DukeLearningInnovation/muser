@@ -1,0 +1,5 @@
+services:
+  muser_system.commands:
+    class: \Drupal\muser_system\Commands\MuserSystemCommands
+    tags:
+      - { name: drush.command }

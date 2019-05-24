@@ -1,0 +1,1314 @@
+<?php
+
+/**
+ * @file
+ * Contains muser_project.module.
+ */
+
+use Drupal\Core\Field\FieldItemList;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\node\Entity\Node;
+use Drupal\node\NodeInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\Core\Cache\Cache;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+use Drupal\flag\FlaggingInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\flag\FlagInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function muser_project_entity_extra_field_info() {
+
+  $extra = [];
+
+  $project_availability = [
+    'label' => t('Footer - Project availability'),
+    'description' => t('View number of applicants and available spaces for a project'),
+    'visible' => FALSE,
+  ];
+
+  $extra['node']['project']['display']['project_availability'] = $project_availability;
+  $extra['node']['project']['display']['hours_per_week'] = [
+    'label' => t('Footer - Hours per week'),
+    'description' => t('View formatted "Hours per week" for a project'),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['categories'] = [
+    'label' => t('Footer - Project Categories'),
+    'description' => t('View formatted "Project Categories" for a project'),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['favorite_link'] = [
+    'label' => t('"Favorite" link (Flag)'),
+    'description' => t('View "Favorite" flagging link for a project'),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['application_form'] = [
+    'label' => t('Application form'),
+    'description' => t('Application form for a project'),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['application_status_and_submitted'] = [
+    'label' => t('Application status and submitted'),
+    'description' => t("Status of the user's Application for a project"),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['mentor_info'] = [
+    'label' => t('Mentor information'),
+    'description' => t("Contact information for the Project's Mentor"),
+    'visible' => FALSE,
+  ];
+
+  $extra['flagging']['favorites']['display']['project_availability'] = $project_availability;
+  $extra['flagging']['favorites']['display']['project_info'] = [
+    'label' => t('Project information'),
+    'description' => t('Information about the project'),
+    'visible' => FALSE,
+  ];
+  $extra['flagging']['favorites']['display']['applicant_info'] = [
+    'label' => t('Applicant information'),
+    'description' => t('Information about the applicant'),
+    'visible' => FALSE,
+  ];
+  $extra['flagging']['favorites']['display']['update_status_link'] = [
+    'label' => t('"Update status" link'),
+    'description' => t('Link to update the status of applicant'),
+    'visible' => FALSE,
+  ];
+  $extra['node']['project']['display']['activate_link'] = [
+    'label' => t('"Activate" link (rounds)'),
+    'description' => t('View "Activate"/"Inactivate" link for a project'),
+    'visible' => FALSE,
+  ];
+
+  return $extra;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function muser_project_theme() {
+  return [
+    'ajax_link_activate' => [
+      'variables' => [
+        'attributes' => [],
+        'title' => NULL,
+        'action' => 'activate',
+        'project' => NULL,
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_view().
+ */
+function muser_project_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+
+  if ($entity->getEntityTypeId() == 'flagging' && $entity->bundle() == 'favorites') {
+    $build['#attached']['library'][] = 'muser_project/applications';
+  }
+
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'project') {
+    if ($view_mode != 'full') {
+      // Add this to make sure modal links work.
+      $build['#attached']['library'][] = 'core/drupal.dialog.ajax';
+    }
+    if ($view_mode == 'application') {
+      $options = [
+        'attributes' => [
+          'class' => ['view-more', 'use-ajax'],
+          'data-dialog-options' => '{"width":800}',
+          'data-dialog-type' => 'modal',
+        ],
+      ];
+      $build['body'][0]['#suffix'] = Link::createFromRoute(t('View more...'), 'entity.node.canonical', ['node' => $entity->id()], $options)
+        ->toString();
+    } // Viewing a project application?
+  } // Viewing a project?
+
+  if ($component = $display->getComponent('project_availability')) {
+
+    if ($entity->getEntityTypeId() == 'flagging') {
+      $project = muser_project_get_project_for_flagging($entity);
+      $project_round_nid = muser_project_get_project_round_for_project($project->id());
+      $count = $project->field_num_students->value;
+    }
+    else {
+      $project_round_nid = muser_project_get_project_round_for_project($entity->id());
+      $count = $entity->field_num_students->value;
+    }
+
+    $build['project_availability'] = [
+      '#weight' => $component['weight'],
+    ];
+    $build['project_availability'][]['#markup'] = '<div class="project-detail">'
+      . '<div class="project-detail__icon">'
+      . '<div><i class="far fa-user"></i></div>'
+      . '</div>'
+      . '<div class="project-detail__value">'
+      . '<div class="availability">'
+      . '<span class="spaces">'
+      . t('@spaces sp.', ['@spaces' => intval($count)])
+      . '</span>';
+    $build['project_availability'][] = [
+      '#lazy_builder' => ['muser_project_get_application_count_text', [$project_round_nid, $entity->id()]],
+      '#create_placeholder' => TRUE,
+    ];
+    $build['project_availability'][]['#markup'] = '</div></div></div>';
+
+  } // Show available spaces info?
+
+  $extra_fields = [
+    'hours_per_week' => 'first',
+    'categories' => 'random',
+  ];
+  foreach ($extra_fields as $field => $item_to_show) {
+    if ($component = $display->getComponent($field)) {
+      $display_options = [
+        'type' => 'single_term_plus',
+        'settings' => [
+          'item_to_show' => $item_to_show,
+        ]
+      ];
+      $build[$field] = $entity->{'field_' . $field}->view($display_options);
+      $build[$field]['#weight'] = $component['weight'];
+    } // Show extra field?
+  } // Loop thru similar extra fields.
+
+  if ($component = $display->getComponent('favorite_link')) {
+    $build['#cache']['contexts'][] = 'user.permissions';
+    if (\Drupal::currentUser()->isAuthenticated()) {
+      if ($project_round_nid = muser_project_get_project_round_for_project($entity->id())) {
+        $project_round = \Drupal\node\Entity\Node::load($project_round_nid);
+        // Need to make this dependent on the project-round.
+        $build['#cache']['tags'][] = 'node:' . $project_round_nid;
+        // Code taken from flag_entity_view().
+        $flag_service = \Drupal::service('flag');
+        /** @var \Drupal\flag\Entity\Flag $flag */
+        $flag = $flag_service->getFlagById('favorites');
+        $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], $flag->getCacheTags());
+        $build['favorite_link'] = [
+          '#lazy_builder' => ['flag.link_builder:build', [
+            $project_round->getEntityTypeId(),
+            $project_round->id(),
+            $flag->id(),
+          ]],
+          '#create_placeholder' => TRUE,
+          '#weight' => $component['weight'],
+        ];
+        $text_flag = $flag->getShortText('flag');
+        $text_unflag = $flag->getShortText('unflag');
+        $placeholder_text = (strlen($text_flag) > strlen($text_unflag)) ? $text_flag : $text_unflag;
+        $build['favorite_link_placeholder_text'] = [
+          '#markup' => Html::escape($placeholder_text),
+        ];
+        $build['#cache']['max-age'] = muser_project_round_period_change_time('application');
+      } // Got a project round ID?
+    } // User is logged in?
+  } // Show "Favorite" flag link?
+
+  if ($component = $display->getComponent('mentor_info')) {
+    /** @var \Drupal\Core\Session\AccountInterface $mentor */
+    $mentor = $entity->getOwner();
+    if ($mentor && $mentor->isAuthenticated()) {
+      $build['mentor_info'] = [
+        '#type' => 'markup',
+        '#weight' => $component['weight'],
+      ];
+      $name = Html::escape($mentor->getDisplayName())
+        . ' '
+        . muser_system_get_mentor_star($mentor);
+      $build['mentor_info']['#markup'] = muser_system_get_display_only_field('field_mentor_name', t('Mentor name'), $name)
+        . muser_system_get_display_only_field('field_mentor_email', t('Mentor email'), Html::escape($mentor->getEmail()));
+      if ($mentor->field_lab_affiliation->value) {
+        $build['mentor_info']['#markup'] .= muser_system_get_display_only_field('field_mentor_position', t('Mentor position'), Html::escape($mentor->field_lab_affiliation->value));
+      }
+    }
+  } // Show Mentor info?
+
+  if ($component = $display->getComponent('application_form')) {
+    if ($project_round_nid = muser_project_get_project_round_for_project($entity->id())) {
+      $project_round = \Drupal\node\Entity\Node::load($project_round_nid);
+      $form_builder = \Drupal::formBuilder();
+      $form_object = new \Drupal\muser_project\Form\UserApplicationForm();
+      $form_object->setProjectRound($project_round);
+      $build['application_form'] = $form_builder->getForm($form_object);
+      $build['application_form']['#weight'] = $component['weight'];
+    }
+  } // Show Application form?
+
+  if ($component = $display->getComponent('application_status_and_submitted')) {
+    if ($project_round_nid = muser_project_get_project_round_for_project($entity->id())) {
+      if (\Drupal::currentUser()->isAuthenticated()) {
+        $project_round = \Drupal\node\Entity\Node::load($project_round_nid);
+        $flagging = muser_project_get_flagging($project_round);
+        if ($flagging && $flagging->field_is_submitted->value) {
+          $build['application_status_and_submitted']['submitted'] = [
+            '#type' => 'markup',
+            '#markup' => muser_project_get_application_submitted_display(),
+          ];
+          $build['application_status_and_submitted']['status'] = [
+            '#type' => 'markup',
+            '#markup' => muser_project_get_application_status_display($flagging->field_status->value, MUSER_STUDENT, $project_round->field_round->entity),
+          ];
+          $build['application_status_and_submitted']['#weight'] = $component['weight'];
+          $build['application_status_and_submitted']['#cache'] = [
+            'contexts' => ['user'],
+            'tags' => [
+              'flagging:' . $flagging->id(),
+              'user:' . \Drupal::currentUser()->id(),
+            ],
+          ];
+        } // Application submitted?
+      } // User logged in?
+    }
+  } // Show Application status and submitted?
+
+  if ($component = $display->getComponent('project_info')) {
+    $project = muser_project_get_project_for_flagging($entity);
+    $build['project_info'] = [
+      '#weight' => $component['weight'],
+    ];
+    $build['project_info']['#markup'] = '<h3 class="application__project-title">'
+      . Html::escape($project->label())
+      . '</h3>';
+  } // Show Project info?
+
+  if ($component = $display->getComponent('applicant_info')) {
+    /** @var \Drupal\user\Entity\User $applicant */
+    $applicant = $entity->getOwner();
+    $view_builder = \Drupal::entityTypeManager()->getViewBuilder('user');
+    $build['applicant_info'] = $view_builder->view($applicant, 'applicant_info');
+    $build['applicant_info']['#weight'] = $component['weight'];
+    $build['applicant_info']['#prefix'] = '<div class="applicant-info"><div class="field__label">'
+      . t('Applicant information')
+      . '</div>';
+    $build['applicant_info']['#suffix'] = '</div>';
+  } // Show Applicant info?
+
+  if ($component = $display->getComponent('update_status_link')) {
+    $round = muser_project_get_round_for_flagging($entity);
+    $access = ($round && muser_project_round_in_period($round->id(), 'acceptance'));
+
+    $url = Url::fromRoute('muser_project.update_flagging_status', ['flagging' => $entity->id()]);
+    $url->setOption('query', \Drupal::destination()->getAsArray());
+
+    if (empty($build['#cache']['tags'])) {
+      $build['#cache']['tags'] = [];
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ["muser_project_update_status:{$entity->id()}","muser_project_update_status"]);
+    $build['#cache']['max-age'] = muser_project_round_period_change_time('acceptance');
+
+    $build['update_status_link'] = [
+      '#type' => 'link',
+      '#url' => $url,
+      '#title' => t('Change status'),
+      '#attributes' => [
+        'class' => ['use-ajax'],
+        'data-dialog-options' => '{"width":"auto"}',
+        'data-dialog-type' => 'modal',
+      ],
+      '#weight' => $component['weight'],
+      '#attached' => [
+        'library' => ['core/drupal.dialog.ajax'],
+      ],
+      '#access' => $access,
+    ];
+
+  } // Show Update status link?
+
+  if ($component = $display->getComponent('activate_link')) {
+
+    if (!muser_project_get_project_round_for_project($entity->id())) {
+      $url = Url::fromRoute('muser_project.action_activate_project', ['entity_id' => $entity->id()]);
+      $action = 'activate';
+      $label = "Activate";
+      $status_class = 'project--inactive';
+    } else {
+      $url = Url::fromRoute('muser_project.action_inactivate_project', ['entity_id' => $entity->id()]);
+      $action = 'inactivate';
+      $label = "Inactivate";
+      $status_class = 'project--active';
+    }
+
+    $url->setOption('query', \Drupal::destination()->getAsArray());
+
+    $build['#cache']['contexts'][] = 'user';
+    if (empty($build['#cache']['tags'])) {
+      $build['#cache']['tags'] = [];
+    }
+    $build['#cache']['tags'] = Cache::mergeTags($build['#cache']['tags'], ["muser_project_activate:{$entity->id()}","muser_project_activate"]);
+    $build['#cache']['max-age'] = muser_project_round_period_change_time('posting');
+
+    $build['activate_link'] = [
+      '#theme' => 'ajax_link_activate',
+      '#title' => t($label),
+      '#action' => $action,
+      '#attributes' => [
+        'class' => ['use-ajax'],
+      ],
+      '#project' => $entity,
+      '#weight' => $component['weight'],
+      '#access' => $url->access(),
+      '#status_class' => $status_class,
+      '#attached' => [
+        'library' => ['core/drupal.dialog.ajax'],
+      ],
+    ];
+
+    // Bubble to CSRF
+    $rendered_url = $url->toString(TRUE);
+    $rendered_url->applyTo($build['activate_link']);
+
+    $build['activate_link']['#attributes']['href'] = $rendered_url->getGeneratedUrl();
+
+  } // Show "Activate" link?
+
+}
+
+function muser_project_get_current_round($load_node = FALSE) {
+  $round = &drupal_static(__FUNCTION__, NULL);
+  if (!isset($round)) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('status', \Drupal\node\NodeInterface::PUBLISHED)
+      ->condition('type', 'round')
+      ->condition('field_is_current', 1)
+      ->execute();
+    $round = ($nids) ? reset($nids) : NULL;
+  }
+  return ($load_node && $round) ? Node::load($round) : $round;
+}
+
+function muser_project_get_project_round_for_project($nid, $round = NULL) {
+  $project_rounds = &drupal_static(__FUNCTION__, []);
+  if (!$round) {
+    $round = muser_project_get_current_round();
+  }
+  if (!isset($project_rounds[$round][$nid])) {
+    $nids = \Drupal::entityQuery('node')
+      ->condition('status', \Drupal\node\NodeInterface::PUBLISHED)
+      ->condition('type', 'project_round')
+      ->condition('field_round', $round)
+      ->condition('field_project', $nid)
+      ->execute();
+    $project_rounds[$round][$nid] = ($nids) ? reset($nids) : NULL;
+  }
+  return $project_rounds[$round][$nid];
+}
+
+function muser_project_get_application_count_cid($nid) {
+  return 'muser_project_application_count:' . $nid;
+}
+
+/**
+ * @param $nid
+ *   Project-Round nid.
+ *
+ * @return mixed
+ */
+function muser_project_get_application_count($nid) {
+  $counts = &drupal_static(__FUNCTION__, []);
+  $cid = muser_project_get_application_count_cid($nid);
+  if (!isset($counts[$cid])) {
+    if ($cache = \Drupal::cache()->get($cid)) {
+      $counts[$cid] = $cache->data;
+    }
+    else {
+      $counts[$cid] = \Drupal::entityQuery('flagging')
+        ->condition('flag_id', 'favorites')
+        ->condition('entity_type', 'node')
+        ->condition('entity_id', $nid)
+        ->condition('field_is_submitted', 1)
+        ->count()
+        ->execute();
+      \Drupal::cache()->set($cid, $counts[$cid]);
+    }
+  }
+  return $counts[$cid];
+}
+
+/**
+ * @param $nid
+ *   Project-Round nid.
+ *
+ * @return array
+ */
+function muser_project_get_application_count_text($nid, $project_nid) {
+  return [
+    '#cache' => [
+      'tags' => ['project_application_count:' . $project_nid],
+    ],
+    '#markup' => ' | <span class="applicants">'
+      . t('@applicants appl.', ['@applicants' => muser_project_get_application_count($nid)])
+      . '</span>',
+  ];
+}
+
+function muser_project_get_user_application_count_cid($uid, $round_nid = NULL) {
+  if (!$round_nid) {
+    $round_nid = muser_project_get_current_round();
+  }
+  return 'muser_project_user_application_count:' . $round_nid . ':' . $uid;
+}
+
+/**
+ * @param $uid
+ *   User uid.
+ *
+ * @return mixed
+ */
+function muser_project_get_user_application_count($uid) {
+  $counts = &drupal_static(__FUNCTION__, []);
+  $round_nid = muser_project_get_current_round();
+  $cid = muser_project_get_user_application_count_cid($uid, $round_nid);
+  if (!isset($counts[$cid])) {
+    if ($cache = \Drupal::cache()->get($cid)) {
+      $counts[$cid] = $cache->data;
+    }
+    else {
+      $query = \Drupal::database()->select('muser_applications', 'ma');
+      $query->addField('ma', 'fid');
+      $query->condition('ma.application_uid', $uid)
+        ->condition('ma.is_submitted', 1)
+        ->condition('ma.round_nid', $round_nid);
+      $counts[$cid] = $query->countQuery()->execute()->fetchField();
+      \Drupal::cache()->set($cid, $counts[$cid]);
+    }
+  }
+  return $counts[$cid];
+}
+
+function muser_project_add_project_to_round($nid, $round) {
+
+  if (empty($nid) || empty($round)) {
+    return FALSE;
+  }
+
+  $node = Node::create([
+    'type' => 'project_round',
+    'title' => t('round_@round_project_@project', ['@round' => $round, '@project' => $nid]),
+    'field_round' => [['target_id' => $round]],
+    'field_project' => [['target_id' => $nid]],
+  ]);
+
+  Cache::invalidateTags(["muser_project_activate:{$nid}"]);
+
+  return $node->save();
+}
+
+function muser_project_remove_project_from_round($project_round_nid) {
+
+  if (empty($project_round_nid)) {
+    return FALSE;
+  }
+
+  $project_round = Node::load($project_round_nid);
+
+  if (!$project_round) {
+    return FALSE;
+  }
+  $project_etid = $project_round->field_project->entity->id();
+
+  if ($project_etid) {
+    Cache::invalidateTags(["muser_project_activate:{$project_etid}"]);
+  }
+
+  $project_round->delete();
+
+  return TRUE;
+}
+
+/**
+ * @param $round_nid
+ * @param string $period posting|application|acceptance
+ * @return bool
+ */
+function muser_project_round_in_period($round_nid, $period = 'posting', $allow_ignore = TRUE) {
+
+  // Allow global override of date checking.
+  if ($allow_ignore && !empty($GLOBALS['ignore_date_checking'])) {
+    return TRUE;
+  }
+
+  $period_field = [
+    'before' => 'field_start_date',
+    'posting' => 'field_post_projects',
+    'application' => 'field_apply',
+    'acceptance' => 'field_accept_applications',
+    'after' => 'field_accept_applications',
+  ];
+  if (empty($period_field[$period])) {
+    return FALSE;
+  }
+
+  $field = $period_field[$period];
+
+  $round = Node::load($round_nid);
+  if (empty($round)) {
+    return FALSE;
+  }
+
+  if ($period == 'before') {
+    // Looking at "before" period (between round start and project posting).
+    // Use start and end from separate fields.
+    $field_data = $round->get($field)->get(0)->getValue();
+    $begining = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+    $field_data = $round->get('field_post_projects')->get(0)->getValue();
+    $end = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+  }
+  elseif ($period == 'after') {
+    // Looking at "after" period (after application acceptance).
+    // Use start from acceptance field and current time+.
+    $field_data = $round->get($field)->get(0)->getValue();
+    $begining = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+    $end = new DrupalDateTime('+1 day');
+  }
+  else {
+    $field_data = $round->get($field)->get(0)->getValue();
+    $begining = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+    $end = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+  }
+
+  $now = new DrupalDateTime();
+
+  $b = $begining->diff($now);
+  $e = $end->diff($now);
+
+  // Invert is 1 if the date was in the future and 0 if it was in the past.
+  return !$b->invert && $e->invert;
+}
+
+/**
+ * Returns the time till the next event entering or exiting a round period.
+ *
+ * When the period is in the past the passed default_expire will be returned, the default is PERMANENT
+ *
+ * @param string $period posting|application|acceptance
+ * @param $round_nid
+ * @param int $default_expire
+ *
+ * @return bool
+ */
+function muser_project_round_period_change_time($period = 'posting', $round_nid = FALSE, $default_expire = CACHE::PERMANENT) {
+
+  if (!$round_nid) {
+    $round_nid = muser_project_get_current_round();
+  }
+
+  if (!$round_nid) {
+    return $default_expire;
+  }
+
+  $period_field = [
+    'posting' => 'field_post_projects',
+    'application' => 'field_apply',
+    'acceptance' => 'field_accept_applications',
+  ];
+  if (empty($period_field[$period])) {
+    return 0;
+  }
+
+  $field = $period_field[$period];
+
+  $round = Node::load($round_nid);
+  if (empty($round)) {
+    return 0;
+  }
+
+  $field_data = $round->get($field)->get(0)->getValue();
+
+  $now = new DrupalDateTime();
+  $begining = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+  $end = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+
+  $b = $begining->diff($now);
+  $e = $end->diff($now);
+
+  // Invert is 1 if the date was in the future and 0 if it was in the past.
+  if ($b->invert) {
+    // Seconds till change.
+    return $begining->getTimestamp() - $now->getTimestamp();
+  }
+
+  if ($e->invert) {
+    // Seconds till change.
+    return $end->getTimestamp() - $now->getTimestamp();
+  }
+
+  return $default_expire;
+}
+
+function muser_project_get_current_period($round_nid) {
+  $periods = ['before', 'posting', 'application', 'acceptance', 'after'];
+  if ($round_nid) {
+    foreach ($periods as $period) {
+      if (muser_project_round_in_period($round_nid, $period, FALSE)) {
+        return $period;
+      }
+    } // Loop thru periods.
+  } // Got a round?
+  return FALSE;
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function muser_project_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (strpos($form_id, 'node_project_') !== 0) {
+    return;
+  }
+  // No revision log for projects.
+  $form['revision_information']['#access'] = FALSE;
+
+  if ($form_id == 'node_project_form') {
+    // Add a "Cancel" button to the "Add node" form.
+    $account = \Drupal::currentUser();
+    $my_projects_url = Url::fromRoute('view.my_projects.page', ['user' => $account->id()]);
+    $form['actions']['cancel'] = [
+      '#type' => 'link',
+      '#title' => t('Cancel'),
+      '#weight' => 100,
+      '#attributes' => [
+        'class' => [
+          'button',
+          'button--secondary',
+        ],
+      ],
+      '#url' => $my_projects_url,
+    ];
+    if (muser_project_get_current_round()) {
+      $form['actions']['activate'] = [
+        '#type' => 'checkbox',
+        '#title' => t('Activate project'),
+        '#description' => t('If checked, this new project will be made active in the current Round.'),
+        '#weight' => -100,
+        '#default_value' => 1,
+      ];
+    } // Got a current round?
+  } // Create form?
+
+}
+
+function muser_project_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  switch ($form['#id']) {
+    case (strpos($form['#id'], 'views-exposed-form-applications-page-') === 0):
+      $form['project']['#options'] = _muser_project_restrict_project_options($form['project']['#options'], $form_state->getStorage()['view']->args);
+      if (count($form['project']['#options']) < 2) {
+        $form['#access'] = FALSE;
+        return;
+      }
+      // Fall thru.
+    case 'views-exposed-form-projects-page':
+      _muser_project_add_views_filters_code($form);
+      break;
+    case 'views-exposed-form-administer-applications-page-1':
+      $form['mentor']['#description'] = NULL;
+      $form['mentor']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
+      $form['student']['#description'] = NULL;
+      $form['student']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
+      break;
+    case 'views-exposed-form-application-counts-page-1':
+      $form['uid']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
+      break;
+    default:
+      return;
+  }
+} // End muser_project_form_views_exposed_form_alter()
+
+function _muser_project_add_views_filters_code(&$form) {
+  foreach ($form['#info'] as $item) {
+    if (empty($form[$item['value']]['#theme_wrappers']['details'])) {
+      continue;
+    }
+    $form[$item['value']]['#theme_wrappers']['details']['#attributes']['class'][] = Html::getClass('details--' . $item['value']);
+  } // Loop thru form items.
+  $form['#attributes']['class'][] = 'muser-view-filters';
+  $form['#attached']['library'][] = 'muser_project/view-filters';
+  $form['actions']['submit']['#attributes']['class'] = ['button-submit'];
+  $form['actions']['reset']['#attributes']['class'] = ['button-reset'];
+  $form['actions']['reset']['#access'] = TRUE;
+} // End _muser_project_add_views_filters_code()
+
+function _muser_project_restrict_project_options($options, $args) {
+
+  $projects = &drupal_static(__FUNCTION__, []);
+
+  if (empty($args[0])) {
+    return [];
+  }
+
+  $uid = $args[0];
+  if (isset($projects[$uid])) {
+    return $projects[$uid];
+  }
+
+  $projects[$uid] = [];
+  $round_nid = muser_project_get_current_round();
+
+  $query = \Drupal::database()->select('node_field_data', 'nfd');
+  $query->addField('nfd', 'nid');
+  $query->join('node__field_project', 'fp', "fp.field_project_target_id = nfd.nid");
+  $query->join('node__field_round', 'fr', "fr.entity_id = fp.entity_id AND fr.bundle = 'project_round'");
+  $query->condition('nfd.type', 'project')
+    ->condition('nfd.uid', $uid)
+    ->condition('nfd.status', 1)
+    ->condition('fr.field_round_target_id', $round_nid);
+  if ($nids = $query->execute()) {
+    foreach ($nids as $row) {
+      if (empty($options[$row->nid])) {
+        continue;
+      }
+      $projects[$uid][$row->nid] = $options[$row->nid];
+    }
+  }
+
+  return $projects[$uid];
+
+} // End _muser_project_restrict_project_options()
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function muser_project_preprocess_taxonomy_term(&$variables) {
+
+  /** @var \Drupal\taxonomy\Entity\Term $term */
+  $term = $variables['term'];
+  if ($term->bundle() != 'categories') {
+    return;
+  }
+
+  if (empty($variables['content']['field_icon']['#items'])) {
+
+    $variables['content']['field_icon'] = [
+      '#theme' => 'field',
+      '#field_type' => 'string',
+      '#field_name' => 'field_icon',
+      '#entity_type' => 'taxonomy_term',
+      '#bundle' => 'categories',
+      '#label_display' => 'hidden',
+      '#title' => '',
+      '#formatter' => 'fontawesome_iconpicker_formatter_type',
+      '#is_multiple' => FALSE,
+      '#object ' => $term,
+    ];
+
+    $definition = FieldConfig::loadByName('taxonomy_term', 'categories', 'field_icon');
+    /** @var \Drupal\Core\Field\FieldItemList $items */
+    $items = new FieldItemList($definition);
+    $item = [
+      '#theme' => 'fontawesome_iconpicker_formatter',
+      '#icon' => 'fas fa-tag',
+      '#size' => 'fa-1x',
+    ];
+    $items->set(0, $item);
+    $item['#attached']['library'] = 'fontawesome_iconpicker/fontawesome';
+    $variables['content']['field_icon'][0] = $item;
+    $variables['content']['field_icon']['#items'] = $items;
+
+  }
+
+} // End muser_project_preprocess_taxonomy_term()
+
+function muser_project_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() == 'project' && $variables['view_mode'] == 'application') {
+    $variables['attributes']['class'][] = 'application-collapsible';
+  }
+}
+
+function muser_project_preprocess_flagging(&$variables) {
+  if ($variables['elements']['#flagging']->getFlagID() == 'favorites') {
+    $variables['attributes']['class'][] = 'application-collapsible';
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function muser_project_form_unflag_confirm_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+
+  $build_info = $form_state->getBuildInfo();
+
+  /** @var \Drupal\flag\Entity\Flag $flag */
+  $flag = $build_info['args'][0];
+  if ($flag->id() != 'favorites') {
+    // Not the flag we want to change.
+    return;
+  }
+
+  $form['description']['#markup'] = '<p>'
+    . t('Are you sure you want to remove this Project from your Favorites?')
+    . '</p>';
+
+  $project_round = Node::load($build_info['args'][1]);
+  if ($flagging = muser_project_get_flagging($project_round, $flag)) {
+    if ($flagging->field_is_submitted->value) {
+      $form['description']['#markup'] .= '<p>'
+        . t('You have <strong>submitted this as an application</strong>. This application <em>will be withdrawn and the essay deleted</em> if you remove this Project from your Favorites.')
+        . '</p>';
+      $form['actions']['submit']['#value'] = t('Delete application & Remove from Favorites');
+    }
+    elseif ($flagging->field_essay->value) {
+      $form['description']['#markup'] .= '<p>'
+        . t('You have created an essay that will be lost if you remove this Project from your Favorites.')
+        . '</p>';
+    }
+  }
+
+}
+
+function muser_project_application_review_complete(Node $round = NULL) {
+  if (!$round) {
+    if ($round_nid = muser_project_get_current_round()) {
+      $round = Node::load($round_nid);
+    }
+  }
+  if (empty($round)) {
+    return FALSE;
+  }
+  $field_data = $round->get('field_accept_applications')->get(0)->getValue();
+  $now = new DrupalDateTime();
+  $end = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+  $e = $end->diff($now);
+  // Invert is 1 if the date was in the future and 0 if it was in the past.
+  return !$e->invert;
+}
+
+function muser_project_get_application_submitted_display() {
+  return '<span class="application-status application-status--submitted">'
+  . '<span class="application-status__icon">'
+  . '<i class="fa-2x fas fa-check" data-fa-transform="shrink-10" data-fa-mask="fas fa-certificate"></i>'
+  . '</span><span class="application-status__label">'
+  . t('Submitted')
+  . '</span>'
+  . '</span>';
+}
+
+function muser_project_get_application_status_display($status, $role, $round = NULL) {
+
+  if ($role == MUSER_STUDENT) {
+    // For Students...
+    if (!muser_project_application_review_complete($round)) {
+      // ... always show "Pending" until the Round is over.
+      $status = 'pending';
+    }
+    else {
+      // ... if Round is complete, show "Reviewed" unless they're "Accepted".
+      switch ($status) {
+        case 'accepted':
+          // Do nothing.
+          break;
+        case 'rejected':
+        case 'in_review':
+        case 'pending':
+        default:
+          $status = 'reviewed';
+          break;
+      }
+    } // Is Round complete?
+  } // Are they a Student?
+
+  switch ($status) {
+    case 'rejected':
+      $icon = '<i class="fa-2x fas fa-thumbs-down" data-fa-transform="shrink-8" data-fa-mask="fas fa-circle"></i>';
+      $text = t('Rejected');
+      break;
+    case 'accepted':
+      $icon = '<i class="fa-2x fas fa-thumbs-up" data-fa-transform="shrink-8" data-fa-mask="fas fa-circle"></i>';
+      $text = t('Accepted');
+      break;
+    case 'in_review':
+      $icon = '<i class="fa-2x fas fa-search" data-fa-transform="shrink-8" data-fa-mask="fas fa-circle"></i>';
+      $text = t('In review');
+      break;
+    case 'reviewed':
+      $icon = '<i class="fa-2x fas fa-clipboard-check" data-fa-transform="shrink-8" data-fa-mask="fas fa-circle"></i>';
+      $text = t('Reviewed');
+      break;
+    case 'pending':
+    default:
+      $icon = '<i class="fa-2x fas fa-ellipsis-h" data-fa-transform="shrink-7" data-fa-mask="fas fa-circle"></i>';
+      $text = t('Pending');
+  }
+
+  return '<span class="application-status application-status--' . $status . '">'
+    .'<span class="application-status__icon">'
+    . $icon
+    . '</span><span class="application-status__label">'
+    . $text
+    . '</span>'
+    . '</span>';
+
+}
+
+/**
+ * @param $project_round
+ * @param null $flag
+ * @param null $account
+ *
+ * @return \Drupal\flag\FlaggingInterface|null
+ */
+function muser_project_get_flagging($project_round, $flag = NULL, $account = NULL) {
+  static $flag_service = NULL;
+  if (!$flag_service) {
+    /** @var \Drupal\flag\FlagService $service */
+    $flag_service = \Drupal::service('flag');
+  }
+  if (!$flag) {
+    $flag = $flag_service->getFlagById('favorites');
+  }
+  if (!$account) {
+    $account = \Drupal::currentUser();
+  }
+  if ($account->isAnonymous()) {
+    return NULL;
+  }
+  /** @var \Drupal\flag\FlaggingInterface $flagging */
+  $flagging = $flag_service->getFlagging($flag, $project_round, $account);
+  return $flagging;
+}
+
+/**
+ * Return the User ID of the mentor that owns the flagged project.
+ *
+ * @param \Drupal\flag\FlaggingInterface $flagging
+ *   Flagging entity.
+ *
+ * @return int
+ *   User ID.
+ */
+function muser_project_get_flagged_project_mentor_id(FlaggingInterface $flagging) {
+  if (!$project = muser_project_get_project_for_flagging($flagging)) {
+    return NULL;
+  }
+  return $project->getOwnerId();
+}
+
+/**
+ * Get project Node for a specified Flagging entity.
+ *
+ * @param \Drupal\flag\FlaggingInterface $flagging
+ *
+ * @return \Drupal\node\Entity\Node
+ */
+function muser_project_get_project_for_flagging(FlaggingInterface $flagging) {
+  /** @var  \Drupal\node\Entity\Node $project_round */
+  $project_round = $flagging->getFlaggable();
+  /** @var  \Drupal\node\Entity\Node $project */
+  $project = $project_round->field_project->entity;
+  return $project;
+}
+
+/**
+ * Get round Node for a specified Flagging entity.
+ *
+ * @param \Drupal\flag\FlaggingInterface $flagging
+ *
+ * @return \Drupal\node\Entity\Node
+ */
+function muser_project_get_round_for_flagging(FlaggingInterface $flagging) {
+  /** @var  \Drupal\node\Entity\Node $project_round */
+  $project_round = $flagging->getFlaggable();
+  /** @var  \Drupal\node\Entity\Node $project */
+  $round = $project_round->field_round->entity;
+  return $round;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_create_access().
+ */
+function muser_project_node_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  if ($entity_bundle == 'project') {
+    return muser_project_project_access_check($account);
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_node_access().
+ */
+function muser_project_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  if ($op != 'view' && $node->bundle() == 'project') {
+    return muser_project_project_access_check($account);
+  }
+  if ($op == 'view' && $node->bundle() == 'round') {
+    return AccessResult::forbiddenIf(!$account->hasPermission('create round content'), "The 'create round content' is required.");
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Checks dates to see if the user can manage projects.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *
+ * @return \Drupal\Core\Access\AccessResultForbidden|\Drupal\Core\Access\AccessResultNeutral
+ */
+function muser_project_project_access_check(AccountInterface $account) {
+
+  if ($account->hasPermission('administer project rounds')) {
+    // The can manage projects outside of dates-- don't bother.
+    return AccessResult::neutral();
+  }
+  if (!$round = muser_project_get_current_round()) {
+    // No round-- just return.
+    // @todo - Should we return forbidden here instead?
+    return AccessResult::neutral();
+  }
+  if (!muser_project_round_in_period($round, 'posting')) {
+    // Outside of posting period-- don't allow it.
+    return AccessResult::forbidden();
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function muser_project_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+
+  if ($entity->getEntityTypeId() != 'flagging' || $entity->bundle() != 'favorites') {
+    return AccessResult::neutral();
+  }
+
+  if ($operation == 'view'
+    && muser_project_allow_flagging_access($operation, $entity, $account)) {
+      return AccessResult::allowed();
+  }
+
+  return AccessResult::neutral();
+
+}
+
+function muser_project_allow_flagging_access($operation, FlaggingInterface $flagging, AccountInterface $account) {
+
+  switch ($operation) {
+    case 'view':
+    case 'update_status':
+      /** @var  \Drupal\node\Entity\Node $project */
+      $project = muser_project_get_project_for_flagging($flagging);
+      if ($flagging->field_is_submitted->value && $project->getOwnerId() == $account->id()) {
+        // Application is submitted and they own the project.
+        return TRUE;
+      }
+      break;
+  }
+
+  return FALSE;
+
+}
+
+/**
+ * Implements hook_flag_action_access().
+ */
+function muser_project_flag_action_access($action, FlagInterface $flag, AccountInterface $account, EntityInterface $flaggable = NULL) {
+
+  if ($flag->id() != 'favorites') {
+    return AccessResult::neutral();
+  }
+
+  if (!$round = muser_project_get_current_round()) {
+    // No round-- return FALSE.
+    return AccessResult::forbidden();
+  }
+
+  if (!muser_project_round_in_period($round, 'application')) {
+    // Outside of application dates-- return FALSE.
+    return AccessResult::forbidden();
+  }
+
+  return AccessResult::neutral();
+
+}
+
+/**
+ * Implements hook_flag_conditional_confirm_confirmation_required().
+ */
+function muser_project_flag_conditional_confirm_confirmation_required($action, FlagInterface $flag, EntityInterface $entity, $flagging, AccountInterface $account) {
+  if ($action == 'flag' || !$account->isAuthenticated()) {
+    return FALSE;
+  }
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if ($route_name == 'view.my_favorites.page') {
+    // Always require confirmation on the "My Favorites" page because we
+    // need to force a reload afterwards to remove it from the list.
+    return TRUE;
+  }
+  /** @var \Drupal\flag\FlaggingInterface $flagging */
+  if ($flagging && $flagging->field_essay->value) {
+    return TRUE;
+  }
+  return FALSE;
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function muser_project_module_implements_alter(&$implementations, $hook) {
+  switch ($hook) {
+    // Move our hook_entity_insert() implementation to the end of the list so
+    // that the path alias is set.
+    case 'entity_insert':
+      $group = $implementations['muser_project'];
+      unset($implementations['muser_project']);
+      $implementations['muser_project'] = $group;
+      break;
+  }
+}
+
+/**
+ * Implements hook_entity_insert().
+ */
+function muser_project_entity_insert(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() != 'node' || $entity->bundle() != 'project') {
+    return;
+  }
+  muser_project_send_project_creation_email($entity, \Drupal::currentUser());
+
+  // This seems pretty hacky to use $_POST here, but I don't know how else to
+  // get this value from the node form since it's not a "real" field.
+  if (!empty($_POST['activate']) && $round = muser_project_get_current_round()) {
+    // Add newly-created project to the current round.
+    muser_project_add_project_to_round($entity->id(), $round);
+  } // Activate project?
+}
+
+/*
+ * Implements hook_entity_predelete().
+ */
+function muser_project_entity_predelete(EntityInterface $entity) {
+  // Only act on project nodes.
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'project') {
+
+    // Get all project rounds, including unpublished, that reference this project.
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'project_round')
+      ->condition('field_project', $entity->id())
+      ->execute();
+
+    // Delete the project rounds, this will also delete flaggings.
+    if ($nids) {
+      $storage_handler = \Drupal::entityTypeManager()->getStorage('node');
+      $entities = $storage_handler->loadMultiple($nids);
+      $storage_handler->delete($entities);
+    }
+  }
+
+  // Act on Rounds
+  if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'round') {
+
+    // Get all project rounds, including unpublished, that reference this round.
+    $nids = \Drupal::entityQuery('node')
+      ->condition('type', 'project_round')
+      ->condition('field_round', $entity->id())
+      ->execute();
+
+    // Delete the project rounds, this will also delete flaggings.
+    if ($nids) {
+      // Try to allocate enough time to run all the deletions.
+      // @todo this should be a batch / queue
+      drupal_set_time_limit(0);
+
+      foreach($nids as $nid) {
+        if ($node = Node::load($nid)) {
+          $node->delete();
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_update().
+ */
+function muser_project_node_update(EntityInterface $entity) {
+  if ($entity->getEntityTypeId() != 'node' || $entity->bundle() != 'round') {
+    return;
+  }
+  // Clear current_round, project activate link caches.
+  Cache::invalidateTags(['current_round', 'muser_project_activate', 'muser_project_update_status']);
+}
+
+function muser_project_flagging_delete(EntityInterface $entity) {
+  if ($entity->bundle() != 'favorites') {
+    return;
+  }
+  if (!$entity->field_is_submitted->value) {
+    return;
+  }
+  // Clear the count cache.
+  $cache = \Drupal::cache();
+  $cache->delete(muser_project_get_application_count_cid($entity->getFlaggable()->id()));
+  $cache->delete(muser_project_get_user_application_count_cid($entity->getOwnerId()));
+  // Clear the block's build array cache, too.
+  Cache::invalidateTags(['application_count:' . $entity->getOwnerId()]);
+  // Clear the review info block's build array cache.
+  Cache::invalidateTags(['application_review_count:' . muser_project_get_flagged_project_mentor_id($entity)]);
+  // Clear the project's application count build array cache.
+  // This may not be needed because the flag handles it.
+  $project_nid = $entity->getFlaggable()->field_project->entity->id();
+  Cache::invalidateTags(['project_application_count:' . $project_nid]);
+}
+
+/**
+ * Sends the "New project" email.
+ *
+ * @param \Drupal\node\NodeInterface $node
+ * @param \Drupal\Core\Session\AccountInterface $account
+ */
+function muser_project_send_project_creation_email(NodeInterface $node, AccountInterface $account) {
+
+  $recipients = [];
+  if ($node->field_pi_email->value) {
+    $recipients[$node->field_pi_email->value] = muser_system_format_email($node->field_pi_name->value, $node->field_pi_email->value);
+  }
+  $recipients[$account->getEmail()] = muser_system_format_email($account->getDisplayName(), $account->getEmail());
+
+  $to = implode(',', $recipients);
+
+  $muser_config = \Drupal::config('muser_system.settings');
+  $site_config = \Drupal::config('system.site');
+
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  /** @var \Drupal\Core\Utility\Token $token_service */
+  $token_service = \Drupal::token();
+  $muser_data['project'] = $node;
+  $muser_data['round'] = muser_project_get_current_round(TRUE);
+  $params['from'] = muser_system_format_email($site_config->get('name'), $site_config->get('mail'));
+  $params['subject'] = $token_service->replace($muser_config->get('new_project_email_subject'), ['user' => $account, 'node' => $node, 'muser' => $muser_data]);
+  $params['message'] = $token_service->replace($muser_config->get('new_project_email_body'), ['user' => $account, 'node' => $node, 'muser' => $muser_data]);
+
+  /** @var \Drupal\Core\Mail\MailManager $mailer */
+  $mailer = \Drupal::service('plugin.manager.mail');
+  $module = 'muser_project';
+  $key = 'new_project';
+
+  $send = TRUE;
+  $result = $mailer->mail($module, $key, $to, $language, $params, NULL, $send);
+  if ($result['result'] !== TRUE) {
+    \Drupal::logger('muser_project')->error('Error sending new project email for project @title.', ['@title' => $node->label()]);
+  }
+  else {
+    \Drupal::logger('muser_project')->info('New project email sent for project @title.', ['@title' => $node->label()]);
+  }
+
+}
+
+/**
+ * Implements hook_mail().
+ */
+function muser_project_mail($key, &$message, $params) {
+  $message['from'] = $params['from'];
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['message'];
+}

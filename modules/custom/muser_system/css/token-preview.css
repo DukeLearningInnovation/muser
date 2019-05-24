@@ -1,0 +1,49 @@
+#token-preview-window {
+    position: fixed;
+    background-color: white;
+    z-index: 9999;
+    box-shadow: 0 0 10px #6b6b6b;
+    color: #333;
+    margin: 16px;
+    border-radius: 3px;
+    bottom:  0;
+    max-width: 100%;
+    max-width: calc(100% - 32px);
+    width: 500px;
+    right:  0;
+    display: block;
+    overflow: hidden;
+}
+
+.token-preview__title {
+    padding: 16px;
+    background-color: #6b6b6b;
+    color: white;
+    margin: 0;
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+}
+
+.token-text__body {
+    padding: 16px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+input.close-preview-window {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+    padding: 16px;
+    font-size: 1.231em;
+    font-weight: bold;
+    color: white;
+
+    background: url(../../../../../../core/misc/icons/ffffff/ex.svg) 0 0 no-repeat;
+    text-indent: -999px;
+    background-position: 16px;
+    overflow: hidden;
+    width: 16px;
+    box-sizing: content-box;
+}

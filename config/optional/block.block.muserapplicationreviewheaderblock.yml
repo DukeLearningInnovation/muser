@@ -1,0 +1,35 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_project
+    - system
+    - user
+  theme:
+    - muser_base
+id: muserapplicationreviewheaderblock
+theme: muser_base
+region: content
+weight: -8
+provider: null
+plugin: muser_application_review_header_block
+settings:
+  id: muser_application_review_header_block
+  label: 'Muser Application review header block'
+  provider: muser_project
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/mentor/*/applications\r\n/mentor/*/applications/*"
+    negate: false
+    context_mapping: {  }
+  user_role:
+    id: user_role
+    roles:
+      administrator: administrator
+      site_admin: site_admin
+      mentor: mentor
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'

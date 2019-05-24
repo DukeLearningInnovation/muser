@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - flag
+id: flagging.full
+label: Full
+targetEntityType: flagging
+cache: true

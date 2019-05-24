@@ -1,0 +1,407 @@
+<?php
+
+/**
+ * @file
+ * Contains muser_system.module.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\user\Entity\User;
+use Drupal\node\Entity\Node;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\views\ViewExecutable;
+use Drupal\Core\Cache\Cache;
+
+define('MUSER_STUDENT', 'student');
+define('MUSER_MENTOR', 'mentor');
+define('MUSER_ADMIN', 'admin');
+define('MUSER_NUM_APPLICATIONS', 3);
+define('MUSER_DEFAULT_DATE_TOKEN_FORMAT', 'F j \a\t g:ia');
+
+/**
+ * Implements hook_theme().
+ */
+function muser_system_theme() {
+  return [
+    'muser_round_info' => [
+      'variables' => [
+        'title' => NULL,
+        'dates' => NULL,
+        'mentor_title' => NULL,
+        'student_title' => NULL,
+      ],
+      'template' => 'muser-round-info',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function muser_system_form_taxonomy_term_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (!empty($form['field_icon'])) {
+    // Use our own custom code for the fontawesome iconpicker.
+    $form['field_icon']['widget'][0]['value']['#attached']['library'] = [
+      'muser_system/fontawesome-iconpicker'
+    ];
+    $form['field_icon']['widget'][0]['value']['#attributes']['autocomplete'] = 'off';
+  }
+  if (!empty($form['relations'])) {
+    // Hide the "Relations" section-- we don't need it for any vocabularies.
+    $form['relations']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function muser_system_entity_operation(EntityInterface $entity) {
+  $operations = array();
+
+  if ($entity->getEntityType()->id() == 'node' && $entity->bundle() == 'round') {
+    $operations['projects'] = array(
+      'title' => t('Projects'),
+      'url' => \Drupal\Core\Url::fromRoute('view.administer_projects.page_1', array( $entity->getEntityTypeId() => $entity->id() )),
+      'weight' => 50,
+    );
+  }
+  return $operations;
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function muser_system_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  if ($context['widget'] instanceof \Drupal\text\Plugin\Field\FieldWidget\TextareaWidget) {
+    // For TextArea widgets...
+    $build_info = $form_state->getBuildInfo();
+    if (strpos($build_info['form_id'], 'node_project_') !== 0) {
+      return;
+    }
+    // On project forms, add an #after_build.
+    $element['#after_build'][] = '_muser_system_remove_textarea_help';
+  }
+}
+
+/**
+ * #after_build callback for removing formatting help.
+ */
+function _muser_system_remove_textarea_help($element, FormStateInterface $form_state) {
+  if (isset($element['format']) && isset($element['format']['format']['#options']) && count($element['format']['format']['#options']) < 3) {
+    // Hide the help text.
+    unset($element['format']['guidelines']);
+    unset($element['format']['help']);
+    unset($element['format']['#type']);
+    unset($element['format']['#theme_wrappers']);
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Round Create form
+ */
+function muser_system_form_node_round_form_alter(&$form, FormStateInterface $form_state) {
+  $config = \Drupal::config('muser_system.settings');
+  $form['field_num_app_per_student']['widget'][0]['value']['#default_value'] = $config->get('default_num_applications') ?? MUSER_NUM_APPLICATIONS;
+  $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
+  $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
+  if (empty($GLOBALS['manage_all_round_fields'])) {
+    $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_review_apps_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
+  }
+  $form['#validate'][] = 'muser_system_round_form_validate';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Round Edit form
+ */
+function muser_system_form_node_round_edit_form_alter(&$form, FormStateInterface $form_state) {
+  $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
+  if (empty($GLOBALS['manage_all_round_fields'])) {
+    $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
+    $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_review_apps_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
+  }
+  elseif (empty($form['field_is_current']['widget']['value']['#default_value'])) {
+    // Only allow admins to un-set the "Is current" field because we need the
+    // system to run muser_system_set_current_round() to properly set the
+    // current round.
+    $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
+  }
+  $form['#validate'][] = 'muser_system_round_form_validate';
+}
+
+/**
+ * Formats a name and email address so it can be used by mail().
+ *
+ * @param $name
+ * @param $email
+ *
+ * @return string
+ */
+function muser_system_format_email($name, $email) {
+  if (!trim($name)) {
+    return $email;
+  }
+  return '"' . str_replace('"', '', trim($name)) . '" <' . $email . '>';
+}
+
+/**
+ * Validation form for the Round form.
+ *
+ * Verifies that the dates are within range.
+ */
+function muser_system_round_form_validate($form, FormStateInterface &$form_state) {
+
+  $start = $form_state->getValue('field_start_date')[0];
+  $accept = $form_state->getValue('field_accept_applications')[0];
+  $apply = $form_state->getValue('field_apply')[0];
+  $post = $form_state->getValue('field_post_projects')[0];
+
+  if ($start['value'] instanceof DrupalDateTime && $post['value'] instanceof DrupalDateTime) {
+    // Start date must be before posting period.
+    $d = $start['value']->diff($post['value']);
+    if ($d->invert) {
+      $form_state->setErrorByName('field_start_date', t('The Start date must be before the Project posting period begins.'));
+    }
+  }
+
+  if ($post['end_value'] instanceof DrupalDateTime && $apply['value'] instanceof DrupalDateTime) {
+    //Posting period before Application period.
+    $d = $post['end_value']->diff($apply['value']);
+    if ($d->invert) {
+      $form_state->setErrorByName('field_apply', t('The Application period cannot start until the Project posting period ends.'));
+    }
+  }
+
+  if ($apply['end_value'] instanceof DrupalDateTime && $accept['value'] instanceof DrupalDateTime) {
+    //Application period before Accept period.
+    $d = $apply['end_value']->diff($accept['value']);
+    if ($d->invert) {
+      $form_state->setErrorByName('field_accept_applications', t('The Accept period cannot start until the Application period ends.'));
+    }
+  }
+
+  $nid = $form_state->getFormObject()->getEntity()->id();
+
+  if ($start['value'] instanceof DrupalDateTime) {
+    $query = \Drupal::entityQuery('node')
+      ->condition('field_start_date', $start['value']->format('Y-m-d\TH:i:s'), '<=')
+      ->condition('field_accept_applications.end_value', $start['value']->format('Y-m-d\TH:i:s'), '>=')
+      ->range(0, 1);
+    //->addTag('debug')
+    if ($nid) {
+      $query->condition('nid', $nid, '!=');
+    }
+
+    if ($query->execute()) {
+      $form_state->setErrorByName('field_start_date', t('The Start date can not fall during another round.'));
+    }
+  }
+
+  if ($accept['end_value'] instanceof DrupalDateTime) {
+    $query = \Drupal::entityQuery('node')
+      ->condition('field_start_date', $accept['end_value']->format('Y-m-d\TH:i:s'), '<=')
+      ->condition('field_accept_applications.end_value', $accept['end_value']->format('Y-m-d\TH:i:s'), '>=')
+      ->range(0, 1);
+    //->addTag('debug')
+    if ($nid) {
+      $query->condition('nid', $nid, '!=');
+    }
+
+    if ($query->execute()) {
+      $form_state->setErrorByName('field_accept_applications', t('This round can not end after another round has started.'));
+    }
+  }
+
+}
+
+/**
+ * Implements hook_mail().
+ */
+function muser_system_mail($key, &$message, $params) {
+  $message['from'] = $params['from'];
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['message'];
+}
+
+function muser_system_set_current_round() {
+
+  $now = new DrupalDateTime('now', DateTimeItemInterface::STORAGE_TIMEZONE);
+  $nids = \Drupal::entityQuery('node')
+    ->condition('status', \Drupal\node\NodeInterface::PUBLISHED)
+    ->condition('type', 'round')
+    ->condition('field_start_date', $now->format('Y-m-d\TH:i:s'), '<=')
+    ->sort('field_start_date', 'DESC')
+    ->range(0, 1)
+    //->addTag('debug')
+    ->execute();
+
+  \Drupal::state()->set('muser_system.set_current_round_checked', \Drupal::time()->getRequestTime());
+
+  $next_round_nid = ($nids) ? reset($nids) : NULL;
+  if (!$next_round_nid) {
+    return FALSE;
+  }
+
+  $current_round_nid = muser_project_get_current_round();
+  if ($next_round_nid == $current_round_nid) {
+    // This is already the current round.
+    $old_current_period = \Drupal::state()->get('muser_system.current_round_period');
+    $current_period = muser_project_get_current_period($current_round_nid);
+    if ($current_period != $old_current_period) {
+      // We've switched periods-- clear the current round cache tag.
+      \Drupal::state()->set('muser_system.current_round_period', $current_period);
+      Cache::invalidateTags(['current_round']);
+    }
+    return FALSE;
+  }
+
+  if ($current_round_nid) {
+    // Make the previous one not current.
+    $old = Node::load($current_round_nid);
+    $old->field_is_current->value = 0;
+    if ($old->save()) {
+      \Drupal::logger('muser_system')
+        ->info('Round %title (nid: @nid) is no longer current.', [
+          '%title' => $old->label(),
+          '@nid' => $old->id()
+        ]);
+    }
+    else {
+      \Drupal::logger('muser_system')
+        ->error('Error making Round %title (nid: @nid) no longer current.', [
+          '%title' => $old->label(),
+          '@nid' => $old->id()
+        ]);
+      return FALSE;
+    }
+  }
+  else {
+    \Drupal::logger('muser_system')
+      ->info('No previous "current round" is set.');
+  } // Got a previous current round?
+
+  // Make the new one current.
+  $new = Node::load($next_round_nid);
+  $new->field_is_current->value = 1;
+
+  Cache::invalidateTags(['current_round']);
+
+  if ($new->save()) {
+    \Drupal::logger('muser_system')->info('Round %title (nid: @nid) is now current.', ['%title' => $new->label(), '@nid' => $new->id()]);
+  }
+  else {
+    \Drupal::logger('muser_system')->error('Error making Round %title (nid: @nid) current.', ['%title' => $new->label(), '@nid' => $new->id()]);
+    return FALSE;
+  }
+
+  // Reset the current round period state value.
+  $current_period = muser_project_get_current_period($next_round_nid);
+  \Drupal::state()->set('muser_system.current_round_period', $current_period);
+
+  // @todo - Update mentor stars here. What else?
+  if ($current_round_nid) {
+    // @todo - This should be done as a batch.
+    $query = \Drupal::database()->select('muser_applications_counts', 'ac');
+    $query->addField('ac', 'project_uid');
+    $query->addExpression('SUM(ac.no_decision)', 'num_no_decision');
+    $query->condition('ac.round_nid', $current_round_nid);
+    $query->groupBy('ac.project_uid');
+    $result = $query->execute();
+    foreach ($result as $row) {
+      if ($account = User::load($row->project_uid)) {
+        // Give them star if they have no decisions to make, remove if they do.
+        $account->field_has_star->value = (empty($row->num_no_decision)) ? 1: 0;
+        $account->save();
+      }
+    } // Loop thru users.
+  } // Was there a previous current round?
+
+  return $new;
+
+}
+
+/**
+ * Override the node delete forms.
+ *
+ * @param array $entity_types
+ */
+function muser_system_entity_type_build(array &$entity_types) {
+  if (!empty($entity_types['node'])) {
+    $entity_types['node']->setFormClass('delete', 'Drupal\muser_system\Form\MuserNodeDeleteForm');
+    $entity_types['node']->setFormClass('delete-multiple-confirm', 'Drupal\muser_system\Form\MuserNodeDeleteMultiple');
+  }
+}
+
+function muser_system_reverse_time_offset($offset) {
+  if (strpos($offset, '+') === 0) {
+    $offset = preg_replace('/^\+/', '-', $offset);
+  }
+  elseif (strpos($offset, '-') === 0) {
+    $offset = preg_replace('/^\-/', '+', $offset);
+  }
+  return $offset;
+}
+
+function muser_system_get_display_only_field($field_name, $label, $value, $label_position = 'above') {
+  return '<div class="field ' . Html::cleanCssIdentifier('field--name-' . $field_name) . ' field--type-string field--label-' . $label_position . '">'
+  . '<div class="field__label">' . $label . '</div>'
+  . '<div class="field__item">'
+  . $value
+  . '</div></div>';
+}
+
+function muser_system_get_mentor_star(AccountInterface $account) {
+  if ($account->field_has_star->value) {
+    $star = '<i class="fa-1x fas fa-star mentor-status-icon--star"></i>';
+  }
+  else {
+    $star = '<span class="mentor-status-icon--no-star"></span>';
+  }
+  return $star;
+}
+
+function _muser_system_user_autocomplete_after_build($element) {
+  // Make the user autocomplete field smaller.
+  $element['#size'] = 30;
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function muser_system_form_views_form_content_page_1_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  // Make this required to add an empty option to the top of the list.
+  $form['header']['node_bulk_form']['action']['#required'] = TRUE;
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function muser_system_views_pre_render(ViewExecutable $view) {
+  if (isset($view) && ($view->storage->id() == 'blog')) {
+    if ($title = \Drupal::config('muser_system.settings')->get('blog_title')) {
+      $view->setTitle($title);
+      \Drupal::routeMatch()->getRouteObject()->setDefault('_title', $title);
+    } // Got a title for the Blog?
+  }
+}

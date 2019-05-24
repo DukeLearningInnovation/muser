@@ -1,0 +1,170 @@
+@mixin content-wrapper() {
+  max-width: $content-width-with-paddings;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 $site-padding;
+}
+@mixin content-margins() {
+  margin: 10px 0;
+}
+
+@mixin transition($transition...) {
+  transition: $transition;
+}
+@mixin transition-property($property...) {
+  transition-property: $property;
+}
+@mixin transition-duration($duration...) {
+  transition-duration: $duration;
+}
+@mixin transition-timing-function($timing...) {
+  transition-timing-function: $timing;
+}
+@mixin transition-delay($delay...) {
+  transition-delay: $delay;
+}
+
+@mixin nt($prop: all, $time: 0.25s, $anim: ease-in-out) {
+  //
+  // These are seperated to allow for multiple element selection with unquote('item, item2') syntax.
+  // @include nt($el: unquote('width, opacity'));
+  // You may also use single selectors.
+  // @include nt($el: width);
+  // Or none at all
+  // @include nt;
+  //
+  @include transition-property($prop);
+  @include transition-duration($time);
+  @include transition-timing-function($anim);
+}
+
+@mixin bg-bar($size: wide) {
+  padding: $site-padding $site-padding;
+  background-color: $secondary-background;
+  margin: 0 0;
+  display: block;
+  >h1, >h2, >h3, >h4, >h5, >div, >span {
+    margin: 0 auto;
+    @if ($size == wide) {
+      max-width: $wide-content-width;
+    }
+    @else if ($size == mid) {
+      max-width: $mid-content-width;
+    }
+    @else if ($size == skinny) {
+      max-width: $content-width;
+    }
+  }
+}
+
+@mixin sr-only {
+  border: 0;
+  clip: rect(0,0,0,0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+@mixin button {
+  padding: $site-padding / 2 $site-padding * 2;
+  background: $primary;
+  border-radius: $border-radius;
+  line-height: $line-height;
+  color: white;
+  font-weight: 600;
+  border: 0;
+  display: inline-block;
+  text-decoration: none;
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+@mixin button-outline {
+  color: $text-color;
+  background-color: white;
+  border-radius: $border-radius;
+  border: 2px solid $primary;
+  line-height: $line-height;
+  padding: $site-padding / 4 $site-padding;
+  font-weight: 600;
+  display: inline-block;
+  text-decoration: none;
+  @include nt($prop: background-color);
+  &:hover {
+    background: $background-color;
+  }
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+@mixin small-button {
+  text-decoration: none;
+  color: $text-color;
+  border: 0;
+  display: block;
+  background-color: white;
+  box-shadow: $box-shadow;
+  border-radius: $border-radius;
+  padding: $site-padding / 2 $site-padding;
+  font-weight: 600;
+  margin: $filter-padding;
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@mixin fade-in($length: 1s) {
+  animation: fade-in $length;
+  animation-iteration-count: 1;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@mixin spin-animation($speed: 1s) {
+  animation: spin $speed;
+  transform-origin: center;
+  transition-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+
+@mixin card {
+  background-color: white;
+  position: relative;
+  //z-index: 4; // can't add this cause it causes issues with tooltips
+  box-shadow: $box-shadow;
+  color: $text-color;
+  border-radius: $border-radius--small;
+  display: block;
+  h3 {
+    margin: 0;
+  }
+  .project__internal-wrapper {
+    padding: $site-padding;
+  }
+}
+//
+//@mixin fa($icon, $fam: 'Solid') {
+//  content: $icon;
+//  font-weight: 900;
+//  font-family: "Font Awesome 5 #{$fam}";
+//  display: inline-block;
+//  font-style: normal;
+//  font-variant: normal;
+//  text-rendering: auto;
+//  -webkit-font-smoothing: antialiased;
+//}

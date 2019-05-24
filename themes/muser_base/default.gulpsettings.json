@@ -1,0 +1,5 @@
+{
+  "drushCommand": "/path/to/drush.sh",
+  "proxyUrl": "home.muser.com",
+  "proxyPort": 2998
+}

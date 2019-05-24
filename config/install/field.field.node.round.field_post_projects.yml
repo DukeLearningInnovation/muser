@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_post_projects
+    - node.type.round
+  module:
+    - datetime_range
+id: node.round.field_post_projects
+field_name: field_post_projects
+entity_type: node
+bundle: round
+label: 'Days to post projects'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: daterange

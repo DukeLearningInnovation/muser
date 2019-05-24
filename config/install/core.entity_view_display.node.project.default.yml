@@ -1,0 +1,276 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.project.body
+    - field.field.node.project.field_categories
+    - field.field.node.project.field_compensation
+    - field.field.node.project.field_contact_email
+    - field.field.node.project.field_contact_person
+    - field.field.node.project.field_contact_position
+    - field.field.node.project.field_hours_per_week
+    - field.field.node.project.field_lab_name
+    - field.field.node.project.field_lab_website
+    - field.field.node.project.field_num_students
+    - field.field.node.project.field_pi_approved
+    - field.field.node.project.field_pi_email
+    - field.field.node.project.field_pi_name
+    - field.field.node.project.field_representative_pub
+    - field.field.node.project.field_student_qualifications
+    - field.field.node.project.field_student_ranks_applicable
+    - field.field.node.project.field_techniques_learned
+    - field.field.node.project.field_why_lab
+    - node.type.project
+  module:
+    - field_group
+    - file
+    - link
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_contact_information:
+      children:
+        - mentor_info
+        - field_pi_name
+        - field_pi_email
+      parent_name: group_details_area
+      weight: 8
+      format_type: fieldset
+      format_settings:
+        label: 'Contact Information:'
+        description: ''
+        id: ''
+        classes: ''
+      label: 'Contact Information:'
+    group_logistics_information:
+      children:
+        - field_categories
+        - field_student_ranks_applicable
+        - field_student_qualifications
+        - field_hours_per_week
+        - field_compensation
+        - field_num_students
+        - field_techniques_learned
+      parent_name: group_details_area
+      weight: 7
+      format_type: fieldset
+      format_settings:
+        label: 'Logistics Information:'
+        description: ''
+        id: ''
+        classes: ''
+      label: 'Logistics Information:'
+    group_details_bar:
+      children:
+        - favorite_link
+        - project_availability
+        - hours_per_week
+        - categories
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: details-bar
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Details bar'
+    group_details_area:
+      children:
+        - group_logistics_information
+        - group_contact_information
+      parent_name: group_container
+      weight: 5
+      format_type: html_element
+      format_settings:
+        label: 'Info area'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: project__info-area
+      label: 'Info area'
+    group_container:
+      children:
+        - body
+        - field_lab_name
+        - field_lab_website
+        - field_why_lab
+        - field_representative_pub
+        - group_details_area
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      format_settings:
+        label: Container
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: project__main-container
+      label: Container
+id: node.project.default
+targetEntityType: node
+bundle: project
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  categories:
+    weight: 3
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  favorite_link:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_categories:
+    weight: 12
+    label: above
+    settings:
+      view_mode: list_item_icon
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_entity_view
+    region: content
+  field_compensation:
+    weight: 16
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_hours_per_week:
+    weight: 15
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_lab_name:
+    weight: 1
+    label: inline
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_lab_website:
+    weight: 2
+    label: inline
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+    region: content
+  field_num_students:
+    weight: 17
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_pi_email:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_pi_name:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_representative_pub:
+    weight: 4
+    label: inline
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    type: file_default
+    region: content
+  field_student_qualifications:
+    weight: 14
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_student_ranks_applicable:
+    weight: 13
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_techniques_learned:
+    weight: 18
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_why_lab:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  hours_per_week:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  mentor_info:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  project_availability:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  activate_link: true
+  application_form: true
+  application_status_and_submitted: true
+  field_contact_email: true
+  field_contact_person: true
+  field_contact_position: true
+  field_pi_approved: true
+  langcode: true
+  links: true
+  project_info: true

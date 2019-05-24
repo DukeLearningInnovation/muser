@@ -1,0 +1,102 @@
+<?php
+
+use Drupal\Core\Url;
+use Drupal\node\Entity\Node;
+
+/**
+ * Implements hook_requirements().
+ */
+function muser_system_requirements($phase) {
+
+  $requirements = [];
+
+  switch ($phase) {
+    case 'runtime':
+      $requirements['muser_system_round'] = _muser_system_get_current_round_info();
+      $requirements['muser_system_scheduled_emails'] = _muser_system_get_scheduled_emails_info();
+      break;
+  }
+
+  return $requirements;
+
+}
+
+function _muser_system_get_current_round_info() {
+
+  if ($round_nid = muser_project_get_current_round()) {
+    $round = Node::load($round_nid);
+  }
+
+  $last_run = \Drupal::state()->get('muser_system.set_current_round_checked');
+  $checked = _muser_system_format_last_checked($last_run);
+
+  $check_url = Url::fromRoute('muser_system.run_set_current_round')->toString();
+  if (empty($round)) {
+    $manage_url = Url::fromRoute('view.rounds.page_1')->toString();
+    $create_url = Url::fromRoute('node.add', ['node_type' => 'round'])->toString();
+    $requirements = [
+      'title' => t('Muser current round'),
+      'value' => t('Not set'),
+      'severity' => REQUIREMENT_WARNING,
+      'description' => t('There is no current Round set. You may <a href="@manage_url">manage Rounds</a> or <a href="@create_url">create a new Round</a>.<br/>Last checked: %checked. <a href="@check_url">Check current round now</a>', [
+        '@manage_url' => $manage_url,
+        '@create_url' => $create_url,
+        '%checked' => $checked,
+        '@check_url' => $check_url,
+      ]),
+    ];
+  }
+  else {
+    $round_url = Url::fromRoute('entity.node.canonical', ['node' => $round->id()])->toString();
+    $requirements = [
+      'title' => t('Muser current round'),
+      'severity' => REQUIREMENT_OK,
+      'value' => t('Set to <a href="@round_url">@title</a>.', [
+        '@round_url' => $round_url,
+        '@title' => $round->label(),
+      ]),
+      'description' => t('Last checked: %checked. <a href="@check_url">Check current round now</a>', [
+        '%checked' => $checked,
+        '@check_url' => $check_url]),
+    ];
+  }
+
+  return $requirements;
+
+}
+
+function _muser_system_get_scheduled_emails_info() {
+  $last_run = \Drupal::state()->get('muser_system.scheduled_emails_checked');
+  $checked = _muser_system_format_last_checked($last_run);
+  $check_url = Url::fromRoute('muser_system.run_send_emails')->toString();
+  if (!empty($GLOBALS['do_not_send_scheduled_emails'])) {
+    // Sending is being prevented.
+    $requirements = [
+      'title' => t('Muser scheduled emails'),
+      'severity' => REQUIREMENT_WARNING,
+      'value' => t('Sending of scheduled emails is being prevented by a settings override. Last checked: %checked.', ['%checked' => $checked]),
+      'description' => t('<a href="@check_url">Check emails now</a>', ['@check_url' => $check_url]),
+    ];
+  }
+  else {
+    $requirements = [
+      'title' => t('Muser scheduled emails'),
+      'severity' => REQUIREMENT_OK,
+      'value' => t('Last checked: %checked.', ['%checked' => $checked]),
+      'description' => t('<a href="@check_url">Check emails now</a>', ['@check_url' => $check_url]),
+    ];
+  }
+  return $requirements;
+}
+
+function _muser_system_format_last_checked($timestamp) {
+  if ($timestamp) {
+    /** @var \Drupal\Core\Datetime\DateFormatter $datetime */
+    $datetime = \Drupal::service('date.formatter');
+    $checked = t('@diff ago', ['@diff' => $datetime->formatTimeDiffSince($timestamp)]);
+  }
+  else {
+    $checked = t('Never');
+  }
+  return $checked;
+}

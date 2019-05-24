@@ -1,0 +1,5 @@
+roleassign_roles:
+  site_admin: site_admin
+  mentor: mentor
+  student: student
+  administrator: '0'

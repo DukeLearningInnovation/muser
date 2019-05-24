@@ -1,0 +1,42 @@
+.layout {
+  display: flex;
+  flex-flow: column nowrap;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  &.toolbar-horizontal .layout {
+    padding-top: 39px;
+  }
+  &.toolbar-horizontal.toolbar-tray-open .layout {
+    padding-top: 79px;
+  }
+  &.toolbar-vertical .layout {
+    padding-top: 39px;
+  }
+  //&.toolbar-horizontal.toolbar-tray-open .layout {
+  //  padding-top: 79px;
+  //}
+}
+
+body {
+  //min-height: 100vh
+  &[style] {
+    padding-top: 0 !important;
+  }
+}
+
+.page__main {
+  flex: 1 0 300px;
+}
+
+
+body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
+  margin: 0;
+}
+
+
+.toolbar-oriented .toolbar-bar {
+  position: fixed;
+}

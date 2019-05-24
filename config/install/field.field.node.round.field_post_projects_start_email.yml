@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_post_projects_start_email
+    - node.type.round
+id: node.round.field_post_projects_start_email
+field_name: field_post_projects_start_email
+entity_type: node
+bundle: round
+label: 'Post projects start email sent'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

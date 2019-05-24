@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_student_qualifications
+    - node.type.project
+  module:
+    - text
+id: node.project.field_student_qualifications
+field_name: field_student_qualifications
+entity_type: node
+bundle: project
+label: 'Student qualifications'
+description: 'What special skills and academic background are necessary to successfully participate in this project? Are there any physical qualifications required- like the ability to stand for long periods of time, or to work outside in extreme temperatures?'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

@@ -1,0 +1,43 @@
+$serif: 'Open Sans', serif;
+$sans-serif: 'Open Sans', sans-serif;
+$font-size: 16px;
+$line-height: 25px;
+
+$primary: var(--primary);
+$secondary: var(--secondary);
+$background-color: var(--background-color);
+
+$title-color: var(--title-color);
+$text-color: var(--text-color);
+
+$warning-color: var(--warning-message-color);
+$error-color: var(--error-message-color);
+$status-color: var(--status-message-color);
+
+$sheet-overlap: 50px;
+
+$light-bg: #eee;
+$header-height: 80px;
+
+$site-padding: 16px;
+$filter-padding: $site-padding / 4;
+$icon-size: 24px;
+
+$disabled-form-item-background: #fafafa;
+
+$border-radius: 10px;
+$border-radius--small: 3px;
+
+$content-width: 900px;
+$content-width-with-paddings: $site-padding * 4 + $content-width;
+
+$box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+$box-shadow-tooltip: 0 2px 24px rgba(0,0,0,0.1);
+
+$color-gold: #ddbf5b;
+
+$form-vertical-padding: 10px;
+$form-horizontal-padding: 12px;
+$form-item-height: $form-vertical-padding * 2 + $line-height;
+$label-size: $font-size;
+$active-label-size: $label-size - 2;

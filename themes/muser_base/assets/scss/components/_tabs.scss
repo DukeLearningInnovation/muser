@@ -1,0 +1,54 @@
+.block-local-tasks-block {
+
+}
+
+ul.tabs {
+  @include fade-in;
+  display: flex;
+  flex-flow: row wrap;
+  margin: -1 * $filter-padding;
+  padding: 0;
+  padding-bottom: $site-padding / 2;
+  @include breakpoint(mobile) {
+    padding-left: $site-padding / 2;
+    padding-right: $site-padding / 2;
+  }
+  @at-root .page-type--sheet & {
+    //padding-bottom: $site-padding / 2 + $sheet-overlap;
+  }
+  li {
+    margin: 0;
+    padding: 0;
+  }
+  a {
+    @include small-button;
+    background-color: $secondary;
+    color: white;
+    opacity: 0.7;
+    @include nt($prop: opacity);
+    @at-root .page--restricted & {
+      background-color: $primary;
+    }
+    &:hover {
+      background-color: $secondary;
+      opacity: 0.9;
+      @at-root .page--restricted & {
+        background-color: $primary;
+      }
+    }
+    &.is-active {
+      background-color: $secondary;
+      opacity: 1;
+      @at-root .page--restricted & {
+        background-color: $primary;
+      }
+    }
+    &:focus {
+      background-color: $secondary;
+      opacity: 0.9;
+      @at-root .page--restricted & {
+        background-color: $primary;
+      }
+    }
+  }
+}

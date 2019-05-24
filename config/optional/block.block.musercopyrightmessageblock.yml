@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_system
+  theme:
+    - muser_base
+id: musercopyrightmessageblock
+theme: muser_base
+region: footer
+weight: 0
+provider: null
+plugin: muser_copyright_message
+settings:
+  id: muser_copyright_message
+  label: 'Muser copyright message block'
+  provider: muser_system
+  label_display: '0'
+visibility: {  }

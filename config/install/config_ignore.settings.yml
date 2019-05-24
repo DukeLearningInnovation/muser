@@ -1,0 +1,7 @@
+ignored_config_entities:
+  0: 'contact.form.basic_contact_form:label'
+  2: 'contact.form.basic_contact_form:recipients'
+  4: 'contact.form.basic_contact_form:message'
+  6: 'update.settings:notification:emails'
+  8: muser_system.settings
+enable_export_filtering: '1'

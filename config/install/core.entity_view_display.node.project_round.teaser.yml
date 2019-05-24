@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.project_round.field_project
+    - field.field.node.project_round.field_round
+    - node.type.project_round
+  module:
+    - user
+id: node.project_round.teaser
+targetEntityType: node
+bundle: project_round
+mode: teaser
+content:
+  flag_favorites:
+    weight: 10
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_project: true
+  field_round: true
+  langcode: true

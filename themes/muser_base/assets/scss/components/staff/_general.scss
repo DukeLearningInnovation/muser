@@ -1,0 +1,37 @@
+.node--type-staff.node--view-mode-full {
+  .node__content {
+    display: flex;
+    flex-flow: row-reverse wrap;
+    @include breakpoint(mobile) {
+      flex-flow: column nowrap;
+    }
+    margin: 0 $site-padding / -2;
+  }
+  .field--name-body {
+    flex: 1 0 300px;
+    padding: 0 $site-padding / 2;
+  }
+  .field--name-field-image {
+    padding: 0 $site-padding / 2;
+  }
+  img {
+    border-radius: 100px;
+    margin: 0 auto;
+    //@include breakpoint(mobile) {
+    //  margin: 0 auto;
+    //}
+  }
+  p {
+    &:first-child {
+      margin-top: 0;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.image-style-staff-headshot {
+  border-radius: $border-radius;
+  display: block;
+}

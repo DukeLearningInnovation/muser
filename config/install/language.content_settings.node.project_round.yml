@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.project_round
+id: node.project_round
+target_entity_type_id: node
+target_bundle: project_round
+default_langcode: site_default
+language_alterable: false

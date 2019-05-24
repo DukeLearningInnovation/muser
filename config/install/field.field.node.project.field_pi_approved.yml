@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_pi_approved
+    - node.type.project
+id: node.project.field_pi_approved
+field_name: field_pi_approved
+entity_type: node
+bundle: project
+label: 'Has the project director or principal investigator approved of this project?'
+description: 'Please do not post a project until everyone involved has approved the proposal.'
+required: true
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

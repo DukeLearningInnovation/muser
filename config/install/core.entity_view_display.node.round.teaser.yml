@@ -1,0 +1,46 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.round.field_accept_applications
+    - field.field.node.round.field_accepted_student_email
+    - field.field.node.round.field_after_round_email
+    - field.field.node.round.field_apply
+    - field.field.node.round.field_is_current
+    - field.field.node.round.field_num_app_per_student
+    - field.field.node.round.field_post_projects
+    - field.field.node.round.field_post_projects_end_email
+    - field.field.node.round.field_post_projects_start_email
+    - field.field.node.round.field_rejected_student_email
+    - field.field.node.round.field_review_apps_end_email
+    - field.field.node.round.field_review_apps_start_email
+    - field.field.node.round.field_start_date
+    - node.type.round
+  module:
+    - user
+id: node.round.teaser
+targetEntityType: node
+bundle: round
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_accept_applications: true
+  field_accepted_student_email: true
+  field_after_round_email: true
+  field_apply: true
+  field_is_current: true
+  field_num_app_per_student: true
+  field_post_projects: true
+  field_post_projects_end_email: true
+  field_post_projects_start_email: true
+  field_rejected_student_email: true
+  field_review_apps_end_email: true
+  field_review_apps_start_email: true
+  field_start_date: true
+  langcode: true

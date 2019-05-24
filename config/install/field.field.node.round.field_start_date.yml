@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_start_date
+    - node.type.round
+  module:
+    - datetime
+id: node.round.field_start_date
+field_name: field_start_date
+entity_type: node
+bundle: round
+label: 'Overall start date'
+description: 'This is the date/time at which this will become the "current" <em>Round</em>.'
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

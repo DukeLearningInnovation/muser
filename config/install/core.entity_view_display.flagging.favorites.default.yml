@@ -1,0 +1,154 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.flagging.favorites.field_essay
+    - field.field.flagging.favorites.field_is_submitted
+    - field.field.flagging.favorites.field_notification_sent
+    - field.field.flagging.favorites.field_status
+    - flag.flag.favorites
+  module:
+    - field_group
+    - muser_project
+third_party_settings:
+  field_group:
+    group_details_bar:
+      children:
+        - project_availability
+      parent_name: ''
+      weight: 1
+      format_type: html_element
+      format_settings:
+        label: 'Details bar'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: 'application__details-bar details-bar'
+      label: 'Details bar'
+    group_main_content:
+      children:
+        - group_title_area
+        - group_content
+      parent_name: ''
+      weight: 0
+      format_type: html_element
+      format_settings:
+        label: 'Main content'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: application__main
+      label: 'Main content'
+    group_title_area:
+      children:
+        - project_info
+        - field_status
+        - group_status_links
+      parent_name: group_main_content
+      weight: 0
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: application__header
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Title area'
+    group_status_links:
+      children:
+        - update_status_link
+      parent_name: group_title_area
+      weight: 24
+      format_type: html_element
+      format_settings:
+        label: 'Status links'
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: application__status-change
+      label: 'Status links'
+    group_content:
+      children:
+        - group_application_body_height
+      parent_name: group_main_content
+      weight: 2
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: application__body
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: Content
+    group_application_body_height:
+      children:
+        - field_essay
+      parent_name: group_content
+      weight: 4
+      format_type: html_element
+      format_settings:
+        id: ''
+        classes: application__body-height
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+      label: 'Application body height'
+id: flagging.favorites.default
+targetEntityType: flagging
+bundle: favorites
+mode: default
+content:
+  field_essay:
+    weight: 5
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_status:
+    weight: 22
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: status_with_icon
+    region: content
+  project_availability:
+    weight: 25
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  project_info:
+    weight: 21
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  update_status_link:
+    weight: 23
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  applicant_info: true
+  field_is_submitted: true
+  field_notification_sent: true

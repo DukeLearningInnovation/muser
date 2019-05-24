@@ -1,0 +1,25 @@
+.node--type-blog-post.node--view-mode-teaser {
+  @include card;
+  margin: $site-padding 0;
+  padding: $site-padding;
+  h2 {
+    margin-top: 0;
+  }
+  h2 a,
+  .field--name-title {
+    text-decoration: none;
+  }
+  .field--name-body {
+    p:last-child {
+      margin-bottom: 0;
+    }
+    p:first-child {
+      margin-top: $site-padding / 2;
+    }
+  }
+  .node-readmore {
+    padding: 0;
+    display: inline-block;
+    margin-top: $site-padding / 2;
+  }
+}

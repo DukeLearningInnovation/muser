@@ -1,0 +1,24 @@
+view-filters:
+  js:
+    js/view-filters.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+
+applications:
+  js:
+    js/applications.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+# Ajax action link library.
+activate_link:
+  js:
+    js/project-activate_link.js: {}
+  css:
+      theme:
+        css/activate-link.ajax.css: {}
+  dependencies:
+    - core/drupal
+    - core/drupal.ajax
+    - flag/flag.link_ajax

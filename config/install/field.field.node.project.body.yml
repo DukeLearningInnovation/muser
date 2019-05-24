@@ -1,0 +1,21 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.project
+  module:
+    - text
+id: node.project.body
+field_name: body
+entity_type: node
+bundle: project
+label: 'Project description'
+description: 'Please provide an overview of your project. What is the goal of the research? What tasks and techniques will be utilized? How will students participate?<br/>Select the "Edit summary" link above to specify the short description shown on the <em>Projects</em> page. If not set, it will use a trimmed value of full description.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary

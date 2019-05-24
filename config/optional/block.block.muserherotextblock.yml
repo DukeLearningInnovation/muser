@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_system
+    - system
+  theme:
+    - muser_base
+id: muserherotextblock
+theme: muser_base
+region: hero
+weight: 0
+provider: null
+plugin: muser_hero_text_block
+settings:
+  id: muser_hero_text_block
+  label: 'Muser hero text block'
+  provider: muser_system
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

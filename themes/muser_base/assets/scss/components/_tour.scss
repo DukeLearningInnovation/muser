@@ -1,0 +1,70 @@
+.block-tour-button-block:not(.hidden) {
+  display: inline-block;
+}
+
+.block-tour-button-block {
+  margin-bottom: $site-padding * 3;
+  button.tour-button {
+    position: absolute;
+    left: $site-padding;
+    bottom: $site-padding / 2;
+    @include breakpoint(mobile) {
+      left: $site-padding / 2;
+    }
+    @include small-button;
+    color: white;
+    border: 2px solid white;
+    background-color: transparent;
+    padding-left: $site-padding + $font-size + 4px;
+    margin: 0;
+    &.is-active:before,
+    &:focus:before,
+    &:before {
+      background-image: url("/profiles/muser/themes/muser_base/icons/question-circle--white.svg");
+    }
+  }
+}
+
+.joyride-tip-guide {
+  background-color: white;
+  box-shadow: 0 2px 108px rgba(0, 0, 0, 0.6);
+  color: $text-color;
+  border-radius: $border-radius;
+  a, h2 {
+    color: $text-color;
+  }
+  .joyride-nub {
+    border-color: white;
+    z-index: 59;
+  }
+  .joyride-nub.top {
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.15);
+    background-color: white;
+    border: none;
+    height: 20px;
+    width: 20px;
+    top: -10px;
+  }
+  .joyride-close-tip:hover, .joyride-close-tip:focus {
+    color: $text-color;
+    opacity: 0.9;
+  }
+  a.button {
+    @include button-outline;
+    //margin: $filter-padding;
+  }
+}
+
+.joyride-content-wrapper {
+  padding: $site-padding $site-padding + 30px $site-padding $site-padding;
+  background-color: white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  z-index: 60;
+}
+
+.tour-progress {
+  bottom: $site-padding * 1.5;
+  right: $site-padding * 1.5;
+}

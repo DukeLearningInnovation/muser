@@ -1,0 +1,13 @@
+user-form:
+  js:
+    js/user-form.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+
+user-type:
+  js:
+    js/user-type.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

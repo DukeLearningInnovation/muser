@@ -1,0 +1,40 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.categories.field_icon
+    - taxonomy.vocabulary.categories
+  module:
+    - fontawesome_iconpicker
+id: taxonomy_term.categories.default
+targetEntityType: taxonomy_term
+bundle: categories
+mode: default
+content:
+  field_icon:
+    weight: 1
+    settings:
+      type: input_search
+      size: 20
+      placeholder: ''
+    third_party_settings: {  }
+    type: fontawesome_iconpicker
+    region: content
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true

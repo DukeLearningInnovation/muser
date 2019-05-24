@@ -1,0 +1,14 @@
+@mixin breakpoint($breakpoint) {
+  @if $breakpoint == desktop {
+    @media (min-width: 992px) { @content; }
+  }
+  @else if $breakpoint == mobile {
+    @media (max-width: 991px) { @content; }
+  }
+  @else if $breakpoint == halfmobile {
+    @media (max-width: 600px) { @content; }
+  }
+  @else if $breakpoint == abovehalfmobile {
+    @media (min-width: 601px) { @content; }
+  }
+}

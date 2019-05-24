@@ -1,0 +1,7 @@
+name: Muser Project
+type: module
+description: Muser Project module.
+core: 8.x
+package: Muser
+dependencies:
+  - muser_system

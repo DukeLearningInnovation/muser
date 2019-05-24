@@ -1,0 +1,37 @@
+.page-title {
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
+.region-hero {
+
+}
+
+.hero__content {
+  flex: 1 0 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  max-width: $content-width-with-paddings;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+
+  padding: $site-padding * 2 $site-padding;
+  @include breakpoint(mobile) {
+    padding: $site-padding * 2 $site-padding;
+  }
+  p:first-child {
+    margin-top: 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.block-page-title-block {
+  justify-self: center;
+}

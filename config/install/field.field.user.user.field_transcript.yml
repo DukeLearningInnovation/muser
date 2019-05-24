@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_transcript
+  module:
+    - file
+    - user
+id: user.user.field_transcript
+field_name: field_transcript
+entity_type: user
+bundle: user
+label: Transcript
+description: 'Upload your transcript. If you are a first-year student in your first semester, please upload your class schedule and not your high school transcript.'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'transcript/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt doc docx pdf'
+  max_filesize: '20 MB'
+  description_field: false
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

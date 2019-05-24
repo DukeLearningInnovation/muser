@@ -1,0 +1,206 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_about_me
+    - field.field.user.user.field_do_not_send_emails
+    - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_star
+    - field.field.user.user.field_how_hear_about
+    - field.field.user.user.field_lab_affiliation
+    - field.field.user.user.field_last_name
+    - field.field.user.user.field_major
+    - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_netid
+    - field.field.user.user.field_programs
+    - field.field.user.user.field_resume
+    - field.field.user.user.field_transcript
+    - field.field.user.user.field_user_type
+    - field.field.user.user.field_yr_in_college
+  module:
+    - field_group
+    - file
+    - text
+    - user
+third_party_settings:
+  field_group:
+    group_personal_info:
+      children:
+        - field_first_name
+        - field_last_name
+        - field_how_hear_about
+        - field_do_not_send_emails
+      parent_name: ''
+      weight: 2
+      format_type: fieldset
+      format_settings:
+        label: 'Personal Information'
+        description: ''
+        id: ''
+        classes: ''
+        required_fields: false
+      label: 'Personal Information'
+    group_student_info:
+      children:
+        - field_yr_in_college
+        - field_major
+        - field_programs
+        - field_about_me
+        - field_resume
+        - field_transcript
+      parent_name: ''
+      weight: 3
+      format_type: fieldset
+      format_settings:
+        label: 'Student Information'
+        description: 'Please fill out all fields in order to apply for projects. This information will become part of your applications.'
+        id: ''
+        classes: ''
+        required_fields: false
+      label: 'Student Information'
+    group_mentor_info:
+      children:
+        - field_netid
+        - field_lab_affiliation
+        - field_has_star
+      parent_name: ''
+      weight: 4
+      format_type: fieldset
+      format_settings:
+        id: ''
+        classes: ''
+        description: 'You only need to fill out these fields if you are a mentor.'
+        required_fields: false
+      label: 'Mentor Information'
+    group_login_information:
+      children:
+        - account
+      parent_name: ''
+      weight: 1
+      format_type: fieldset
+      format_settings:
+        id: ''
+        classes: ''
+        description: ''
+        required_fields: true
+      label: 'Login information'
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  account:
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_about_me:
+    weight: 5
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
+    region: content
+  field_do_not_send_emails:
+    weight: 6
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_first_name:
+    weight: 3
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_has_star:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_how_hear_about:
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_lab_affiliation:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_last_name:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_major:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_netid:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_programs:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_resume:
+    weight: 6
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    region: content
+    type: file_generic
+  field_transcript:
+    weight: 7
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+    region: content
+  field_user_type:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  field_yr_in_college:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_buttons
+    region: content
+  language:
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  contact: true
+  field_mentor_yesno: true
+  google_analytics: true
+  langcode: true
+  path: true
+  timezone: true

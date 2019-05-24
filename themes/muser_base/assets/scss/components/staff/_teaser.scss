@@ -1,0 +1,39 @@
+.node--type-staff.node--view-mode-teaser {
+
+  a & {
+    text-decoration: none;
+  }
+  img {
+    border-radius: 100px;
+    margin: 0 auto;
+    display: block;
+  }
+  .field--name-body {
+    color: $text-color;
+  }
+  h3 {
+    margin: 0.5em 0 0.75em;
+  }
+}
+
+.staff__link {
+  text-decoration: none;
+  margin: $site-padding;
+  display: block;
+}
+
+.view-staff-members {
+  margin-left: $site-padding * -1;
+  margin-right: $site-padding * -1;
+  .view-content {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  .spacer-item,
+  .views-row {
+    flex: 1 0 400px;
+    @include breakpoint(halfmobile) {
+      flex: 1 1 100%;
+    }
+  }
+}

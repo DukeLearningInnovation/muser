@@ -1,0 +1,30 @@
+fontawesome-css:
+  css:
+    theme:
+      https://use.fontawesome.com/releases/v5.6.3/css/all.css: { type: external }
+
+fontawesome-iconpicker:
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - muser_system/fontawesome-css
+  css:
+    component:
+      /libraries/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css: {minified: true }
+      css/fontawesome_iconpicker.css: {}
+  js:
+    /libraries/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js: {minified: true }
+    js/fontawesome_iconpicker.js: {}
+
+token-preview:
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+  js:
+    js/token-preview.js: {}
+  css:
+    theme:
+      css/token-preview.css: {}

@@ -1,0 +1,13 @@
+definitions:
+  contact__site_page:
+    enabled: true
+    menu_name: footer
+    parent: ''
+    weight: 0
+    expanded: false
+  node__add__project_round:
+    enabled: false
+    menu_name: admin
+    parent: admin_toolbar_tools.add_content
+    expanded: false
+    weight: 0

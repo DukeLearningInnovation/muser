@@ -1,0 +1,42 @@
+.block-masquerade {
+  margin: 0 auto;
+  max-width: 100%;
+  width: 430px;
+  h2 {
+    color: white;
+    @extend h3;
+  }
+  form {
+    //max-width: 100%;
+    //width: 430px;
+    width: 100%;
+  }
+  input[type="text"] {
+    //width: auto;
+    width: 100%;
+    //max-width: 250px;
+    padding: 8px 12px;
+    &:focus-within,
+    &:focus,
+    &:hover {
+      padding: 7px 11px;
+    }
+  }
+  .form-item-masquerade-as {
+    flex: 1 0 300px;
+  }
+  .form-item {
+    margin: 0 0 $site-padding;
+  }
+  .form-actions {
+    margin-left: $site-padding / 2;
+  }
+  a {
+    color: white;
+  }
+  .container-inline {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+}

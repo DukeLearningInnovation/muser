@@ -1,0 +1,5 @@
+name: Muser System
+type: module
+description: Muser System module.
+core: 8.x
+package: Muser

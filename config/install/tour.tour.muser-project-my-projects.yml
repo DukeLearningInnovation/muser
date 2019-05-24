@@ -1,0 +1,66 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_project
+id: muser-project-my-projects
+label: 'My projects page'
+module: muser_project
+routes:
+  -
+    route_name: view.my_projects.page
+tips:
+  my-projects-main:
+    id: my-projects-main
+    plugin: text
+    label: 'List of your projects'
+    body: 'View and manage <b>Projects</b> that you have created.'
+    weight: 1
+  my-projects-info-block:
+    id: my-projects-info-block
+    plugin: text
+    label: 'Information block'
+    body: 'Here you''ll see the dates for the project-posting period. If you are within that period, you''ll see a "Create project" button.'
+    weight: 2
+    attributes:
+      data-class: 'block-muser-my-projects-header-block .field--name-field-post-projects'
+  my-projects-create-project:
+    id: my-projects-create-project
+    plugin: text
+    label: 'Create a project'
+    body: 'Select the "Create project" button to create a new project that students can apply for.'
+    weight: 3
+    attributes:
+      data-class: 'block-muser-my-projects-header-block .button--standard'
+  my-projects-list:
+    id: my-projects-list
+    plugin: text
+    label: 'List of projects'
+    body: 'All of your projects are listed here, displaying as students will see them on the public Projects page. Projects that are inactive for the current round will be grayed-out.'
+    weight: 4
+    attributes:
+      data-class: view-my-projects
+  my-projects-manage:
+    id: my-projects-manage
+    plugin: text
+    label: 'Manage your project'
+    body: 'Hover over the icon with the three dots to edit your project or make it active or inactive in the current round.'
+    weight: 5
+    attributes:
+      data-class: 'project__contextual-links .contextual-links__dots'
+  my-projects-details-bar:
+    id: my-projects-details-bar
+    plugin: text
+    label: 'Details bar'
+    body: 'This allows students to quickly see how many spots are open in each project and how many people have already applied, how many hours they''ll be required to work and if there is a possibility for extra time, and to determine if the project reflects their research interests. Note that this shows a randomly-selected category.'
+    weight: 6
+    attributes:
+      data-class: details-bar
+  my-projects-view:
+    id: my-projects-view
+    plugin: text
+    label: 'View a project'
+    body: 'Select the project title to see full details.'
+    weight: 7
+    attributes:
+      data-class: 'node--type-project .field--name-title'

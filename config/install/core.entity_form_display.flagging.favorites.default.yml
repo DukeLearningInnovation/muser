@@ -1,0 +1,43 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.flagging.favorites.field_essay
+    - field.field.flagging.favorites.field_is_submitted
+    - field.field.flagging.favorites.field_notification_sent
+    - field.field.flagging.favorites.field_status
+    - flag.flag.favorites
+id: flagging.favorites.default
+targetEntityType: flagging
+bundle: favorites
+mode: default
+content:
+  field_essay:
+    weight: 0
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_is_submitted:
+    weight: 1
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_notification_sent:
+    weight: 3
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_status:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+hidden: {  }

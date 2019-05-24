@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.how_hear
+id: taxonomy_term.how_hear
+target_entity_type_id: taxonomy_term
+target_bundle: how_hear
+default_langcode: site_default
+language_alterable: false

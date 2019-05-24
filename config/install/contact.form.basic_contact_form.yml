@@ -1,0 +1,11 @@
+langcode: en
+status: true
+dependencies: {  }
+id: basic_contact_form
+label: 'Contact us'
+recipients:
+  - muser-contact@example.com
+reply: ''
+weight: 0
+message: 'Thanks for your interest!  We''ll get back to you soon.'
+redirect: ''

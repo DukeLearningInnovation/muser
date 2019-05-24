@@ -1,0 +1,397 @@
+<?php
+
+/**
+ * @file
+ * Contains muser_user.module.
+ */
+
+use Drupal\Core\Url;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Component\Utility\Html;
+use Drupal\Core\Access\AccessResult;
+
+// user_register_form
+// user_form
+
+/**
+ * Implements hook_theme().
+ */
+function muser_user_theme() {
+  return [
+    'muser_user_menu' => [
+      'variables' => [
+        'nav' => NULL,
+        'menu_items' => NULL,
+      ],
+      'template' => 'muser-user-menu',
+    ],
+  ];
+}
+
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function muser_user_entity_extra_field_info() {
+  $extra = [];
+  $extra['user']['user']['display']['contact_email'] = [
+    'label' => t('Contact email address'),
+    'description' => t('Email address for the user'),
+    'visible' => FALSE,
+  ];
+  return $extra;
+}
+
+
+/**
+ * Implements hook_entity_view().
+ */
+function muser_user_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+
+  if ($entity->getEntityTypeId() != 'user') {
+    return;
+  }
+
+  if ($component = $display->getComponent('contact_email')) {
+    $build['contact_email']['#markup'] = 'my email!';
+    $link = '<a href="mailto:' . $entity->getEmail() . '" class="email-link">' . Html::escape($entity->getEmail()) . '</a>';
+    $build['contact_email'] = [
+      '#type' => 'markup',
+      '#markup' => muser_system_get_display_only_field('field_contact_email', t('Email'), $link, 'inline'),
+      '#weight' => $component['weight'],
+    ];
+  } // Show email address?
+
+}
+
+function muser_user_profile_is_complete(Drupal\user\Entity\User $account) {
+  return ($account->field_user_type->value) ? TRUE : FALSE;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function muser_user_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+
+  foreach (['field_yr_in_college', 'field_major'] as $field) {
+    if (isset($form[$field]['widget']['#options']['_none'])) {
+      // Don't show a "N/A" value for this field.
+      unset($form[$field]['widget']['#options']['_none']);
+    }
+  }
+
+  if (!empty($form['language'])) {
+    // Hide the language selector.
+    $form['language']['#access'] = FALSE;
+  }
+
+  /** @var Drupal\user\Entity\User $account */
+  $account = $form_state->getFormObject()->getEntity();
+
+  $muser_config = \Drupal::config('muser_system.settings');
+  $user_management_restricted = $muser_config->get('user_management_restricted');
+
+  if (!\Drupal::currentUser()->hasPermission('administer users')) {
+
+    if ($form['field_user_type']['widget']['#default_value'] != 'admin') {
+      unset($form['field_user_type']['widget']['#options']['admin']);
+    }
+
+    // Hide the Mentor star from non-admins.
+    $form['field_has_star']['#access'] = FALSE;
+
+    $form['#attached']['library'][] = 'muser_user/user-type';
+
+    $current_type = '';
+    if ($account->field_user_type->value && $current_value = $account->field_user_type->first()->view()) {
+      $current_type = $current_value['#markup'];
+    }
+    $form['user_type_display'] = [
+      '#type' => 'markup',
+      '#prefix' => '<div class="change-user-type">',
+      '#markup' => '<div class="field field--name-field-user-type field--type-list-string field__item">'
+      . t('I am a %type', ['%type' => $current_type])
+      . '</div>',
+      'change_use_type' => [
+        '#type' => 'button',
+        '#value' => t('Not a @type? Change this.', ['@type' => $current_type]),
+      ],
+      'change_use_type_after' => [
+        '#type' => 'button',
+        '#value' => t('Change this.'),
+      ],
+      '#suffix' => '</div>',
+      '#weight' => -100,
+    ];
+
+    foreach ($form['field_user_type']['widget']['#options'] as $role => &$text) {
+      if (!$role_description = $muser_config->get('role_description_' . $role)) {
+        continue;
+      }
+      $text = '<div class="role--name">'
+        . $text
+        . '</div><div class="role--description">'
+        . check_markup($role_description['value'], $role_description['format'])
+        . '</div>';
+    } // Loop thru roles.
+
+  } // Admin user editing someone?
+
+  if ($user_management_restricted) {
+    // User management is restricted-- don't allow access to these fields.
+    if (empty($form['account']['roles']['#access'])) {
+      unset($form['#group_children']['account']);
+    }
+    $form['account']['name']['#access'] = FALSE;
+    if (\Drupal::currentUser()->hasPermission('administer users')) {
+      $form['account']['mail']['#disabled'] = TRUE;
+    }
+    else {
+      $form['account']['mail']['#access'] = FALSE;
+    }
+    $form['account']['pass']['#access'] = FALSE;
+    $form['account']['current_pass']['#access'] = FALSE;
+    return;
+  } // User management restricted?
+
+  if (!$account->id()) {
+    return;
+  }
+
+  $form['#attached']['library'][] = 'muser_user/user-form';
+
+  $form['account']['name']['#weight'] = -10;
+  $form['account']['mail']['#weight'] = -9;
+  $form['account']['current_pass']['#description'] = t('Required if you want to change the %mail or %pass. <a href=":request_new_url" title="Send password reset instructions via email.">Reset your password</a>.', [
+    '%mail' => $form['account']['mail']['#title'],
+    '%pass' => t('Password'),
+    ':request_new_url' => Url::fromRoute('user.pass')->toString(),
+  ]);
+  $form['account']['change_pass'] = [
+    '#type' => 'button',
+    '#value' => t('Change password'),
+    '#attributes' => ['class' => ['change-pass']],
+    '#weight' => -8,
+  ];
+
+  if ($account->hasRole('mentor')) {
+
+
+  }
+
+  if ($account->hasRole('student')) {
+
+
+  }
+
+  if ($account->hasRole('site_admin') || $account->hasRole('administrator')) {
+
+
+  }
+  /*
+  Are you a mentor?
+  As a mentor, you'll be able to create and manage your projects and view students
+  who apply for your projects.
+
+  Are you a student?
+  As a student, you'll be able to browse available projects and apply for
+  positions that interest you.
+   */
+
+  // if they're a student, hide mentor fields
+
+  // if they're a mentor, hide student fields
+
+  // if they're an admin already, hide student & mentor fields?
+  // - can they be a mentor and an admin?  maybe
+
+
+}
+
+/**
+ * Implements hook_field_group_build_pre_render_alter().
+ */
+function muser_user_field_group_build_pre_render_alter(&$element) {
+
+  if (empty($element['#form_id'])) {
+    return;
+  }
+
+  if ($element['#form_id'] != 'user_form' && $element['#form_id'] != 'user_register_form') {
+    return;
+  }
+
+  $fields = [
+    'group_student_info' => 'student',
+    'group_mentor_info' => 'mentor',
+  ];
+  foreach ($fields as $name => $value) {
+    if (isset($element[$name])) {
+      // Add form states to the field group.
+      $element[$name]['#attributes']['class'][] = 'form-wrapper';
+      $element[$name]['#attributes']['class'][] = 'js-form-wrapper';
+      $element[$name]['#states'] = [
+        'visible' => [
+          ':input[name="field_user_type"]' => ['value' => $value],
+        ],
+      ];
+    }
+  } // Loop thru field groups.
+
+} // End muser_user_field_group_build_pre_render_alter().
+
+/**
+ * Implements hook_entity_update().
+ */
+function muser_user_user_update(Drupal\Core\Entity\EntityInterface $entity) {
+
+  /** @var Drupal\user\Entity\User $entity */
+  $old_user_type = $entity->original->field_user_type->value;
+  $new_user_type = $entity->field_user_type->value;
+
+  if ($new_user_type == 'mentor'
+    && $new_user_type != $old_user_type
+    && !\Drupal::currentUser()->hasPermission('administer users')
+  ) {
+    // Send email.
+    muser_user_send_mentor_request_email($entity);
+  } // Requesting mentor role / user type?
+
+  if ($entity->hasRole('mentor') && !$entity->original->hasRole('mentor')) {
+    // Send email.
+    muser_user_send_mentor_grant_email($entity);
+  } // Newly-granted mentor role?
+
+  if ($new_user_type == 'student'
+    && !$entity->hasRole('student')
+  ) {
+    // Grant "student" role.
+    $entity->addRole('student');
+    $entity->save();
+  } // Add student role?
+
+}
+
+/**
+ * Implements hook_mail().
+ */
+function muser_user_mail($key, &$message, $params) {
+  $message['from'] = $params['from'];
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['message'];
+}
+
+function muser_user_send_mentor_request_email(Drupal\user\Entity\User $account) {
+
+  $muser_config = \Drupal::config('muser_system.settings');
+  if (!$recipients = $muser_config->get('mentor_request_recipients')) {
+    // No recipients, don't send.
+    return;
+  }
+  $to = implode(',', $recipients);
+
+  $site_config = \Drupal::config('system.site');
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  /** @var \Drupal\Core\Utility\Token $token_service */
+  $token_service = \Drupal::token();
+  $muser_data['round'] = muser_project_get_current_round(TRUE);
+  $params['from'] = muser_system_format_email($site_config->get('name'), $site_config->get('mail'));
+  $params['subject'] = $token_service->replace($muser_config->get('mentor_request_email_subject'), ['user' => $account, 'muser' => $muser_data]);
+  $params['message'] = $token_service->replace($muser_config->get('mentor_request_email_body'), ['user' => $account, 'muser' => $muser_data]);
+
+  /** @var \Drupal\Core\Mail\MailManager $mailer */
+  $mailer = \Drupal::service('plugin.manager.mail');
+  $module = 'muser_user';
+  $key = 'mentor_request';
+
+  $send = TRUE;
+  $result = $mailer->mail($module, $key, $to, $language, $params, NULL, $send);
+  if ($result['result'] !== TRUE) {
+    \Drupal::logger('muser_user')->error('Error sending mentor role request email for user @user.', ['@user' => $account->getDisplayName()]);
+  }
+  else {
+    \Drupal::logger('muser_user')->info('Mentor role request email sent for user @user.', ['@user' => $account->getDisplayName()]);
+  }
+
+}
+
+function muser_user_send_mentor_grant_email(Drupal\user\Entity\User $account) {
+
+  $muser_config = \Drupal::config('muser_system.settings');
+  $site_config = \Drupal::config('system.site');
+  $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
+
+  $to = muser_system_format_email($account->getDisplayName(), $account->getEmail());
+
+  /** @var \Drupal\Core\Utility\Token $token_service */
+  $token_service = \Drupal::token();
+  $muser_data['round'] = muser_project_get_current_round(TRUE);
+  $params['from'] = muser_system_format_email($site_config->get('name'), $site_config->get('mail'));
+  $params['subject'] = $token_service->replace($muser_config->get('mentor_grant_email_subject'), ['user' => $account, 'muser' => $muser_data]);
+  $params['message'] = $token_service->replace($muser_config->get('mentor_grant_email_body'), ['user' => $account, 'muser' => $muser_data]);
+
+  /** @var \Drupal\Core\Mail\MailManager $mailer */
+  $mailer = \Drupal::service('plugin.manager.mail');
+  $module = 'muser_user';
+  $key = 'mentor_grant';
+
+  $send = TRUE;
+  $result = $mailer->mail($module, $key, $to, $language, $params, NULL, $send);
+  if ($result['result'] !== TRUE) {
+    \Drupal::logger('muser_user')->error('Error sending mentor role request email for user @user.', ['@user' => $account->getDisplayName()]);
+  }
+  else {
+    \Drupal::logger('muser_user')->info('Mentor role request email sent for user @user.', ['@user' => $account->getDisplayName()]);
+  }
+
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function muser_user_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  if (strpos($form['#id'], 'views-exposed-form-mentor-requests-page') !== 0) {
+    return;
+  }
+  $form['role']['#options']['mentor'] = t('Not a Mentor');
+} // End muser_user_form_views_exposed_form_alter()
+
+/**
+ * Implements hook_entity_access().
+ */
+function muser_user_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+
+  if ($entity->getEntityTypeId() != 'file' || $operation != 'download') {
+    return;
+  }
+
+  // Get the host entity (user) for the file.
+  if ($references = file_get_file_references($entity)) {
+    $usage = reset($references);
+    if (!empty($usage['user'])) {
+      $owner = key($usage['user']);
+    }
+  }
+
+  if (empty($owner) || !$round_nid = muser_project_get_current_round()) {
+    return AccessResult::neutral();
+  }
+
+  // See if the owner of the file has submitted an application to the mentor.
+  $query = \Drupal::database()->select('muser_applications', 'ma');
+  $query->addField('ma', 'fid');
+  $query->condition('ma.application_uid', $owner)
+    ->condition('ma.is_submitted', 1)
+    ->condition('ma.project_uid', $account->id())
+    ->condition('ma.round_nid', $round_nid);
+  if ($fid = $query->execute()->fetchField()) {
+    // There is at least one application.
+    return AccessResult::allowed();
+  }
+  return AccessResult::neutral();
+
+}

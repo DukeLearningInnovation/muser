@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_user
+  theme:
+    - muser_base
+id: muserusermenublock
+theme: muser_base
+region: header_menu
+weight: -10
+provider: null
+plugin: muser_user_menu
+settings:
+  id: muser_user_menu
+  label: 'Muser user menu block'
+  provider: muser_user
+  label_display: '0'
+visibility: {  }
