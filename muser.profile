@@ -45,6 +45,10 @@ function muser_install_tasks() {
 
 function muser_post_install_config_import() {
 
+  // Create the custom colors CSS file.
+  include_once drupal_get_path('theme', 'muser_base') . '/includes/theme_settings.inc';
+  muser_base_create_accent_css();
+
   $config_path = drupal_get_path('profile', 'muser') . '/config/post-install';
   $source = new \Drupal\Core\Config\FileStorage($config_path);
   $config_storage = \Drupal::service('config.storage');
