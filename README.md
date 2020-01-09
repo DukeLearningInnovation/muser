@@ -1,5 +1,7 @@
 # Muser
 
+[![DOI](https://zenodo.org/badge/184466830.svg)](https://zenodo.org/badge/latestdoi/184466830)
+
 Muser is a Drupal installation profile that allows you to quickly set up a site to connect undergraduate students with mentors (faculty, postdoctoral researchers, lab technicians/managers/research affiliates, and graduate students) that have projects with open research positions. Mentors can post their projects while students can browse and search for opportunities that interest them and apply directly through the site. Mentors then review applications online and accept or reject them.
 
 ## Blind Review
