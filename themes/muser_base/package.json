@@ -24,6 +24,6 @@
     "run-sequence": "^2.2.1"
   },
   "dependencies": {
-    "node-sass": "^4.9.2"
+    "node-sass": "^4.13.1"
   }
 }
