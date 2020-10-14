@@ -160,39 +160,15 @@ function muser_base_preprocess_field(&$variables) {
  */
 function muser_base_preprocess_file_link(&$variables) {
 
-  if (is_string($variables['link']) || empty($variables['link']->getGeneratedLink())) {
+  if (is_string($variables['link']) || empty($variables['link']['#url'])) {
     // Don't have generated link.
     return;
   }
 
-  $file = $variables['file'];
-  $url = file_create_url($file->uri->value);
-
-  // Use the description as the link text, if available.
-  if (empty($variables['description'])) {
-    $link_text = $file->filename->value;
-  }
-  else {
-    $link_text = $variables['description']->__toString();
-  }
-
-  $link = Url::fromUri($url);
-
-  // All of these options are standard file link, with the exception
-  // of target and rel - the two attributes we actually want to add.
-  $link_options = array(
-    'attributes' => array(
-      'type' => $file->filemime->value . '; length=' . $file->filesize->value,
-      'title' => \Drupal\Component\Utility\Html::escape($file->filename->value),
-      'target' => '_blank',
-      'rel' => 'noopener',
-    ),
-  );
-
-  $link->setOptions($link_options);
-  $link_html = Link::fromTextAndUrl($link_text, $link)->toString();
-
-  $variables['link']->setGeneratedLink($link_html);
+  $link_options = $variables['link']['#url']->getOptions();
+  $link_options['attributes']['target'] = '_blank';
+  $link_options['attributes']['rel'] = 'noopener';
+  $variables['link']['#url']->setOptions($link_options);
 
 }
 
