@@ -1037,9 +1037,24 @@ function muser_project_node_create_access(AccountInterface $account, array $cont
  * Implements hook_node_access().
  */
 function muser_project_node_access(NodeInterface $node, $op, AccountInterface $account) {
-  if ($op != 'view' && $node->bundle() == 'project') {
-    return muser_project_project_access_check($account);
-  }
+  if ($node->bundle() == 'project') {
+    if ($op == 'view') {
+      // Viewing it.
+      if (!$account->hasPermission('administer project rounds')
+        // Project isn't part of this round.
+        && !muser_project_get_project_round_for_project($node->id())
+        // They're not the author-- don't allow viewing.
+        && $node->getRevisionUserId() != $account->id()) {
+        return AccessResult::forbidden();
+      }
+      // Project is part of the round or they're the author or admin.
+      return AccessResult::neutral();
+    }
+    else {
+      // Not viewing it.
+      return muser_project_project_access_check($account);
+    } // Are they viewing it?
+  } // Is it a project?
   if ($op == 'view' && $node->bundle() == 'round') {
     return AccessResult::forbiddenIf(!$account->hasPermission('create round content'), "The 'create round content' is required.");
   }
@@ -1056,7 +1071,7 @@ function muser_project_node_access(NodeInterface $node, $op, AccountInterface $a
 function muser_project_project_access_check(AccountInterface $account) {
 
   if ($account->hasPermission('administer project rounds')) {
-    // The can manage projects outside of dates-- don't bother.
+    // They can manage projects outside of dates-- don't bother.
     return AccessResult::neutral();
   }
   if (!$round = muser_project_get_current_round()) {
