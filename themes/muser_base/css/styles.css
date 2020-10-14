@@ -787,8 +787,6 @@ input[type="number"] {
     -webkit-box-shadow: none;
             box-shadow: none;
     padding: 2px; }
-  .form-textarea-wrapper .cke {
-    border: 0; }
   .form-textarea-wrapper:focus-within, .form-textarea-wrapper:focus, .form-textarea-wrapper:hover {
     padding: 0; }
     .form-textarea-wrapper:focus-within textarea,
@@ -2548,6 +2546,9 @@ ul.tabs {
     background-color: transparent;
     border: 0;
     padding: 16px 16px 0; }
+    @media (max-width: 991px) {
+      .ui-widget.ui-widget-content .ui-dialog-titlebar {
+        padding: 16px 8px 0; } }
   .ui-widget.ui-widget-content .ui-icon-closethick {
     -webkit-transform: scale(2);
             transform: scale(2);
