@@ -212,9 +212,9 @@ function muser_user_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInte
 }
 
 /**
- * Implements hook_field_group_build_pre_render_alter().
+ * Implements hook_field_group_form_process_build_alter().
  */
-function muser_user_field_group_build_pre_render_alter(&$element) {
+function muser_user_field_group_form_process_build_alter(array &$element, FormStateInterface $form_state, &$complete_form) {
 
   if (empty($element['#form_id'])) {
     return;
