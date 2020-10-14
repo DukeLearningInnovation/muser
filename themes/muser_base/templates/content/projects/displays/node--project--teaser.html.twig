@@ -86,13 +86,13 @@
 <a{{ attributes.addClass(classes, 'use-ajax').setAttribute('href', url).setAttribute('data-dialog-options', '{"width":800}').setAttribute('data-dialog-type', 'modal').setAttribute('rel', 'bookmark') }}>
 
     <div class="project__internal-wrapper">
+      <div{{ content_attributes.addClass('node__content') }}>
       <div class="project__card-top">
         <div class="project__favorite project__favorite--invisible">{{ content.favorite_link_placeholder_text }}</div>
           {{ title_prefix }}
         <h3{{ title_attributes }}>{{ label }}</h3>
           {{ title_suffix }}
       </div>
-      <div{{ content_attributes.addClass('node__content') }}>
         {{ content|without('favorite_link', 'favorite_link_placeholder_text', 'activate_link') }}
       </div>
 

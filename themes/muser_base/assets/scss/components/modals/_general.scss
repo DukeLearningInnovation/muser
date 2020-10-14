@@ -12,6 +12,9 @@
     background-color: transparent;
     border: 0;
     padding: $site-padding $site-padding 0;
+    @include breakpoint(mobile) {
+      padding: $site-padding $site-padding / 2 0;
+    }
   }
   .ui-icon-closethick {
     transform: scale(2); // todo use fontawesome for closing icon.
