@@ -29,6 +29,7 @@ ul.tabs {
     @include nt($prop: opacity);
     @at-root .page--restricted & {
       background-color: $primary;
+      color: $text-over-primary-color;
     }
     &:hover {
       background-color: $secondary;
@@ -36,6 +37,7 @@ ul.tabs {
       opacity: 0.9;
       @at-root .page--restricted & {
         background-color: $primary;
+        color: $text-over-primary-color;
       }
     }
     &.is-active {
@@ -44,6 +46,7 @@ ul.tabs {
       opacity: 1;
       @at-root .page--restricted & {
         background-color: $primary;
+        color: $text-over-primary-color;
       }
     }
     &:focus {
@@ -52,6 +55,7 @@ ul.tabs {
       opacity: 0.9;
       @at-root .page--restricted & {
         background-color: $primary;
+        color: $text-over-primary-color;
       }
     }
   }

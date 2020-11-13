@@ -12,6 +12,7 @@
 .main__hero {
   min-height: 250px;
   background-color: $primary;
+  color: $text-over-primary-color;
   display: flex;
   flex-flow: column nowrap;
   @at-root .page--restricted & {

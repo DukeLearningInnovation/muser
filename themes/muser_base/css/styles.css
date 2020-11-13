@@ -414,6 +414,7 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
 .main__hero {
   min-height: 250px;
   background-color: var(--primary);
+  color: var(--text-over-primary-color);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2278,25 +2279,29 @@ ul.tabs {
     ul.tabs a:disabled {
       opacity: 0.5; }
     .page--restricted ul.tabs a {
-      background-color: var(--primary); }
+      background-color: var(--primary);
+      color: var(--text-over-primary-color); }
     ul.tabs a:hover {
       background-color: var(--secondary);
       color: var(--text-over-secondary-color);
       opacity: 0.9; }
       .page--restricted ul.tabs a:hover {
-        background-color: var(--primary); }
+        background-color: var(--primary);
+        color: var(--text-over-primary-color); }
     ul.tabs a.is-active {
       background-color: var(--secondary);
       color: var(--text-over-secondary-color);
       opacity: 1; }
       .page--restricted ul.tabs a.is-active {
-        background-color: var(--primary); }
+        background-color: var(--primary);
+        color: var(--text-over-primary-color); }
     ul.tabs a:focus {
       background-color: var(--secondary);
       color: var(--text-over-secondary-color);
       opacity: 0.9; }
       .page--restricted ul.tabs a:focus {
-        background-color: var(--primary); }
+        background-color: var(--primary);
+        color: var(--text-over-primary-color); }
 
 .view-id-applications .view-content {
   display: -webkit-box;
@@ -3323,6 +3328,8 @@ ul.tabs {
   color: var(--text-over-primary-color);
   text-align: center;
   margin: 0; }
+  .page--restricted .page-title {
+    color: var(--text-over-secondary-color); }
 
 .hero__content {
   -webkit-box-flex: 1;

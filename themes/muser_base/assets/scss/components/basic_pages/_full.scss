@@ -4,6 +4,9 @@
 
   text-align: center;
   margin: 0;
+  .page--restricted & {
+    color: $text-over-secondary-color;
+  }
 }
 
 .region-hero {
