@@ -17,3 +17,20 @@ The Muser site can be configured to send out emails automatically to:
 ## Customizable Colors
 
 Muser uses a custom theme that allows you to select one of various pre-set color schemes or to choose the exact colors to match your school's color palette.
+
+## Cron jobs
+Set up the following cron jobs (update paths as needed):
+```
+#
+# Crontab entries for muser
+#
+
+# Check and set the current Round.
+* * * * * cd /app/web && drush muser_system:set-current-round > /dev/null 2>&1
+
+# Check for and send scheduled emails.
+* * * * * cd /app/web && drush muser_system:send-scheduled-emails > /dev/null 2>&1
+
+# Run queue_mail queue worker.
+*/5 * * * * cd /app/web && drush queue:run queue_mail > /dev/null 2>&1
+```
