@@ -135,11 +135,33 @@ function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $for
     ],
   ];
 
-  $form['custom_message_text_color'] = [
+  $form['custom_message_status_text_color'] = [
     '#type' => 'textfield',
-    '#title' => t('Text color for messages.'),
+    '#title' => t('Text color for status messages.'),
     '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
-    '#default_value' => theme_get_setting('custom_message_text_color'),
+    '#default_value' => theme_get_setting('custom_message_status_text_color'),
+    '#states' => [
+      'visible' => $condition,
+      'required' => $condition,
+    ],
+  ];
+
+  $form['custom_message_warning_text_color'] = [
+    '#type' => 'textfield',
+    '#title' => t('Text color for warning messages.'),
+    '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
+    '#default_value' => theme_get_setting('custom_message_warning_text_color'),
+    '#states' => [
+      'visible' => $condition,
+      'required' => $condition,
+    ],
+  ];
+
+  $form['custom_message_error_text_color'] = [
+    '#type' => 'textfield',
+    '#title' => t('Text color for error messages.'),
+    '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
+    '#default_value' => theme_get_setting('custom_message_error_text_color'),
     '#states' => [
       'visible' => $condition,
       'required' => $condition,
@@ -242,10 +264,12 @@ function muser_base_get_colorsets() {
       'BACKGROUND_COLOR' => '#F3F2F1',
       'TITLE_COLOR' => '#001A57',
       'TEXT_COLOR' => '#262626',
-      'MESSAGE_ERROR' => '#C84E00',
-      'MESSAGE_WARNING' => '#E89923',
-      'MESSAGE_STATUS' => '#A1B70D',
-      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'MESSAGE_ERROR_BG' => '#C84E00',
+      'MESSAGE_WARNING_BG' => '#E89923',
+      'MESSAGE_STATUS_BG' => '#A1B70D',
+      'MESSAGE_ERROR_TEXT' => '#FFFFFF',
+      'MESSAGE_WARNING_TEXT' => '#FFFFFF',
+      'MESSAGE_STATUS_TEXT' => '#FFFFFF',
       'TEXT_OVER_PRIMARY' => '#FFFFFF',
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
@@ -255,9 +279,9 @@ function muser_base_get_colorsets() {
       'BACKGROUND_COLOR' => '#F3F2F1',
       'TITLE_COLOR' => '#001A57',
       'TEXT_COLOR' => '#262626',
-      'MESSAGE_ERROR' => '#D14905',
-      'MESSAGE_WARNING' => '#FDD726',
-      'MESSAGE_STATUS' => '#6F7D1C',
+      'MESSAGE_ERROR_BG' => '#D14905',
+      'MESSAGE_WARNING_BG' => '#FDD726',
+      'MESSAGE_STATUS_BG' => '#6F7D1C',
       'MESSAGE_TEXT_COLOR' => '#FFFFFF',
       'TEXT_OVER_PRIMARY' => '#FFFFFF',
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
@@ -268,10 +292,12 @@ function muser_base_get_colorsets() {
       'BACKGROUND_COLOR' => '#F3F2F1',
       'TITLE_COLOR' => '#001A57',
       'TEXT_COLOR' => '#262626',
-      'MESSAGE_ERROR' => '#DADDC0',
-      'MESSAGE_WARNING' => '#E89923',
-      'MESSAGE_STATUS' => '#A1B70D',
-      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'MESSAGE_ERROR_BG' => '#DADDC0',
+      'MESSAGE_WARNING_BG' => '#E89923',
+      'MESSAGE_STATUS_BG' => '#A1B70D',
+      'MESSAGE_ERROR_TEXT' => '#FFFFFF',
+      'MESSAGE_WARNING_TEXT' => '#FFFFFF',
+      'MESSAGE_STATUS_TEXT' => '#FFFFFF',
       'TEXT_OVER_PRIMARY' => '#FFFFFF',
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
@@ -290,10 +316,12 @@ function muser_base_get_accent_colors($colorset = NULL, $form_values = NULL) {
     'BACKGROUND_COLOR' => $form_values['custom_background_color']['#value'] ?? theme_get_setting('custom_background_color', 'muser_base'),
     'TITLE_COLOR' => $form_values['custom_title_color']['#value'] ?? theme_get_setting('custom_title_color', 'muser_base'),
     'TEXT_COLOR' => $form_values['custom_text_color']['#value'] ?? theme_get_setting('custom_text_color', 'muser_base'),
-    'MESSAGE_ERROR' => $form_values['custom_error_message_color']['#value'] ?? theme_get_setting('custom_error_message_color', 'muser_base'),
-    'MESSAGE_WARNING' => $form_values['custom_warning_message_color']['#value'] ?? theme_get_setting('custom_warning_message_color', 'muser_base'),
-    'MESSAGE_STATUS' => $form_values['custom_status_message_color']['#value'] ?? theme_get_setting('custom_status_message_color', 'muser_base'),
-    'MESSAGE_TEXT_COLOR' => $form_values['custom_message_text_color']['#value'] ?? theme_get_setting('custom_message_text_color', 'muser_base'),
+    'MESSAGE_ERROR_BG' => $form_values['custom_error_message_color']['#value'] ?? theme_get_setting('custom_error_message_color', 'muser_base'),
+    'MESSAGE_WARNING_BG' => $form_values['custom_warning_message_color']['#value'] ?? theme_get_setting('custom_warning_message_color', 'muser_base'),
+    'MESSAGE_STATUS_BG' => $form_values['custom_status_message_color']['#value'] ?? theme_get_setting('custom_status_message_color', 'muser_base'),
+    'MESSAGE_ERROR_TEXT' => $form_values['custom_message_error_text_color']['#value'] ?? theme_get_setting('custom_message_error_text_color', 'muser_base'),
+    'MESSAGE_WARNING_TEXT' => $form_values['custom_message_warning_text_color']['#value'] ?? theme_get_setting('custom_message_warning_text_color', 'muser_base'),
+    'MESSAGE_STATUS_TEXT' => $form_values['custom_message_status_text_color']['#value'] ?? theme_get_setting('custom_message_status_text_color', 'muser_base'),
     'TEXT_OVER_PRIMARY' => $form_values['custom_text_over_primary_color']['#value'] ?? theme_get_setting('custom_text_over_primary_color', 'muser_base'),
     'TEXT_OVER_SECONDARY' => $form_values['custom_text_over_secondary_color']['#value'] ?? theme_get_setting('custom_text_over_secondary_color', 'muser_base'),
   ];
@@ -326,10 +354,12 @@ function muser_base_create_accent_css($values = NULL) {
   $css = preg_replace('/BACKGROUND_COLOR/', $colorset['BACKGROUND_COLOR'], $css);
   $css = preg_replace('/TITLE_COLOR/', $colorset['TITLE_COLOR'], $css);
   $css = preg_replace('/TEXT_COLOR/', $colorset['TEXT_COLOR'], $css);
-  $css = preg_replace('/MESSAGE_ERROR/', $colorset['MESSAGE_ERROR'], $css);
-  $css = preg_replace('/MESSAGE_WARNING/', $colorset['MESSAGE_WARNING'], $css);
-  $css = preg_replace('/MESSAGE_STATUS/', $colorset['MESSAGE_STATUS'], $css);
-  $css = preg_replace('/MESSAGE_TEXT_COLOR/', $colorset['MESSAGE_TEXT_COLOR'], $css);
+  $css = preg_replace('/MESSAGE_ERROR_BG/', $colorset['MESSAGE_ERROR_BG'], $css);
+  $css = preg_replace('/MESSAGE_WARNING_BG/', $colorset['MESSAGE_WARNING_BG'], $css);
+  $css = preg_replace('/MESSAGE_STATUS_BG/', $colorset['MESSAGE_STATUS_BG'], $css);
+  $css = preg_replace('/MESSAGE_ERROR_TEXT/', $colorset['MESSAGE_ERROR_TEXT'], $css);
+  $css = preg_replace('/MESSAGE_WARNING_TEXT/', $colorset['MESSAGE_WARNING_TEXT'], $css);
+  $css = preg_replace('/MESSAGE_STATUS_TEXT/', $colorset['MESSAGE_STATUS_TEXT'], $css);
   $css = preg_replace('/TEXT_OVER_PRIMARY/', $colorset['TEXT_OVER_PRIMARY'], $css);
   $css = preg_replace('/TEXT_OVER_SECONDARY/', $colorset['TEXT_OVER_SECONDARY'], $css);
   $site_css_dir = 'public://site-css/';

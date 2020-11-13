@@ -16,27 +16,41 @@
   + .messages {
     margin-top: $site-padding / 2;
   }
+  color: $message-text-color-status;
+  a {
+    color: white;
+    color: $message-text-color-status;
+  }
+
   &.messages--status {
     color: white;
-    color: $message-text-color;
+    color: $message-text-color-status;
     background-color: $status-color;
     background-image: none;
+    a {
+      color: white;
+      color: $message-text-color-status;
+    }
   }
   &.messages--warning {
     color: white;
-    color: $message-text-color;
+    color: $message-text-color-warning;
     background-color: $warning-color;
     background-image: none;
+    a {
+      color: white;
+      color: $message-text-color-warning;
+    }
   }
   &.messages--error {
     color: white;
-    color: $message-text-color;
+    color: $message-text-color-error;
     background-color: $error-color;
     background-image: none;
-  }
-  a {
-    color: white;
-    color: $message-text-color;
+    a {
+      color: white;
+      color: $message-text-color-error;
+    }
   }
 }
 

@@ -14,7 +14,9 @@ $warning-color: var(--warning-message-color);
 $error-color: var(--error-message-color);
 $status-color: var(--status-message-color);
 
-$message-text-color: var(--message-text-color);
+$message-text-color-status: var(--message-text-color-status);
+$message-text-color-warning: var(--message-text-color-warning);
+$message-text-color-error: var(--message-text-color-error);
 
 $text-over-primary-color: var(--text-over-primary-color);
 $text-over-secondary-color: var(--text-over-secondary-color);

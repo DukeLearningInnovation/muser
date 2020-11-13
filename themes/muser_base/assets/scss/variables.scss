@@ -6,10 +6,13 @@
   --title-color: TITLE_COLOR;
   --text-color: TEXT_COLOR;
 
-  --status-message-color: MESSAGE_STATUS;
-  --warning-message-color: MESSAGE_WARNING;
-  --error-message-color: MESSAGE_ERROR;
-  --message-text-color: MESSAGE_TEXT_COLOR;
+  --status-message-color: MESSAGE_STATUS_BG;
+  --warning-message-color: MESSAGE_WARNING_BG;
+  --error-message-color: MESSAGE_ERROR_BG;
+
+  --message-text-color-error: MESSAGE_ERROR_TEXT;
+  --message-text-color-warning: MESSAGE_WARNING_TEXT;
+  --message-text-color-status: MESSAGE_STATUS_TEXT;
 
   --text-over-primary-color: TEXT_OVER_PRIMARY;
   --text-over-secondary-color: TEXT_OVER_SECONDARY;

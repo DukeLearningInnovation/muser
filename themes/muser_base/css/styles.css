@@ -596,30 +596,40 @@ a.tabledrag-handle .handle {
   padding: 16px;
   padding-left: 56px;
   background-image: none;
-  position: relative; }
+  position: relative;
+  color: var(--message-text-color-status); }
   @media (max-width: 991px) {
     .messages {
       margin: 16px 0 8px; } }
   .messages + .messages {
     margin-top: 8px; }
-  .messages.messages--status {
-    color: white;
-    color: var(--message-text-color);
-    background-color: var(--status-message-color);
-    background-image: none; }
-  .messages.messages--warning {
-    color: white;
-    color: var(--message-text-color);
-    background-color: var(--warning-message-color);
-    background-image: none; }
-  .messages.messages--error {
-    color: white;
-    color: var(--message-text-color);
-    background-color: var(--error-message-color);
-    background-image: none; }
   .messages a {
     color: white;
-    color: var(--message-text-color); }
+    color: var(--message-text-color-status); }
+  .messages.messages--status {
+    color: white;
+    color: var(--message-text-color-status);
+    background-color: var(--status-message-color);
+    background-image: none; }
+    .messages.messages--status a {
+      color: white;
+      color: var(--message-text-color-status); }
+  .messages.messages--warning {
+    color: white;
+    color: var(--message-text-color-warning);
+    background-color: var(--warning-message-color);
+    background-image: none; }
+    .messages.messages--warning a {
+      color: white;
+      color: var(--message-text-color-warning); }
+  .messages.messages--error {
+    color: white;
+    color: var(--message-text-color-error);
+    background-color: var(--error-message-color);
+    background-image: none; }
+    .messages.messages--error a {
+      color: white;
+      color: var(--message-text-color-error); }
 
 .message__icon {
   position: absolute;
