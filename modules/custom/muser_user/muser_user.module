@@ -138,7 +138,18 @@ function muser_user_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInte
         . '</div>';
     } // Loop thru roles.
 
+    $allowed_email_domains = trim($muser_config->get('allowed_email_domains'));
+    if ($allowed_email_domains && $account->id() == \Drupal::currentUser()->id()) {
+      $form['account']['mail']['#allowed_email_domains'] = $allowed_email_domains;
+      $form['account']['mail']['#element_validate'][] = 'muser_user_validate_restricted_email_domains';
+    }
+
   } // Admin user editing someone?
+
+  if ($allowed_email_domains_message = $muser_config->get('allowed_email_domains_message')) {
+    $form['account']['mail']['#allowed_email_domains_message'] = $allowed_email_domains_message;
+    $form['account']['mail']['#description'] .= '<br/>' . check_markup($allowed_email_domains_message, 'full_html');
+  }
 
   if ($user_management_restricted) {
     // User management is restricted-- don't allow access to these fields.
@@ -242,6 +253,27 @@ function muser_user_field_group_form_process_build_alter(array &$element, FormSt
   } // Loop thru field groups.
 
 } // End muser_user_field_group_build_pre_render_alter().
+
+function muser_user_validate_restricted_email_domains(&$element, FormStateInterface $form_state) {
+
+  $allowed_email_domains = $element['#allowed_email_domains'];
+  $domains = array_filter(array_map('trim', explode("\n", $allowed_email_domains)));
+  $email_domain = NULL;
+  if (!empty($element['#value'])) {
+    $parts = explode('@', trim($element['#value']));
+    $email_domain = trim('@' . array_pop($parts));
+  };
+
+  if (!$domains || !$email_domain) {
+    return;
+  }
+
+  if (!in_array($email_domain, $domains)) {
+    $error_message = $element['#allowed_email_domains_message'] ?? t('Invalid email address domain.');
+    $form_state->setError($element, $error_message);
+  } // Is domain valid?
+
+}
 
 /**
  * Implements hook_entity_insert().

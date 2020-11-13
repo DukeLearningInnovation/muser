@@ -100,6 +100,28 @@ class MuserConfig extends ConfigFormBase {
       ];
     }
 
+    $form['user_management']['email_restrictions'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Email address restrictions'),
+      '#states' => [
+        'visible' => [
+          ':input[name="user_login_method"]' => ['value' => 'drupal'],
+        ],
+      ],
+    ];
+    $form['user_management']['email_restrictions']['allowed_email_domains'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Allowed email address domains'),
+      '#description' => $this->t('If set, users will only be allowed to use email addresses from these domains <em>when registering</em>. Administrative users will still be able to create users with any email address.<br/>Enter one per line, starting with "@" (e.g. <em>@example.com</em>).'),
+      '#default_value' => $config->get('allowed_email_domains'),
+    ];
+    $form['user_management']['email_restrictions']['allowed_email_domains_message'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Message to users'),
+      '#description' => $this->t('Will be shown on registration form with the email address field. Will also be used as the error message if they use an invalid email address.'),
+      '#default_value' => $config->get('allowed_email_domains_message'),
+    ];
+
     $form['rounds'] = [
       '#type' => 'details',
       '#title' => $this->t('Rounds'),
@@ -239,7 +261,14 @@ class MuserConfig extends ConfigFormBase {
     }
     if ($values['user_login_method'] == 'drupal') {
       $values['user_management_restricted'] = FALSE;
+      $config->set('allowed_email_domains', $values['allowed_email_domains']);
+      $config->set('allowed_email_domains_message', $values['allowed_email_domains_message']);
     }
+    else {
+      $config->set('allowed_email_domains', NULL);
+      $config->set('allowed_email_domains_message', NULL);
+    }
+
     $config->set('user_login_method', $values['user_login_method']);
     $config->set('user_management_restricted', $values['user_management_restricted']);
 
