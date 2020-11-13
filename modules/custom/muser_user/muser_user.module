@@ -259,7 +259,7 @@ function muser_user_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
 function muser_user_user_update(Drupal\Core\Entity\EntityInterface $entity) {
 
   /** @var Drupal\user\Entity\User $entity */
-  $old_user_type = $entity->original->field_user_type->value;
+  $old_user_type = (!empty($entity->original)) ? $entity->original->field_user_type->value : NULL;
   $new_user_type = $entity->field_user_type->value;
 
   if ($new_user_type == 'mentor'
