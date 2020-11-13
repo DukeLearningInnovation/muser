@@ -23,7 +23,10 @@
   };
   Drupal.behaviors.muserViewFilters = {
     attach: function (context, settings) {
-      $('.muser-view-filters .form-item-search, .muser-view-filters details')
+      $('.muser-view-filters .form-item-search')
+        .once('muser-view-filters-wrapper--applied')
+        .wrapAll('<div class="muser-view-filters-wrapper muser-view-filters-wrapper--right"></div>');
+      $('.muser-view-filters details')
         .once('muser-view-filters-wrapper--applied')
         .wrapAll('<div class="muser-view-filters-wrapper"></div>');
 

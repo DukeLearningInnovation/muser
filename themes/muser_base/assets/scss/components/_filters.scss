@@ -15,6 +15,12 @@
         max-width: 100%;
         width: 250px;
       }
+      &.form-no-label {
+
+      }
+    }
+    .muser-view-filters-wrapper--right {
+      order: 999;
     }
     .search__wrapper {
       position: relative;
@@ -32,7 +38,7 @@
       //background: $background-color;
       background: 0;
       border: 0;
-
+      color: $text-color;
       border-top-right-radius: $border-radius;
       border-bottom-right-radius: $border-radius;
       svg {
@@ -44,6 +50,7 @@
         opacity: 0.8;
       }
     }
+
     .muser-view-filters-wrapper,
     .form--inline {
       display: flex;
