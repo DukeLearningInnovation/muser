@@ -269,6 +269,8 @@ function _muser_system_get_date_text($muser_data, $name, $format = MUSER_DEFAULT
   }
   $field_data = $muser_data['round']->get($fields[$date_type])->get(0)->getValue();
   $datetime = new DrupalDateTime($field_data[$key], DateTimeItemInterface::STORAGE_TIMEZONE);
+  $config_tz = \Drupal::config('system.date')->get('timezone.default');
+  date_default_timezone_set($config_tz);
   $date = \Drupal::service('date.formatter')->format($datetime->getTimestamp(), 'custom', $format);
   return $date;
 }
