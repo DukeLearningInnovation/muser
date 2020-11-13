@@ -531,12 +531,14 @@ function muser_project_remove_project_from_round($project_round_nid) {
 /**
  * @param $round_nid
  * @param string $period posting|application|acceptance
+ * @param bool $allow_ignore
+ *
  * @return bool
  */
 function muser_project_round_in_period($round_nid, $period = 'posting', $allow_ignore = TRUE) {
 
   // Allow global override of date checking.
-  if ($allow_ignore && !empty($GLOBALS['ignore_date_checking'])) {
+  if ($allow_ignore && \Drupal::service('settings')::get('ignore_date_checking')) {
     return TRUE;
   }
 

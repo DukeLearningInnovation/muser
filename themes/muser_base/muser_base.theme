@@ -54,7 +54,7 @@ function muser_base_theme_suggestions_form_element_alter(array &$suggestions, ar
  */
 function muser_base_preprocess_html(&$variables) {
   // Check for global override of date checking.
-  if (!empty($GLOBALS['ignore_date_checking'])) {
+  if (\Drupal::service('settings')::get('ignore_date_checking')) {
     \Drupal::messenger()->addWarning(t('All date restrictions for the current Round are being ignored.'));
   }
   $route_name = \Drupal::routeMatch()->getRouteName();

@@ -148,7 +148,7 @@ class ScheduledEmails {
         \Drupal::logger('muser_system')->info('Scheduled @type email must be processed.', ['@type' => $type]);
 
         // Allow global override of scheduled email sending.
-        if (!empty($GLOBALS['do_not_send_scheduled_emails'])) {
+        if (\Drupal::service('settings')::get('do_not_send_scheduled_emails')) {
           \Drupal::logger('muser_system')->info('Scheduled @type email sending prevented by a settings override.', ['@type' => $type]);
           $done = TRUE;
         }

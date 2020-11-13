@@ -111,7 +111,7 @@ function muser_system_form_node_round_form_alter(&$form, FormStateInterface $for
   $form['field_num_app_per_student']['widget'][0]['value']['#default_value'] = $config->get('default_num_applications') ?? MUSER_NUM_APPLICATIONS;
   $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
   $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
-  if (empty($GLOBALS['manage_all_round_fields'])) {
+  if (!\Drupal::service('settings')::get('manage_all_round_fields')) {
     $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
@@ -130,7 +130,7 @@ function muser_system_form_node_round_form_alter(&$form, FormStateInterface $for
  */
 function muser_system_form_node_round_edit_form_alter(&$form, FormStateInterface $form_state) {
   $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
-  if (empty($GLOBALS['manage_all_round_fields'])) {
+  if (!\Drupal::service('settings')::get('manage_all_round_fields')) {
     $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
     $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
