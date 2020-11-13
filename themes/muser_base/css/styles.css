@@ -240,7 +240,8 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
           align-items: flex-end; }
 
 .site-logo {
-  width: 150px;
+  width: 200px;
+  max-width: 200px;
   display: block;
   padding: 8px 0;
   height: 80px;
