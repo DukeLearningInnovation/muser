@@ -165,6 +165,9 @@
   .project-detail {
     display: flex;
   }
+  .field--name-field-hours-per-week {
+    max-width: 118px;
+  }
 }
 
 .field--name-field-categories .field__item {
