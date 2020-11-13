@@ -45,15 +45,18 @@ function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $for
     '#default_value' => theme_get_setting('logo_header_style'),
   ];
 
+  $colorset_options = [];
+  $colorsets = muser_base_get_colorsets();
+  foreach ($colorsets as $key => $colorset) {
+    if (!empty($colorset['name'])) {
+      $colorset_options[$key] = $colorset['name'];
+    }
+  }
+  $colorset_options['custom'] = t('Custom');
   $form['colorset'] = [
     '#type' => 'select',
-    '#attributes' => ['data-colorset-options' => json_encode(muser_base_get_colorsets())],
-    '#options' => [
-      'colorset_devil' => 'Devil (Dark blue)',
-      'colorset_wolfy' => 'Wolfy (Red)',
-      'colorset_ram' => 'Ram (Light blue)',
-      'custom' => 'Custom',
-    ],
+    '#attributes' => ['data-colorset-options' => json_encode($colorsets)],
+    '#options' => $colorset_options,
     '#title' => t('Site Accent Color Set'),
     '#default_value' => theme_get_setting('colorset'),
     '#description' => t("The color set for the site."),
@@ -269,8 +272,9 @@ function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $for
 }
 
 function muser_base_get_colorsets() {
-  return [
+  $colorsets = [
     'colorset_devil' => [
+      'name' => t('Devil (Dark blue)'),
       'PRIMARY_COLOR' => '#001A57',
       'SECONDARY_COLOR' => '#339898',
       'BACKGROUND_COLOR' => '#F3F2F1',
@@ -286,6 +290,7 @@ function muser_base_get_colorsets() {
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
     'colorset_wolfy' => [
+      'name' => t('Wolfy (Red)'),
       'PRIMARY_COLOR' => '#CC0000',
       'SECONDARY_COLOR' => '#427E93',
       'BACKGROUND_COLOR' => '#F3F2F1',
@@ -299,6 +304,7 @@ function muser_base_get_colorsets() {
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
     'colorset_ram' => [
+      'name' => t('Ram (Light blue)'),
       'PRIMARY_COLOR' => '#4B9CD3',
       'SECONDARY_COLOR' => '#2A696A',
       'BACKGROUND_COLOR' => '#F3F2F1',
@@ -314,6 +320,9 @@ function muser_base_get_colorsets() {
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
   ];
+  // Allow modules to alter/add colorsets.
+  \Drupal::moduleHandler()->alter('muser_colorsets', $colorsets);
+  return $colorsets;
 }
 
 function muser_base_get_accent_colors($colorset = NULL, $form_values = NULL) {
