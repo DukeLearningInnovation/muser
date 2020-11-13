@@ -244,6 +244,16 @@ function muser_user_field_group_form_process_build_alter(array &$element, FormSt
 } // End muser_user_field_group_build_pre_render_alter().
 
 /**
+ * Implements hook_entity_insert().
+ */
+function muser_user_entity_insert(Drupal\Core\Entity\EntityInterface $entity) {
+  $config = \Drupal::config('muser_system.settings');
+  if ($config->get('user_login_method') == 'drupal') {
+    //
+    muser_user_user_update($entity);
+  }
+}
+/**
  * Implements hook_entity_update().
  */
 function muser_user_user_update(Drupal\Core\Entity\EntityInterface $entity) {
