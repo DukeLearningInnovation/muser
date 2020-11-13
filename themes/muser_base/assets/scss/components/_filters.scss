@@ -120,6 +120,7 @@
         &.summary--has-selected {
           background-color: $secondary;
           color: white;
+          color: $text-over-secondary-color;
         }
 
         &::-webkit-details-marker {
@@ -138,6 +139,7 @@
       details[open] summary {
         background-color: $secondary;
         color: white;
+        color: $text-over-secondary-color;
       }
 
       .details-wrapper {

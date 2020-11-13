@@ -11,7 +11,7 @@ fonts:
 
 fontawesome:
   js:
-    https://use.fontawesome.com/releases/v5.6.3/js/all.js: { attributes: { data-search-pseudo-elements: ""} }
+    //cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js: { }
 
 global-js:
   dependencies:

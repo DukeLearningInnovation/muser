@@ -3,9 +3,11 @@
   min-height: 200px;
   display: block;
   color: white;
+  color: $text-over-secondary-color;
   .menu {
     a {
       color: white;
+      color: $text-over-secondary-color;
       text-decoration: none;
     }
   }
@@ -37,6 +39,7 @@
       padding: $site-padding / 2 $site-padding;
       &.is-active {
         color: white;
+        color: $text-over-secondary-color;
       }
     }
   }

@@ -24,6 +24,7 @@ ul.tabs {
     @include small-button;
     background-color: $secondary;
     color: white;
+    color: $text-over-secondary-color;
     opacity: 0.7;
     @include nt($prop: opacity);
     @at-root .page--restricted & {
@@ -31,6 +32,7 @@ ul.tabs {
     }
     &:hover {
       background-color: $secondary;
+      color: $text-over-secondary-color;
       opacity: 0.9;
       @at-root .page--restricted & {
         background-color: $primary;
@@ -38,6 +40,7 @@ ul.tabs {
     }
     &.is-active {
       background-color: $secondary;
+      color: $text-over-secondary-color;
       opacity: 1;
       @at-root .page--restricted & {
         background-color: $primary;
@@ -45,6 +48,7 @@ ul.tabs {
     }
     &:focus {
       background-color: $secondary;
+      color: $text-over-secondary-color;
       opacity: 0.9;
       @at-root .page--restricted & {
         background-color: $primary;

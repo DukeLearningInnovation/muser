@@ -1,9 +1,12 @@
 .block-muser-hero-text-block {
   color: white;
+  color: $text-over-primary-color;
   h1, h2, h3, h4, h5, h6 {
     color: white;
+    color: $text-over-primary-color;
   }
   a {
     color: white;
+    color: $text-over-primary-color;
   }
 }

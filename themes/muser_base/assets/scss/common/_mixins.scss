@@ -38,25 +38,6 @@
   @include transition-timing-function($anim);
 }
 
-@mixin bg-bar($size: wide) {
-  padding: $site-padding $site-padding;
-  background-color: $secondary-background;
-  margin: 0 0;
-  display: block;
-  >h1, >h2, >h3, >h4, >h5, >div, >span {
-    margin: 0 auto;
-    @if ($size == wide) {
-      max-width: $wide-content-width;
-    }
-    @else if ($size == mid) {
-      max-width: $mid-content-width;
-    }
-    @else if ($size == skinny) {
-      max-width: $content-width;
-    }
-  }
-}
-
 @mixin sr-only {
   border: 0;
   clip: rect(0,0,0,0);
@@ -68,12 +49,17 @@
   width: 1px;
 }
 
+.sr-only {
+  @include sr-only;
+}
+
 @mixin button {
   padding: $site-padding / 2 $site-padding * 2;
   background: $primary;
   border-radius: $border-radius;
   line-height: $line-height;
   color: white;
+  color: $text-over-primary-color;
   font-weight: 600;
   border: 0;
   display: inline-block;

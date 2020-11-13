@@ -6,6 +6,7 @@
 .button--secondary {
   @include button;
   background-color: $secondary;
+  color: $text-over-secondary-color;
 }
 
 .button--outline {

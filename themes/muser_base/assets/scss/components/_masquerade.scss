@@ -4,6 +4,7 @@
   width: 430px;
   h2 {
     color: white;
+    color: $text-over-secondary-color;
     @extend h3;
   }
   form {
@@ -33,6 +34,7 @@
   }
   a {
     color: white;
+    color: $text-over-secondary-color;
   }
   .container-inline {
     display: flex;

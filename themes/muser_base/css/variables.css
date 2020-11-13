@@ -6,4 +6,7 @@
   --text-color: TEXT_COLOR;
   --status-message-color: MESSAGE_STATUS;
   --warning-message-color: MESSAGE_WARNING;
-  --error-message-color: MESSAGE_ERROR; }
+  --error-message-color: MESSAGE_ERROR;
+  --message-text-color: MESSAGE_TEXT_COLOR;
+  --text-over-primary-color: TEXT_OVER_PRIMARY;
+  --text-over-secondary-color: TEXT_OVER_SECONDARY; }

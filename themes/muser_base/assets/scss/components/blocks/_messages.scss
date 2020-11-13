@@ -18,21 +18,25 @@
   }
   &.messages--status {
     color: white;
+    color: $message-text-color;
     background-color: $status-color;
     background-image: none;
   }
   &.messages--warning {
     color: white;
+    color: $message-text-color;
     background-color: $warning-color;
     background-image: none;
   }
   &.messages--error {
     color: white;
+    color: $message-text-color;
     background-color: $error-color;
     background-image: none;
   }
   a {
     color: white;
+    color: $message-text-color;
   }
 }
 

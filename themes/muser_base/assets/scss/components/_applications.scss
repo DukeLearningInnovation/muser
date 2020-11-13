@@ -204,6 +204,7 @@
           @include small-button;
           background-color: $primary;
           color: white;
+          color: $text-over-primary-color;
         }
       }
       details {
@@ -230,10 +231,12 @@
       }
       summary {
         color: white;
+        color: $text-over-primary-color;
         background-color: $primary;
         &.summary--has-selected {
           background-color: $secondary;
           color: white;
+          color: $text-over-secondary-color;
         }
       }
       //details[open] summary {

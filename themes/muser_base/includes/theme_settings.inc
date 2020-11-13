@@ -135,6 +135,39 @@ function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $for
     ],
   ];
 
+  $form['custom_message_text_color'] = [
+    '#type' => 'textfield',
+    '#title' => t('Text color for messages.'),
+    '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
+    '#default_value' => theme_get_setting('custom_message_text_color'),
+    '#states' => [
+      'visible' => $condition,
+      'required' => $condition,
+    ],
+  ];
+
+  $form['custom_text_over_primary_color'] = [
+    '#type' => 'textfield',
+    '#title' => t('Text Color over Primary Color. Set dark over light colors and light over dark colors.'),
+    '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
+    '#default_value' => theme_get_setting('custom_text_over_primary_color'),
+    '#states' => [
+      'visible' => $condition,
+      'required' => $condition,
+    ],
+  ];
+
+  $form['custom_text_over_secondary_color'] = [
+    '#type' => 'textfield',
+    '#title' => t('Text Color over Secondary Color. Set dark over light colors and light over dark colors.'),
+    '#attributes' => ['class' => ['color-field'], 'data-color' => 'TEXT_COLOR'],
+    '#default_value' => theme_get_setting('custom_text_over_secondary_color'),
+    '#states' => [
+      'visible' => $condition,
+      'required' => $condition,
+    ],
+  ];
+
   //  $form['accent_color_light_change_factor'] = [
   //    '#type' => 'textfield',
   //    '#title' => t('Lightening factor used for creating of the light accent'),
@@ -212,6 +245,9 @@ function muser_base_get_colorsets() {
       'MESSAGE_ERROR' => '#C84E00',
       'MESSAGE_WARNING' => '#E89923',
       'MESSAGE_STATUS' => '#A1B70D',
+      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'TEXT_OVER_PRIMARY' => '#FFFFFF',
+      'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
     'colorset_wolfy' => [
       'PRIMARY_COLOR' => '#CC0000',
@@ -222,6 +258,9 @@ function muser_base_get_colorsets() {
       'MESSAGE_ERROR' => '#D14905',
       'MESSAGE_WARNING' => '#FDD726',
       'MESSAGE_STATUS' => '#6F7D1C',
+      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'TEXT_OVER_PRIMARY' => '#FFFFFF',
+      'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
     'colorset_ram' => [
       'PRIMARY_COLOR' => '#4B9CD3',
@@ -232,6 +271,9 @@ function muser_base_get_colorsets() {
       'MESSAGE_ERROR' => '#DADDC0',
       'MESSAGE_WARNING' => '#E89923',
       'MESSAGE_STATUS' => '#A1B70D',
+      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'TEXT_OVER_PRIMARY' => '#FFFFFF',
+      'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
   ];
 }
@@ -251,6 +293,9 @@ function muser_base_get_accent_colors($colorset = NULL, $form_values = NULL) {
     'MESSAGE_ERROR' => $form_values['custom_error_message_color']['#value'] ?? theme_get_setting('custom_error_message_color', 'muser_base'),
     'MESSAGE_WARNING' => $form_values['custom_warning_message_color']['#value'] ?? theme_get_setting('custom_warning_message_color', 'muser_base'),
     'MESSAGE_STATUS' => $form_values['custom_status_message_color']['#value'] ?? theme_get_setting('custom_status_message_color', 'muser_base'),
+    'MESSAGE_TEXT_COLOR' => $form_values['custom_message_text_color']['#value'] ?? theme_get_setting('custom_message_text_color', 'muser_base'),
+    'TEXT_OVER_PRIMARY' => $form_values['custom_text_over_primary_color']['#value'] ?? theme_get_setting('custom_text_over_primary_color', 'muser_base'),
+    'TEXT_OVER_SECONDARY' => $form_values['custom_text_over_secondary_color']['#value'] ?? theme_get_setting('custom_text_over_secondary_color', 'muser_base'),
   ];
 
   //    if ($colorset_settings['accent_color_advanced_custom']) {
@@ -284,6 +329,9 @@ function muser_base_create_accent_css($values = NULL) {
   $css = preg_replace('/MESSAGE_ERROR/', $colorset['MESSAGE_ERROR'], $css);
   $css = preg_replace('/MESSAGE_WARNING/', $colorset['MESSAGE_WARNING'], $css);
   $css = preg_replace('/MESSAGE_STATUS/', $colorset['MESSAGE_STATUS'], $css);
+  $css = preg_replace('/MESSAGE_TEXT_COLOR/', $colorset['MESSAGE_TEXT_COLOR'], $css);
+  $css = preg_replace('/TEXT_OVER_PRIMARY/', $colorset['TEXT_OVER_PRIMARY'], $css);
+  $css = preg_replace('/TEXT_OVER_SECONDARY/', $colorset['TEXT_OVER_SECONDARY'], $css);
   $site_css_dir = 'public://site-css/';
   file_prepare_directory($site_css_dir, FILE_CREATE_DIRECTORY);
   file_save_data($css, $site_css_dir . 'site-variables.css', FILE_EXISTS_REPLACE);

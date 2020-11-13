@@ -16,6 +16,7 @@
   flex-flow: column nowrap;
   @at-root .page--restricted & {
     background-color: $secondary;
+    color: $text-over-secondary-color;
   }
 }
 
