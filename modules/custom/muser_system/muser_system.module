@@ -15,6 +15,7 @@ use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
 use Drupal\Component\Utility\Html;
 use Drupal\views\ViewExecutable;
 use Drupal\Core\Cache\Cache;
+use Drupal\Core\Render\Element;
 
 define('MUSER_STUDENT', 'student');
 define('MUSER_MENTOR', 'mentor');
@@ -38,6 +39,28 @@ function muser_system_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function muser_system_form_taxonomy_overview_terms_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $build_info = $form_state->getBuildInfo();
+  /** @var Drupal\taxonomy\Entity\Vocabulary $vocabulary */
+  $vocabulary = $build_info['args'][0] ?? NULL;
+  if (!$vocabulary || $vocabulary->id() != 'categories') {
+    return;
+  }
+  $form['#attached']['library'][] = 'muser_system/fontawesome-css';
+  foreach (Element::children($form['terms']) as $key) {
+    /** @var Drupal\taxonomy\Entity\Term $term */
+    $term = $form['terms'][$key]['#term'];
+    if ($icon = $term->field_icon->value) {
+      $icon = t('<i class="@icon"></i>', ['@icon' => $icon]);
+      $form['terms'][$key]['term']['#prefix'] .= ' ' . $icon . '&nbsp;&nbsp;';
+    } // Got an icon?
+  } // Loop thru terms.
+}
+
 
 /**
  * Implements hook_form_BASE_FORM_ID_alter().
