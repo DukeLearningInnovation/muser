@@ -33,6 +33,18 @@ function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $for
 //    '#default_value' => theme_get_setting('menu_header_text'),
 //    '#description' => t('This is the text that appears in the header when the main menu of the site is opened.'),
 //  ];
+
+  $form['logo_header_style'] = [
+    '#type' => 'select',
+    '#options' => [
+      'normal_header_normal_logo' => 'Normal Header, Normal Logo (max 48x150px)',
+      'normal_header_large_logo' => 'Normal Header, Large Logo (max 64x200px)',
+      'tall_header_large_logo' => 'Tall Header, Large Logo (max 100x200px)',
+    ],
+    '#title' => t('Logo/header style'),
+    '#default_value' => theme_get_setting('logo_header_style'),
+  ];
+
   $form['colorset'] = [
     '#type' => 'select',
     '#attributes' => ['data-colorset-options' => json_encode(muser_base_get_colorsets())],

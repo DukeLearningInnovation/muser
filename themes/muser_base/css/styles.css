@@ -131,6 +131,8 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
   @media (max-width: 991px) {
     .header__flex {
       padding: 0 8px; } }
+  .header__flex.logo-header-style--tall_header_large_logo {
+    height: 116px; }
 
 .header__menu {
   margin-left: auto;
@@ -243,10 +245,15 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
   width: 200px;
   max-width: 200px;
   display: block;
-  padding: 8px 0;
+  padding: 16px 0;
   height: 80px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
+  .header__flex.logo-header-style--tall_header_large_logo .site-logo,
+  .header__flex.logo-header-style--normal_header_large_logo .site-logo {
+    padding: 8px 0; }
+  .header__flex.logo-header-style--tall_header_large_logo .site-logo {
+    height: 116px; }
   .site-logo img {
     display: block;
     max-width: 100%;

@@ -177,3 +177,13 @@ function muser_base_form_system_theme_settings_alter(&$form, &$form_state, $form
   include_once drupal_get_path('theme', 'muser_base') . '/includes/theme_settings.inc';
   _muser_base_form_system_theme_settings_alter($form, $form_state, $form_id);
 }
+
+
+function muser_base_preprocess_page(&$variables) {
+//  ksm('$vars', $variables);
+  $logo_header_style = theme_get_setting('logo_header_style', 'muser_base');
+  $variables['logo_header_style'] = "logo-header-style--" . $logo_header_style;
+
+//  if () {
+//  }
+}

@@ -13,6 +13,9 @@
   flex-flow: row nowrap;
   margin: 0 auto;
   height: $header-height;
+  &.logo-header-style--tall_header_large_logo {
+    height: $header-height-tall;
+  }
 }
 
 .header__menu {
@@ -113,8 +116,15 @@
   width: 200px;
   max-width: 200px;
   display: block;
-  padding: $site-padding / 2 0;
+  padding: $site-padding 0;
+  .header__flex.logo-header-style--tall_header_large_logo &,
+  .header__flex.logo-header-style--normal_header_large_logo & {
+    padding: $site-padding / 2 0;
+  }
   height: $header-height;
+  .header__flex.logo-header-style--tall_header_large_logo & {
+    height: $header-height-tall;
+  }
   box-sizing: border-box;
   img {
     display: block;

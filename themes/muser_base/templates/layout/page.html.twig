@@ -45,7 +45,8 @@
 <div class="layout">
   <header role="banner" class="page__header">
     <div class="header">
-      <div class="header__flex">
+      {% set header_flex_attributes = create_attribute() %}
+      <div {{ header_flex_attributes.addClass('header__flex', logo_header_style) }}>
         <div class="header__branding">
             {{ page.header_branding }}
         </div>
