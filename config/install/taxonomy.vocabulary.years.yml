@@ -4,5 +4,4 @@ dependencies: {  }
 name: Years
 vid: years
 description: 'The years required for projects.'
-hierarchy: 0
 weight: 0

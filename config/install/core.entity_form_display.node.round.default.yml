@@ -40,6 +40,7 @@ third_party_settings:
         classes: ''
         required_fields: false
       label: Dates
+      region: content
     group_emails:
       children:
         - field_post_projects_start_email
@@ -58,6 +59,7 @@ third_party_settings:
         open: false
         required_fields: true
       label: Emails
+      region: content
 id: node.round.default
 targetEntityType: node
 bundle: round
@@ -74,7 +76,7 @@ content:
     settings: {  }
     third_party_settings:
       datetimehideseconds:
-        hide: '1'
+        hide: true
     type: daterange_default
     region: content
   field_accepted_student_email:
@@ -96,7 +98,7 @@ content:
     settings: {  }
     third_party_settings:
       datetimehideseconds:
-        hide: '1'
+        hide: true
     type: daterange_default
     region: content
   field_is_current:
@@ -118,7 +120,7 @@ content:
     settings: {  }
     third_party_settings:
       datetimehideseconds:
-        hide: '1'
+        hide: true
     type: daterange_default
     region: content
   field_post_projects_end_email:
@@ -161,7 +163,7 @@ content:
     settings: {  }
     third_party_settings:
       datetimehideseconds:
-        hide: '1'
+        hide: true
     type: datetime_default
     region: content
   langcode:
@@ -199,6 +201,7 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     region: content
     third_party_settings: {  }
   url_redirects:

@@ -46,6 +46,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Details bar'
+      region: content
     group_main_content:
       children:
         - group_application_body
@@ -63,6 +64,7 @@ third_party_settings:
         id: ''
         classes: application__main
       label: 'Main content'
+      region: content
     group_application_main_height:
       children:
         - body
@@ -80,6 +82,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Application body height'
+      region: content
     group_application_body:
       children:
         - group_application_main_height
@@ -96,6 +99,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Application body'
+      region: content
 id: node.project.application
 targetEntityType: node
 bundle: project

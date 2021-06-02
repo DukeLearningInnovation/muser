@@ -1,8 +1,6 @@
 langcode: en
 status: true
-dependencies:
-  config:
-    - taxonomy.vocabulary.categories
+dependencies: {  }
 id: taxonomy_vocabulary_categories
 action: page_not_found
 allow_override: 0

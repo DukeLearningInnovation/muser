@@ -43,6 +43,7 @@ third_party_settings:
         id: ''
         classes: ''
       label: 'Contact Information:'
+      region: content
     group_logistics_information:
       children:
         - field_categories
@@ -61,6 +62,7 @@ third_party_settings:
         id: ''
         classes: ''
       label: 'Logistics Information:'
+      region: content
     group_details_bar:
       children:
         - favorite_link
@@ -80,6 +82,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Details bar'
+      region: content
     group_details_area:
       children:
         - group_logistics_information
@@ -98,6 +101,7 @@ third_party_settings:
         id: ''
         classes: project__info-area
       label: 'Info area'
+      region: content
     group_container:
       children:
         - body
@@ -120,6 +124,7 @@ third_party_settings:
         id: ''
         classes: project__main-container
       label: Container
+      region: content
 id: node.project.default
 targetEntityType: node
 bundle: project

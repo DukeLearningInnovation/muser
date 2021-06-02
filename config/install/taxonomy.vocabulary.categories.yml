@@ -4,5 +4,4 @@ dependencies: {  }
 name: Categories
 vid: categories
 description: 'The categories for projects.'
-hierarchy: 0
 weight: 0

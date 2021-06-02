@@ -39,6 +39,7 @@ third_party_settings:
         classes: ''
         id: ''
       label: 'Personal Information'
+      region: content
     group_student_info:
       children:
         - field_yr_in_college
@@ -54,6 +55,7 @@ third_party_settings:
         classes: ''
         id: ''
       label: 'Student Information'
+      region: content
 id: user.user.applicant_info
 targetEntityType: user
 bundle: user

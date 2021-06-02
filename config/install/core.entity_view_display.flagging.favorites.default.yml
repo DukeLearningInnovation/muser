@@ -29,6 +29,7 @@ third_party_settings:
         id: ''
         classes: 'application__details-bar details-bar'
       label: 'Details bar'
+      region: content
     group_main_content:
       children:
         - group_title_area
@@ -47,6 +48,7 @@ third_party_settings:
         id: ''
         classes: application__main
       label: 'Main content'
+      region: content
     group_title_area:
       children:
         - project_info
@@ -65,6 +67,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Title area'
+      region: content
     group_status_links:
       children:
         - update_status_link
@@ -82,6 +85,7 @@ third_party_settings:
         id: ''
         classes: application__status-change
       label: 'Status links'
+      region: content
     group_content:
       children:
         - group_application_body_height
@@ -98,6 +102,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: Content
+      region: content
     group_application_body_height:
       children:
         - field_essay
@@ -114,6 +119,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Application body height'
+      region: content
 id: flagging.favorites.default
 targetEntityType: flagging
 bundle: favorites

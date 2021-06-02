@@ -1,6 +1,8 @@
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - taxonomy.vocabulary.hours
 id: taxonomy_vocabulary_hours
 action: page_not_found
 allow_override: 0

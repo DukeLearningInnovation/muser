@@ -38,6 +38,7 @@ third_party_settings:
         open: true
         required_fields: false
       label: 'Personal Information'
+      region: content
     group_student_info:
       children:
         - field_yr_in_college
@@ -55,6 +56,7 @@ third_party_settings:
         open: true
         required_fields: false
       label: 'Student Information'
+      region: content
     group_mentor_info:
       children:
         - field_netid
@@ -68,13 +70,14 @@ third_party_settings:
         open: true
         required_fields: false
       label: 'Mentor Information'
+      region: content
 id: user.user.default
 targetEntityType: user
 bundle: user
 mode: default
 content:
   field_about_me:
-    weight: 6
+    weight: 5
     label: above
     settings: {  }
     third_party_settings: {  }

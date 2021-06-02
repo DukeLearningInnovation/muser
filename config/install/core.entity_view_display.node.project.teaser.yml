@@ -46,6 +46,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Details bar'
+      region: content
 id: node.project.teaser
 targetEntityType: node
 bundle: project

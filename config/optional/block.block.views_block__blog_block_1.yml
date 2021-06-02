@@ -16,10 +16,10 @@ provider: null
 plugin: 'views_block:blog-block_1'
 settings:
   id: 'views_block:blog-block_1'
-  label: 'Recent Musings'
+  label: 'Recent Blog Posts'
   provider: views
   label_display: visible
-  views_label: 'Recent Musings'
+  views_label: 'Recent Blog Posts'
   items_per_page: none
 visibility:
   request_path:

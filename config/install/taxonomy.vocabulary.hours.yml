@@ -4,5 +4,4 @@ dependencies: {  }
 name: 'Hours per week'
 vid: hours
 description: 'The number of hours per week required for projects.'
-hierarchy: 0
 weight: 0

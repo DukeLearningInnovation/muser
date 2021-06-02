@@ -38,6 +38,7 @@ third_party_settings:
         id: ''
         classes: ''
       label: Dates
+      region: content
     group_emails:
       children:
         - field_post_projects_start_email
@@ -56,6 +57,7 @@ third_party_settings:
         open: false
         required_fields: false
       label: Emails
+      region: content
 id: node.round.default
 targetEntityType: node
 bundle: round

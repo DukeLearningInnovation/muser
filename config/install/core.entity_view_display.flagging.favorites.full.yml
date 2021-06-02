@@ -30,6 +30,7 @@ third_party_settings:
         id: ''
         classes: 'application__details-bar details-bar'
       label: 'Details bar'
+      region: content
     group_main_content:
       children:
         - group_titel
@@ -47,6 +48,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Main content'
+      region: content
     group_titel:
       children:
         - project_info
@@ -65,6 +67,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Title area'
+      region: content
     group_status_links:
       children:
         - update_status_link
@@ -81,6 +84,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Status links'
+      region: content
     group_content:
       children:
         - group_application_body_height
@@ -97,6 +101,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: Content
+      region: content
     group_application_body_height:
       children:
         - applicant_info
@@ -114,6 +119,7 @@ third_party_settings:
         effect: none
         speed: fast
       label: 'Application body height'
+      region: content
 id: flagging.favorites.full
 targetEntityType: flagging
 bundle: favorites

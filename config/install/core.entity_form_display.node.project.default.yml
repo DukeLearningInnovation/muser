@@ -48,6 +48,7 @@ third_party_settings:
         classes: ''
         required_fields: false
       label: 'Logistics Information'
+      region: content
     group_contact_information:
       children:
         - field_pi_name
@@ -62,6 +63,7 @@ third_party_settings:
         classes: ''
         required_fields: false
       label: 'Contact Information'
+      region: content
 id: node.project.default
 targetEntityType: node
 bundle: project
@@ -228,6 +230,7 @@ content:
       match_operator: CONTAINS
       size: 60
       placeholder: ''
+      match_limit: 10
     region: content
     third_party_settings: {  }
   url_redirects:

@@ -34,12 +34,12 @@ third_party_settings:
       weight: 2
       format_type: fieldset
       format_settings:
-        label: 'Personal Information'
         description: ''
         id: ''
         classes: ''
         required_fields: false
       label: 'Personal Information'
+      region: content
     group_student_info:
       children:
         - field_yr_in_college
@@ -52,12 +52,12 @@ third_party_settings:
       weight: 3
       format_type: fieldset
       format_settings:
-        label: 'Student Information'
         description: 'Please fill out all fields in order to apply for projects. This information will become part of your applications.'
         id: ''
         classes: ''
         required_fields: false
       label: 'Student Information'
+      region: content
     group_mentor_info:
       children:
         - field_netid
@@ -72,6 +72,7 @@ third_party_settings:
         description: 'You only need to fill out these fields if you are a mentor.'
         required_fields: false
       label: 'Mentor Information'
+      region: content
     group_login_information:
       children:
         - account
@@ -84,6 +85,7 @@ third_party_settings:
         description: ''
         required_fields: true
       label: 'Login information'
+      region: content
 id: user.user.default
 targetEntityType: user
 bundle: user

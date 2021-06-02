@@ -4,5 +4,4 @@ dependencies: {  }
 name: Compensation
 vid: compensation
 description: 'The compensation given for projects.'
-hierarchy: 0
 weight: 0
