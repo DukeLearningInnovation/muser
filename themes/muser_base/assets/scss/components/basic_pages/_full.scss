@@ -40,3 +40,22 @@
 .block-page-title-block {
   justify-self: center;
 }
+
+.cke_editable,
+.field--name-body {
+  details {
+    border: 1px solid $primary;
+    padding: 0 1rem;
+    border-radius: $border-radius--small;
+    margin: 1rem 0;
+    &:focus-within {
+      outline: 2px auto;
+    }
+  }
+  summary {
+    padding: 0.3rem 0;
+    &:focus {
+      outline: 0;
+    }
+  }
+}

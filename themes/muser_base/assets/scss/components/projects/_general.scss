@@ -23,6 +23,11 @@
   }
 }
 
+.favorite-button__abs-wrapper {
+  .js-flag-message {
+    display: none;
+  }
+}
 .project__favorite--invisible {
   opacity: 0;
   pointer-events: none;

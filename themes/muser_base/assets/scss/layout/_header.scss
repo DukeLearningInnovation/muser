@@ -31,8 +31,27 @@
       padding: 0;
       //border-radius: $border-radius--small;
       border-bottom: 5px solid transparent;
+      .menu-item {
+        border-bottom: 0;
+      }
       position: relative;
       //border-bottom: 4px + $border-radius--small solid transparent;
+      &.menu-item--expanded {
+        list-style: none;
+        > a {
+          position: relative;
+          padding-right: $site-padding * 2;
+          &:after {
+            position: absolute;
+            right: $site-padding - 3;
+            display: block;
+            content: '▼';
+            font-size: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
       @include nt($prop: border-color);
       &.menu-item--active-trail {
         border-color: $primary;
@@ -148,7 +167,8 @@
   cursor: pointer;
   position: relative;
   height: 40px;
-  width: 40px;
+  width: 35px;
+  margin-right: 5px;
   font-size: 40px;
   margin-bottom: 12px;
   svg {
