@@ -299,7 +299,9 @@ function muser_base_get_colorsets() {
       'MESSAGE_ERROR_BG' => '#D14905',
       'MESSAGE_WARNING_BG' => '#FDD726',
       'MESSAGE_STATUS_BG' => '#6F7D1C',
-      'MESSAGE_TEXT_COLOR' => '#FFFFFF',
+      'MESSAGE_ERROR_TEXT' => '#FFFFFF',
+      'MESSAGE_WARNING_TEXT' => '#FFFFFF',
+      'MESSAGE_STATUS_TEXT' => '#FFFFFF',
       'TEXT_OVER_PRIMARY' => '#FFFFFF',
       'TEXT_OVER_SECONDARY' => '#FFFFFF',
     ],
@@ -384,8 +386,10 @@ function muser_base_create_accent_css($values = NULL) {
   $css = preg_replace('/TEXT_OVER_PRIMARY/', $colorset['TEXT_OVER_PRIMARY'], $css);
   $css = preg_replace('/TEXT_OVER_SECONDARY/', $colorset['TEXT_OVER_SECONDARY'], $css);
   $site_css_dir = 'public://site-css/';
-  file_prepare_directory($site_css_dir, FILE_CREATE_DIRECTORY);
-  file_save_data($css, $site_css_dir . 'site-variables.css', FILE_EXISTS_REPLACE);
+
+  $file_system = \Drupal::service('file_system');
+  $file_system->prepareDirectory($site_css_dir);
+  $file_system->saveData($css, $site_css_dir . 'site-variables.css', TRUE);
 }
 
 //:root {
