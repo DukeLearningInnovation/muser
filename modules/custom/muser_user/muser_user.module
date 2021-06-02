@@ -56,7 +56,6 @@ function muser_user_entity_view(array &$build, EntityInterface $entity, EntityVi
   }
 
   if ($component = $display->getComponent('contact_email')) {
-    $build['contact_email']['#markup'] = 'my email!';
     $link = '<a href="mailto:' . $entity->getEmail() . '" class="email-link">' . Html::escape($entity->getEmail()) . '</a>';
     $build['contact_email'] = [
       '#type' => 'markup',
@@ -65,6 +64,17 @@ function muser_user_entity_view(array &$build, EntityInterface $entity, EntityVi
     ];
   } // Show email address?
 
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function muser_user_preprocess_user(&$variables) {
+  foreach ($variables['content'] as &$value) {
+    if (empty($value[0]) && empty($value['#markup'])) {
+      $value['#access'] = FALSE;
+    }
+  }
 }
 
 function muser_user_profile_is_complete(Drupal\user\Entity\User $account) {
