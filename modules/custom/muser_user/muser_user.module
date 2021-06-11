@@ -313,7 +313,7 @@ function muser_user_user_update(Drupal\Core\Entity\EntityInterface $entity) {
     muser_user_send_mentor_request_email($entity);
   } // Requesting mentor role / user type?
 
-  if ($entity->hasRole('mentor') && !$entity->original->hasRole('mentor')) {
+  if ($entity->hasRole('mentor') && (empty($entity->original) || !$entity->original->hasRole('mentor'))) {
     // Send email.
     muser_user_send_mentor_grant_email($entity);
   } // Newly-granted mentor role?
