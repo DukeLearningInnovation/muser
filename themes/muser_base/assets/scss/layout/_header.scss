@@ -132,13 +132,15 @@
 
 .site-logo {
   //height: 100%;
-  width: 200px;
-  max-width: 200px;
+  width: 150px;
+  max-width: 150px;
   display: block;
   padding: $site-padding 0;
   .header__flex.logo-header-style--tall_header_large_logo &,
   .header__flex.logo-header-style--normal_header_large_logo & {
     padding: $site-padding / 2 0;
+    width: 200px;
+    max-width: 200px;
   }
   height: $header-height;
   .header__flex.logo-header-style--tall_header_large_logo & {

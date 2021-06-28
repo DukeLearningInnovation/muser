@@ -259,8 +259,8 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
           align-items: flex-end; }
 
 .site-logo {
-  width: 200px;
-  max-width: 200px;
+  width: 150px;
+  max-width: 150px;
   display: block;
   padding: 16px 0;
   height: 80px;
@@ -268,7 +268,9 @@ body.toolbar-tray-open.toolbar-vertical.toolbar-fixed {
           box-sizing: border-box; }
   .header__flex.logo-header-style--tall_header_large_logo .site-logo,
   .header__flex.logo-header-style--normal_header_large_logo .site-logo {
-    padding: 8px 0; }
+    padding: 8px 0;
+    width: 200px;
+    max-width: 200px; }
   .header__flex.logo-header-style--tall_header_large_logo .site-logo {
     height: 116px; }
   .site-logo img {
