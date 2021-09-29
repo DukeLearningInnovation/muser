@@ -90,7 +90,7 @@
       <div class="project__card-top">
         <div class="project__favorite project__favorite--invisible">{{ content.favorite_link_placeholder_text }}</div>
           {{ title_prefix }}
-        <h3{{ title_attributes }}>{{ label }}</h3>
+        <h3{{ title_attributes }}>{{ contract_icon|raw }}{{ mentor_star_icon|raw }}{{ label }}</h3>
           {{ title_suffix }}
       </div>
         {{ content|without('favorite_link', 'favorite_link_placeholder_text', 'activate_link') }}

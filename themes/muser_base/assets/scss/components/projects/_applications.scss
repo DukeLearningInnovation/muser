@@ -124,6 +124,40 @@
       font-size: $font-size - 3;
     }
   }
+  .project__accept-contract {
+    padding: $site-padding / 4;
+    a {
+      white-space: nowrap;
+      text-decoration: none;
+      color: $primary;
+      font-weight: 600;
+      border: 2px solid $primary;
+      border-radius: $border-radius * 2;
+      font-size: $font-size - 3;
+      line-height: 1.4;
+      display: inline-block;
+      padding: $site-padding / 4 $site-padding / 2;
+    }
+  }
+  .contract-status {
+    padding: $site-padding / 4 $site-padding / 4;
+    display: flex;
+    align-items: center;
+  }
+
+  .contract-status__icon {
+    font-size: $font-size + 4;
+    svg {
+      opacity: 0.9;
+      //transform: translateY(2px);
+    }
+  }
+  .contract-status__label {
+    //opacity: 0.9;
+    font-size: $font-size - 3;
+    margin-left: $site-padding / 4;
+  }
+
   .details-bar {
     padding-top: $site-padding * 3 / 4;
   }

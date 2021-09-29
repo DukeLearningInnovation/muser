@@ -2455,9 +2455,12 @@ ul.tabs {
     margin-left: auto; }
   .application__header .application__project-title,
   .application__header .field--name-field-status,
+  .application__header .contract-status,
+  .application__header .application__contract-change,
   .application__header .application__status-change {
     padding: 8px; }
   .application__header .field--name-field-status,
+  .application__header .application__contract-change,
   .application__header .application__status-change {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -2465,19 +2468,31 @@ ul.tabs {
     -webkit-box-align: start;
         -ms-flex-align: start;
             align-items: flex-start; }
+  .application__header .contract-status,
   .application__header .application-status {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
     margin: 2px 0; }
+    .application__header .contract-status svg,
     .application__header .application-status svg {
       font-size: 24px; }
-    .application__header .application-status .application-status__label {
-      margin-left: 4px;
-      white-space: nowrap; }
+  .application__header .contract-status__label,
+  .application__header .application-status__label {
+    margin-left: 4px;
+    white-space: nowrap;
+    -webkit-transform: translateY(1px);
+            transform: translateY(1px); }
+  .application__header .contract-status__icon svg {
+    opacity: 0.9;
+    -webkit-transform: translateY(2px);
+            transform: translateY(2px); }
+  .application__header .contract-status__label {
+    font-size: 0.9rem;
+    opacity: 0.9; }
   .application__header a {
     white-space: nowrap;
     text-decoration: none;
@@ -2492,6 +2507,29 @@ ul.tabs {
 
 .application__body {
   padding: 0 16px; }
+
+.muser-project-accept-contract {
+  margin-top: 16px; }
+  .muser-project-accept-contract .field {
+    margin-bottom: 8px; }
+    .muser-project-accept-contract .field .label {
+      float: left;
+      margin-right: 8px; }
+      .muser-project-accept-contract .field .label:after {
+        content: ":"; }
+  .muser-project-accept-contract .form-radios {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-flow: row wrap;
+            flex-flow: row wrap;
+    margin: 0 -8px; }
+    .muser-project-accept-contract .form-radios > .form-item {
+      padding: 8px 8px; }
+  .muser-project-accept-contract .form-item {
+    margin: 0; }
 
 .toggle-application {
   position: absolute;
@@ -2928,6 +2966,9 @@ ul.tabs {
 .mentor-status-icon--star {
   color: #ddbf5b; }
 
+.mentor-contract-status-icon--star {
+  color: var(--primary); }
+
 .extra-term {
   display: block; }
   .field--name-field-hours-per-week .extra-term {
@@ -3300,6 +3341,38 @@ ul.tabs {
           align-items: flex-start; }
   .node--view-mode-application .project__application-status .application-status__label {
     font-size: 13px; }
+
+.node--view-mode-application .project__accept-contract {
+  padding: 4px; }
+  .node--view-mode-application .project__accept-contract a {
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--primary);
+    font-weight: 600;
+    border: 2px solid var(--primary);
+    border-radius: 20px;
+    font-size: 13px;
+    line-height: 1.4;
+    display: inline-block;
+    padding: 4px 8px; }
+
+.node--view-mode-application .contract-status {
+  padding: 4px 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+
+.node--view-mode-application .contract-status__icon {
+  font-size: 20px; }
+  .node--view-mode-application .contract-status__icon svg {
+    opacity: 0.9; }
+
+.node--view-mode-application .contract-status__label {
+  font-size: 13px;
+  margin-left: 4px; }
 
 .node--view-mode-application .details-bar {
   padding-top: 12px; }
