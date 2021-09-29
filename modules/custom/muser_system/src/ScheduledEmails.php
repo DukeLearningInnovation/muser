@@ -48,6 +48,26 @@ class ScheduledEmails {
       'date_field' => 'field_accept_applications',
       'key' => 'end_value',
     ],
+    'contract_reminder_mentor_start' => [
+      'field' => 'field_contract_start_mentor_mail',
+      'date_field' => 'field_sign_contracts',
+      'key' => 'value',
+    ],
+    'contract_reminder_mentor_end' => [
+      'field' => 'field_contract_end_mentor_mail',
+      'date_field' => 'field_sign_contracts',
+      'key' => 'end_value',
+    ],
+    'contract_reminder_student_start' => [
+      'field' => 'field_contract_start_studnt_mail',
+      'date_field' => 'field_sign_contracts',
+      'key' => 'value',
+    ],
+    'contract_reminder_student_end' => [
+      'field' => 'field_contract_end_studnt_mail',
+      'date_field' => 'field_sign_contracts',
+      'key' => 'end_value',
+    ],
     'after_round' => [
       'field' => 'field_after_round_email',
       'date_field' => 'field_accept_applications',
@@ -128,7 +148,11 @@ class ScheduledEmails {
         $offset = muser_system_reverse_time_offset($offset);
         if (strtotime($offset) === FALSE) {
           // Offset is invalid.
-          \Drupal::logger('muser_system')->error('Invalid offset "@offset" for @type email.', ['@offset' => $offset, '@type' => $type]);
+          \Drupal::logger('muser_system')
+            ->error('Invalid offset "@offset" for @type email.', [
+              '@offset' => $offset,
+              '@type' => $type,
+            ]);
           continue;
         }
       }
@@ -159,6 +183,8 @@ class ScheduledEmails {
             case 'after_round':
             case 'student_accepted':
             case 'student_rejected':
+            case 'contract_reminder_student_start':
+            case 'contract_reminder_student_end':
               $done = $this->processStudentEmail($type);
               break;
 
@@ -205,6 +231,11 @@ class ScheduledEmails {
         $results = $this->getApplicantStudents('rejected');
         break;
 
+      case 'contract_reminder_student_start':
+      case 'contract_reminder_student_end':
+        $results = $this->getApplicantStudents('accepted', TRUE);
+        break;
+
       default:
         return FALSE;
     }
@@ -222,9 +253,13 @@ class ScheduledEmails {
       $count++;
     } // Loop thru students.
 
-    \Drupal::logger('muser_system')->info('Processed student email type "@type". Emails to send: @count', ['@type' => $type, '@count' => $count]);
+    \Drupal::logger('muser_system')
+      ->info('Processed student email type "@type". Emails to send: @count', [
+        '@type' => $type,
+        '@count' => $count,
+      ]);
 
-    // @todo - what to return here?
+    // @todo Determine what to return here.
     return TRUE;
 
   }
@@ -235,7 +270,7 @@ class ScheduledEmails {
   protected function getParticipatingStudents() {
     // Get all students who have participated in this round.
     // Check for opt-outs here.
-    // @todo - Get all students who have favorited anything? Or just submitted?
+    // @todo Determine if we should get all students who have favorited anything or just submitted.
     $query = \Drupal::database()->select('muser_applications', 'ma');
     $query->addField('ma', 'application_uid', 'uid');
     $query->join('users_field_data', 'ufd', 'ufd.uid = ma.application_uid');
@@ -252,7 +287,7 @@ class ScheduledEmails {
   /**
    * @return \Drupal\Core\Database\StatementInterface|null
    */
-  protected function getApplicantStudents($status) {
+  protected function getApplicantStudents($status, $contracted_projects_only = FALSE) {
     // Get all students accepted or rejected students for this round.
     $query = \Drupal::database()->select('muser_applications', 'ma');
     $query->addField('ma', 'application_uid', 'uid');
@@ -268,6 +303,11 @@ class ScheduledEmails {
     }
     else {
       $query->condition('ma.status', 'accepted', '<>');
+    }
+    if ($contracted_projects_only) {
+      // Get only applications requiring student to sign.
+      $query->condition('ma.is_contracted', 1);
+      $query->condition('ma.contract_signed_student', 0);
     }
     $query->orderBy('ma.fid');
     $results = $query->distinct()->execute();
@@ -295,6 +335,11 @@ class ScheduledEmails {
         $results = $this->getMentorsWithApplicationsToReview();
         break;
 
+      case 'contract_reminder_mentor_start':
+      case 'contract_reminder_mentor_end':
+        $results = $this->getMentorsWithContractedProjects();
+        break;
+
       default:
         return FALSE;
     }
@@ -302,13 +347,23 @@ class ScheduledEmails {
     $count = 0;
     foreach ($results as $row) {
       $account = User::load($row->uid);
-      $this->sendScheduledEmail($type, $account);
+      if (!empty($row->fid)) {
+        $flagging = Flagging::load($row->fid);
+      }
+      else {
+        $flagging = NULL;
+      }
+      $this->sendScheduledEmail($type, $account, $flagging);
       $count++;
     } // Loop thru mentors.
 
-    \Drupal::logger('muser_system')->info('Processed mentor email type "@type". Emails to send: @count', ['@type' => $type, '@count' => $count]);
+    \Drupal::logger('muser_system')
+      ->info('Processed mentor email type "@type". Emails to send: @count', [
+        '@type' => $type,
+        '@count' => $count,
+      ]);
 
-    // @todo - what to return here?
+    // @todo Determine what to return here.
     return TRUE;
 
   }
@@ -344,6 +399,27 @@ class ScheduledEmails {
       ->condition('ufd.status', 1)
       ->condition('mac.round_nid', $this->round->id())
       ->condition('mac.no_decision', 0, '>');
+    $results = $query->distinct()->execute();
+    return $results;
+  }
+
+  /**
+   * @return \Drupal\Core\Database\StatementInterface|null
+   */
+  protected function getMentorsWithContractedProjects() {
+    // Get all accepted applications still requiring signed contracts for this
+    // round.
+    $query = \Drupal::database()->select('muser_applications', 'ma');
+    $query->addField('ma', 'project_uid', 'uid');
+    $query->addField('ma', 'fid');
+    $query->join('users_field_data', 'ufd', 'ufd.uid = ma.application_uid');
+    $query->condition('ufd.status', 1)
+      ->condition('ma.is_submitted', 1)
+      ->condition('ma.round_nid', $this->round->id())
+      ->condition('ma.status', 'accepted')
+      ->condition('ma.is_contracted', 1)
+      ->condition('ma.contract_signed_mentor', 0);
+    $query->orderBy('ma.fid');
     $results = $query->distinct()->execute();
     return $results;
   }

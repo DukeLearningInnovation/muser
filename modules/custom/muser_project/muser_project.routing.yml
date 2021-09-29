@@ -27,3 +27,14 @@ muser_project.update_flagging_status:
     parameters:
       flagging:
         type: entity:flagging
+muser_project.accept_contract:
+  path: '/muser/application/accept-contract/{flagging}'
+  defaults:
+    _title: 'Accept contract'
+    _form: 'Drupal\muser_project\Form\AcceptContractForm'
+  requirements:
+    _accept_contract_access_check: 'TRUE'
+  options:
+    parameters:
+      flagging:
+        type: entity:flagging

@@ -131,6 +131,10 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
         'start' => $this->t('First day to apply for projects'),
         'end' => $this->t('Last day to apply for projects'),
       ],
+      'field_sign_contracts' => [
+        'start' => $this->t('First day to agree to contracts'),
+        'end' => $this->t('Last day to agree to contracts'),
+      ],
     ];
 
     $dates = [];

@@ -88,9 +88,23 @@ function muser_system_token_info() {
     'description' => t('Ending date/time of application review period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
     'dynamic' => TRUE,
   ];
+  $info['tokens']['muser']['contract-period-start'] = [
+    'name' => t('Contract period start'),
+    'description' => t('Starting date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
+    'dynamic' => TRUE,
+  ];
+  $info['tokens']['muser']['contract-period-end'] = [
+    'name' => t('Contract period end'),
+    'description' => t('Ending date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
+    'dynamic' => TRUE,
+  ];
   $info['tokens']['muser']['review-applications-url'] = [
     'name' => t('Applications review URL'),
     'description' => t('URL for Mentor to review applications for their projects.'),
+  ];
+  $info['tokens']['muser']['application-contract-accept-url'] = [
+    'name' => t('Contract accept URL'),
+    'description' => t('URL for Mentor/Student to indicate that they accepted contract.'),
   ];
   // Return them.
   return $info;
@@ -112,6 +126,8 @@ function muser_system_tokens($type, $tokens, array $data, array $options, Bubble
       'post-projects-end',
       'application-start',
       'application-end',
+      'contract-period-start',
+      'contract-period-end',
       'review-applications-start',
       'review-applications-end',
     ];
@@ -219,6 +235,17 @@ function muser_system_tokens($type, $tokens, array $data, array $options, Bubble
           $replacements[$original] = $text;
           break;
 
+        case 'application-contract-accept-url':
+          $text = '';
+          if (!empty($muser_data['flagging'])) {
+            $options = [
+              'absolute' => TRUE,
+            ];
+            $text = Url::fromRoute('muser_project.accept_contract', ['flagging' => $muser_data['flagging']->id()], $options)->toString();
+          } // Got a flagging?
+          $replacements[$original] = $text;
+          break;
+
         case 'round-title':
           $text = '';
           $round = (!empty($muser_data['round'])) ? $muser_data['round'] : muser_project_get_current_round(TRUE);
@@ -234,6 +261,7 @@ function muser_system_tokens($type, $tokens, array $data, array $options, Bubble
 
         case (strpos($name, 'post-projects-') === 0):
         case (strpos($name, 'application-') === 0):
+        case (strpos($name, 'contract-period-') === 0):
         case (strpos($name, 'review-applications-') === 0):
           $replacements[$original] = _muser_system_get_date_text($muser_data, $name);
           break;
@@ -260,6 +288,7 @@ function _muser_system_get_date_text($muser_data, $name, $format = MUSER_DEFAULT
   $fields = [
     'post-projects' => 'field_post_projects',
     'application' => 'field_apply',
+    'contract-period' => 'field_sign_contracts',
     'review-applications' => 'field_accept_applications',
   ];
   $date_type = preg_replace('/-(start|end)$/', '', $name);
@@ -325,6 +354,13 @@ function _muser_system_get_current_period_text($muser_data, $role = NULL) {
           '@date' => _muser_system_get_date_text($muser_data, 'review-applications-end'),
         ];
         $text[] = t('Application review continues until @date.', $values)->__toString();
+        break;
+
+      case 'contract':
+        $values = [
+          '@date' => _muser_system_get_date_text($muser_data, 'contract-period-end'),
+        ];
+        $text[] = t('Contract period continues until @date.', $values)->__toString();
         break;
 
       case 'after':

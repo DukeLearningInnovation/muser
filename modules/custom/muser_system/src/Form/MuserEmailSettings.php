@@ -261,6 +261,203 @@ class MuserEmailSettings extends ConfigFormBase {
       '#token_types' => ['user', 'node', 'muser'],
       '#show_restricted' => TRUE,
     ];
+/*
+c. Admin sets 4 additional emails:
+
+To mentor that needs to sign contract with list of projects/applicants(at start of period)
+To student that needs to sign contract with list of projects (at start of period)
+Reminder to mentor that still needs to sign contract(s), if they haven't already (before end of period)
+Reminder to student that still needs to sign contract(s), if they haven't already (before end of period)
+Each of these emails will contain a link back to a form on the Muser site for them to submit.
+
+d. For mentors, the form will have these choices:
+[  ] I have not sent this student a contract.
+[  ] I have sent this student a contract.
+[Submit]
+
+e. For students, the form will have these choices:
+[  ]  I have not received a contract from my mentor.
+[  ]  I have received a contract and have not signed it.
+[  ]  I have received a contract and have signed it.
+[Submit]
+ */
+    $form['contract'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Contract emails'),
+      '#open' => TRUE,
+    ];
+    $form['contract']['contract_reminder_mentor_start'] = [
+      '#type' => 'details',
+      '#title' => $this->t('To Mentors - Start of contract period'),
+      '#open' => FALSE,
+    ];
+    $form['contract']['contract_reminder_mentor_start']['info'] = [
+      '#type' => 'markup',
+      '#markup' => '<div>'
+        . $this->t('This email will be sent to mentors at the start of the contract period.')
+        . '</div>',
+    ];
+    $form['contract']['contract_reminder_mentor_start']['contract_reminder_mentor_start_email_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sending relative date/time'),
+      '#description' => $this->t('How far from the first day to sign contracts to send this email (e.g. "now", "+1 day", "+2 days 12 hours"). Leaving this empty means at right the start of the period.'),
+      '#default_value' => $config->get('contract_reminder_mentor_start_email_offset'),
+    ];
+    $form['contract']['contract_reminder_mentor_start']['contract_reminder_mentor_start_email_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Email subject'),
+      '#description' => $this->t('The subject of the email. May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_mentor_start_email_subject'),
+    ];
+    $form['contract']['contract_reminder_mentor_start']['contract_reminder_mentor_start_email_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Email body'),
+      '#description' => $this->t('May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_mentor_start_email_body'),
+      '#rows' => 10,
+    ];
+    $form['contract']['contract_reminder_mentor_start']['token_preview'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Preview'),
+      '#attributes' => [
+        'class' => ['token-preview-button'],
+        'data-field-name' => 'contract_reminder_mentor_start_email_body',
+      ],
+    ];
+    $form['contract']['contract_reminder_mentor_start']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['user', 'node', 'muser'],
+      '#show_restricted' => TRUE,
+    ];
+    $form['contract']['contract_reminder_mentor_end'] = [
+      '#type' => 'details',
+      '#title' => $this->t('To Mentors - End of contract period'),
+      '#open' => FALSE,
+    ];
+    $form['contract']['contract_reminder_mentor_end']['info'] = [
+      '#type' => 'markup',
+      '#markup' => '<div>'
+        . $this->t('This email will be sent to mentors at the end of the contract period.')
+        . '</div>',
+    ];
+    $form['contract']['contract_reminder_mentor_end']['contract_reminder_mentor_end_email_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sending relative date/time'),
+      '#description' => $this->t('How far from the last day to sign contracts to send this email (e.g. "now", "+1 day", "+2 days 12 hours"). Leaving this empty means at right the end of the period.'),
+      '#default_value' => $config->get('contract_reminder_mentor_end_email_offset'),
+    ];
+    $form['contract']['contract_reminder_mentor_end']['contract_reminder_mentor_end_email_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Email subject'),
+      '#description' => $this->t('The subject of the email. May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_mentor_end_email_subject'),
+    ];
+    $form['contract']['contract_reminder_mentor_end']['contract_reminder_mentor_end_email_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Email body'),
+      '#description' => $this->t('May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_mentor_end_email_body'),
+      '#rows' => 10,
+    ];
+    $form['contract']['contract_reminder_mentor_end']['token_preview'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Preview'),
+      '#attributes' => [
+        'class' => ['token-preview-button'],
+        'data-field-name' => 'contract_reminder_mentor_end_email_body',
+      ],
+    ];
+    $form['contract']['contract_reminder_mentor_end']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['user', 'node', 'muser'],
+      '#show_restricted' => TRUE,
+    ];
+    $form['contract']['contract_reminder_student_start'] = [
+      '#type' => 'details',
+      '#title' => $this->t('To Students - Start of contract period'),
+      '#open' => FALSE,
+    ];
+    $form['contract']['contract_reminder_student_start']['info'] = [
+      '#type' => 'markup',
+      '#markup' => '<div>'
+        . $this->t('This email will be sent to students at the start of the contract period.')
+        . '</div>',
+    ];
+    $form['contract']['contract_reminder_student_start']['contract_reminder_student_start_email_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sending relative date/time'),
+      '#description' => $this->t('How far from the first day to sign contracts to send this email (e.g. "now", "+1 day", "+2 days 12 hours"). Leaving this empty means at right the start of the period.'),
+      '#default_value' => $config->get('contract_reminder_student_start_email_offset'),
+    ];
+    $form['contract']['contract_reminder_student_start']['contract_reminder_student_start_email_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Email subject'),
+      '#description' => $this->t('The subject of the email. May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_student_start_email_subject'),
+    ];
+    $form['contract']['contract_reminder_student_start']['contract_reminder_student_start_email_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Email body'),
+      '#description' => $this->t('May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_student_start_email_body'),
+      '#rows' => 10,
+    ];
+    $form['contract']['contract_reminder_student_start']['token_preview'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Preview'),
+      '#attributes' => [
+        'class' => ['token-preview-button'],
+        'data-field-name' => 'contract_reminder_student_start_email_body',
+      ],
+    ];
+    $form['contract']['contract_reminder_student_start']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['user', 'node', 'muser'],
+      '#show_restricted' => TRUE,
+    ];
+    $form['contract']['contract_reminder_student_end'] = [
+      '#type' => 'details',
+      '#title' => $this->t('To Students - End of contract period'),
+      '#open' => FALSE,
+    ];
+    $form['contract']['contract_reminder_student_end']['info'] = [
+      '#type' => 'markup',
+      '#markup' => '<div>'
+        . $this->t('This email will be sent to students at the end of the contract period.')
+        . '</div>',
+    ];
+    $form['contract']['contract_reminder_student_end']['contract_reminder_student_end_email_offset'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sending relative date/time'),
+      '#description' => $this->t('How far from the last day to sign contracts to send this email (e.g. "now", "+1 day", "+2 days 12 hours"). Leaving this empty means at right the end of the period.'),
+      '#default_value' => $config->get('contract_reminder_student_end_email_offset'),
+    ];
+    $form['contract']['contract_reminder_student_end']['contract_reminder_student_end_email_subject'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Email subject'),
+      '#description' => $this->t('The subject of the email. May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_student_end_email_subject'),
+    ];
+    $form['contract']['contract_reminder_student_end']['contract_reminder_student_end_email_body'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Email body'),
+      '#description' => $this->t('May include tokens.'),
+      '#default_value' => $config->get('contract_reminder_student_end_email_body'),
+      '#rows' => 10,
+    ];
+    $form['contract']['contract_reminder_student_end']['token_preview'] = [
+      '#type' => 'button',
+      '#value' => $this->t('Preview'),
+      '#attributes' => [
+        'class' => ['token-preview-button'],
+        'data-field-name' => 'contract_reminder_student_end_email_body',
+      ],
+    ];
+    $form['contract']['contract_reminder_student_end']['token_tree'] = [
+      '#theme' => 'token_tree_link',
+      '#token_types' => ['user', 'node', 'muser'],
+      '#show_restricted' => TRUE,
+    ];
 
     $form['mentor_reminder']['review_applications_start'] = [
       '#type' => 'details',
@@ -513,6 +710,10 @@ class MuserEmailSettings extends ConfigFormBase {
       'post_projects_end_email_offset' => t('Before "Last day to post projects" Sending relative date/time'),
       'review_applications_start_email_offset' => t('Before "First day to accept applications" Sending relative date/time'),
       'review_applications_end_email_offset' => t('Before "Last day to accept applications" Sending relative date/time'),
+      'contract_reminder_mentor_start_email_offset' => t('To Mentors - Start of contract period Sending relative date/time'),
+      'contract_reminder_mentor_end_email_offset' => t('To Mentors - End of contract period Sending relative date/time'),
+      'contract_reminder_student_start_email_offset' => t('To Students - Start of contract period Sending relative date/time'),
+      'contract_reminder_student_end_email_offset' => t('To Students - End of contract period Sending relative date/time'),
       'after_round_email_offset' => t('After-round email Sending relative date/time'),
     ];
     foreach ($offset_fields as $field => $label) {
@@ -555,6 +756,18 @@ class MuserEmailSettings extends ConfigFormBase {
       'review_applications_end_email_offset',
       'review_applications_end_email_subject',
       'review_applications_end_email_body',
+      'contract_reminder_mentor_start_email_offset',
+      'contract_reminder_mentor_start_email_subject',
+      'contract_reminder_mentor_start_email_body',
+      'contract_reminder_mentor_end_email_offset',
+      'contract_reminder_mentor_end_email_subject',
+      'contract_reminder_mentor_end_email_body',
+      'contract_reminder_student_start_email_offset',
+      'contract_reminder_student_start_email_subject',
+      'contract_reminder_student_start_email_body',
+      'contract_reminder_student_end_email_offset',
+      'contract_reminder_student_end_email_subject',
+      'contract_reminder_student_end_email_body',
       'after_round_email_offset',
       'after_round_email_subject',
       'after_round_email_body',

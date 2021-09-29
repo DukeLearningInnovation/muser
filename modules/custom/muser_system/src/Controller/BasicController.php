@@ -110,6 +110,10 @@ class BasicController extends ControllerBase {
       case 'after_round_email_body':
       case 'student_accepted_email_body':
       case 'student_rejected_email_body':
+      case 'contract_reminder_mentor_start_email_body':
+      case 'contract_reminder_mentor_end_email_body':
+      case 'contract_reminder_student_start_email_body':
+      case 'contract_reminder_student_end_email_body':
         // Valid configuration setting to preview-- do nothing.
         break;
       default:

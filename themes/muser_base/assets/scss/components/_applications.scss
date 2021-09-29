@@ -78,29 +78,44 @@
   }
   .application__project-title,
   .field--name-field-status,
+  .contract-status,
+  .application__contract-change,
   .application__status-change {
     padding: $site-padding / 2;
   }
   .field--name-field-status,
+  .application__contract-change,
   .application__status-change {
     display: flex;
     align-items: flex-start;
   }
+  .contract-status,
   .application-status {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin: 2px 0;
     svg {
       font-size: $icon-size;
     }
-    .application-status__label {
-      margin-left: $site-padding / 4;
-      white-space: nowrap;
+  }
+
+  .contract-status__label,
+  .application-status__label {
+    margin-left: $site-padding / 4;
+    white-space: nowrap;
+    transform: translateY(1px);
+  }
+  .contract-status__icon {
+    svg {
+      opacity: 0.9;
+      transform: translateY(2px);
     }
   }
-  .application__status-change {
-    //margin
+  .contract-status__label {
+    font-size: 0.9rem;
+    opacity: 0.9;
   }
+
   a {
     white-space: nowrap;
     text-decoration: none;
@@ -119,6 +134,30 @@
   padding: 0 $site-padding;
 }
 
+.muser-project-accept-contract {
+  margin-top: $site-padding;
+  .field {
+    .label {
+      float: left;
+      margin-right: $site-padding / 2;
+      &:after {
+        content: ":";
+      }
+    }
+    margin-bottom: $site-padding / 2;
+  }
+  .form-radios {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 0 $site-padding / -2;
+    > .form-item {
+      padding: $site-padding / 2 $site-padding / 2;
+    }
+  }
+  .form-item {
+    margin: 0;
+  }
+}
 
 .toggle-application {
   position: absolute;

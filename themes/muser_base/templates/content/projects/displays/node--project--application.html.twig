@@ -89,14 +89,15 @@
 
     <div class="project__internal-wrapper">
       <div class="project__card-top">
-        <h3{{ title_attributes }}>{{ label }}</h3>
+        <h3{{ title_attributes }}>{{ contract_icon|raw }}{{ mentor_star_icon|raw }}{{ label }}</h3>
         <div class="project__application-status">
           {{ content.application_status_and_submitted }}
         </div>
         <div class="project__favorite">{{ content.favorite_link }}</div>
+        <div class="project__accept-contract">{{ content.application_contract_link }}</div>
       </div>
       <div{{ content_attributes.addClass('node__content') }}>
-        {{ content|without('favorite_link', 'favorite_link_placeholder_text', 'application_status_and_submitted') }}
+        {{ content|without('favorite_link', 'favorite_link_placeholder_text', 'application_status_and_submitted', 'application_contract_link') }}
       </div>
 
     </div>

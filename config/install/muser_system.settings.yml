@@ -5,6 +5,14 @@ mentor_request_email_body: "[user:display-name] has requested to become a Muser 
 new_project_email_subject: '[[site:name]] New project created'
 new_project_email_body: "Dear [muser:project-contacts]\r\n\r\nA new project, entitled \"[node:title]\", has been posted to the [site:name] website and will be included in this round of the program.\r\n\r\n[node:url]\r\n\r\nOn [muser:review-applications-start], you will be able to begin reviewing applicants.  The deadline for finishing application review is [muser:review-applications-end].\r\n\r\nThank you for participating in [site:name].\r\n\r\nBest wishes,\r\n\r\nThe [site:name] Team"
 user_login_method: drupal
+contract_label: "Use Mentor-Student contract on this project?"
+contract_description: "Check this if there will be a Mentor-Student contract on this project. At the end of the Round, reminder emails will be sent to both the mentor and student(s) involved."
+enable_contract_modal: false
+contract_require_short_confirmation_text: true
+contract_short_confirmation_text: "I understand"
+contract_modal_text:
+  value: "<p>When you agree to use a Mentor-Student contract on this project, you commit to working with the student or students you select to create a contract outlining the obligations and expectations of both parties.</p>\r\n"
+  format: basic_html
 user_management_restricted: false
 mentor_grant_email_subject: '[[site:name]] You''ve been granted the mentor role'
 mentor_grant_email_body: "Dear [user:display-name],\r\n\r\nWelcome to [site:name]! You have been granted mentor status and can now participate in posting projects.\r\n\r\n[site:url]\r\n\r\nBest regards,\r\nThe [site:name] Team\r\n"

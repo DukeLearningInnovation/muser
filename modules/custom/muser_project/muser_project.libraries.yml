@@ -11,6 +11,7 @@ applications:
   dependencies:
     - core/jquery
     - core/jquery.once
+
 # Ajax action link library.
 activate_link:
   js:
@@ -22,3 +23,14 @@ activate_link:
     - core/drupal
     - core/drupal.ajax
     - flag/flag.link_ajax
+
+contract-confirm:
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/jquery.once
+  js:
+    js/contract-confirm.js: {}
+  css:
+    theme:
+      css/contract-confirm.css: { }

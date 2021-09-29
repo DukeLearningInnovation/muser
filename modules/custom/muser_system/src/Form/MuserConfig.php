@@ -216,6 +216,80 @@ class MuserConfig extends ConfigFormBase {
       '#default_value' => $value['value'] ?? NULL,
     ];
 
+    $form['contracts'] = [
+      '#type' => 'details',
+      '#title' => $this->t('Contracts'),
+      '#open' => FALSE,
+    ];
+    $form['contracts']['info'] = [
+      '#type' => 'markup',
+      '#markup' => $this->t('These fields are used for various parts of the contracts feature.'),
+    ];
+
+    $form['contracts']['contract_label'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Contract label'),
+      '#description' => $this->t('This is what will be displayed next to the checkbox on the project form. An example of this text might be "Use Mentor-Student contract on this project?"'),
+      '#default_value' => $config->get('contract_label'),
+    ];
+
+    $value = $config->get('contract_description');
+    $form['contracts']['contract_description'] = [
+      '#type' => 'textarea',
+      '#title' => $this->t('Contract description'),
+      '#default_value' => $config->get('contract_description'),
+      '#description' => $this->t('Appears below the checkbox and label set above. This can be used for clarification around what is expected of mentors that choose to offer a contract for their project.'),
+    ];
+
+    $form['contracts']['enable_contract_modal'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Enable contract pop-up window?'),
+      '#default_value' => $config->get('enable_contract_modal') ?? FALSE,
+      '#description' => $this->t('When enabled, this will open a pop-up window when a mentor checks the "Use a Mentor-Student contract..." checkbox to ensure they understand the requirements.'),
+    ];
+
+    $form['contracts']['contract_require_short_confirmation_text'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Require confirmation text?'),
+      '#default_value' => $config->get('contract_require_short_confirmation_text') ?? TRUE,
+      '#description' => $this->t('When enabled, mentors will be required to type "I Understand" to check the box, instead of just clicking "accept".'),
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_contract_modal"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+
+    $value = $config->get('contract_short_confirmation_text');
+    $form['contracts']['contract_short_confirmation_text'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Contract pop-up window short confirmation text'),
+      '#format' => $value['format'] ?? 'basic_html',
+      '#default_value' => $config->get('contract_short_confirmation_text') ?? $this->t("I understand"),
+      '#description' => $this->t('The text that mentors must enter (case-insensitive) in order to click the "accept" button.'),
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_contract_modal"]' => ['checked' => TRUE],
+          ':input[name="contract_require_short_confirmation_text"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
+    $value = $config->get('contract_modal_text');
+    $form['contracts']['contract_modal_text'] = [
+      '#type' => 'text_format',
+      '#title' => $this->t('Contract pop-up window text'),
+      '#format' => $value['format'] ?? 'basic_html',
+      '#default_value' => $value['value'] ?? NULL,
+      '#description' => $this->t("This text will be displayed in the pop-up window described above. There's no need to describe the confirmation text that the mentor must enter, it will already be there."),
+      '#states' => [
+        'visible' => [
+          ':input[name="enable_contract_modal"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
+
     $definition = FieldConfig::loadByName('flagging', 'favorites', 'field_status');
     $settings = $definition->getSettings();
     $form['#application_statuses'] = $settings['allowed_values'];
@@ -278,6 +352,13 @@ class MuserConfig extends ConfigFormBase {
 
     $config->set('role_description_student', $values['role_description_student']);
     $config->set('role_description_mentor', $values['role_description_mentor']);
+
+    $config->set('contract_label', $values['contract_label']);
+    $config->set('contract_description', $values['contract_description']);
+    $config->set('enable_contract_modal', $values['enable_contract_modal']);
+    $config->set('contract_require_short_confirmation_text', $values['contract_require_short_confirmation_text']);
+    $config->set('contract_short_confirmation_text', $values['contract_short_confirmation_text']);
+    $config->set('contract_modal_text', $values['contract_modal_text']);
 
     $config->set('application_essay_guidelines', $values['application_essay_guidelines']);
 
