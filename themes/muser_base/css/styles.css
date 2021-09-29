@@ -697,6 +697,7 @@ a.tabledrag-handle .handle {
 select, input, textarea {
   color: var(--text-color); }
 
+.form-wrapper > summary,
 .field__label {
   font-weight: 600; }
 
@@ -2963,6 +2964,9 @@ ul.tabs {
 .essay-guidelines__text {
   max-width: 600px; }
 
+.field--name-field-mentor-info .field__item:not(:last-child) {
+  margin-bottom: 8px; }
+
 .mentor-status-icon--star {
   color: #ddbf5b; }
 
@@ -2976,6 +2980,17 @@ ul.tabs {
     .field--name-field-hours-per-week .extra-term:not(:last-child):after {
       content: ',';
       margin-right: 3px; }
+
+.field--name-field-additional-mentors table {
+  width: 100%; }
+
+.field--name-field-additional-mentors th.field-label {
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-color);
+  padding-bottom: 8px; }
+  .field--name-field-additional-mentors th.field-label h4 {
+    color: inherit; }
 
 .block-muser-my-projects-header-block .button--primary,
 .block-muser-my-projects-header-block .button--standard,
