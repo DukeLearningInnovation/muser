@@ -1,7 +1,7 @@
 name: Muser
 type: profile
 description: 'A Drupal installation profile for Muser sites.'
-core: 8.x
+core_version_requirement: ^8 || ^9
 
 distribution:
   name: Muser
