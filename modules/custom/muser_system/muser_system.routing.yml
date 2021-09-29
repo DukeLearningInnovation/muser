@@ -67,3 +67,11 @@ muser_system.item_with_tokens:
     _controller: '\Drupal\muser_system\Controller\BasicController::configItemWithTokens'
   requirements:
     _permission: 'manage muser settings'
+
+muser_system.export_applications:
+  path: '/muser/export-applications/{stage}'
+  defaults:
+    _title: 'Export applications'
+    _controller: '\Drupal\muser_system\Controller\MuserPdfExportController::build'
+  requirements:
+    _permission: 'export muser applications'
