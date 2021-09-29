@@ -405,11 +405,17 @@ function muser_system_reverse_time_offset($offset) {
 }
 
 function muser_system_get_display_only_field($field_name, $label, $value, $label_position = 'above') {
-  return '<div class="field ' . Html::cleanCssIdentifier('field--name-' . $field_name) . ' field--type-string field--label-' . $label_position . '">'
-  . '<div class="field__label">' . $label . '</div>'
-  . '<div class="field__item">'
+  if (!$label) {
+    $label_position = 'hidden';
+  }
+  $out = '<div class="field ' . Html::cleanCssIdentifier('field--name-' . $field_name) . ' field--type-string field--label-' . $label_position . '">';
+  if ($label) {
+    $out .= '<div class="field__label">' . $label . '</div>';
+  }
+  $out .= '<div class="field__item">'
   . $value
   . '</div></div>';
+  return $out;
 }
 
 function muser_system_get_mentor_star(AccountInterface $account, $contract_star = FALSE) {

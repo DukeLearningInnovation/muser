@@ -75,6 +75,11 @@ function muser_project_entity_extra_field_info() {
     'description' => t("Contact information for the Project's Mentor"),
     'visible' => FALSE,
   ];
+  $extra['node']['project']['display']['activate_link'] = [
+    'label' => t('"Activate" link (rounds)'),
+    'description' => t('View "Activate"/"Inactivate" link for a project'),
+    'visible' => FALSE,
+  ];
 
   $extra['flagging']['favorites']['display']['project_availability'] = $project_availability;
   $extra['flagging']['favorites']['display']['project_info'] = [
@@ -90,11 +95,6 @@ function muser_project_entity_extra_field_info() {
   $extra['flagging']['favorites']['display']['update_status_link'] = [
     'label' => t('"Update status" link'),
     'description' => t('Link to update the status of applicant'),
-    'visible' => FALSE,
-  ];
-  $extra['node']['project']['display']['activate_link'] = [
-    'label' => t('"Activate" link (rounds)'),
-    'description' => t('View "Activate"/"Inactivate" link for a project'),
     'visible' => FALSE,
   ];
   $extra['flagging']['favorites']['display']['application_contract_link'] = $extra['node']['project']['display']['application_contract_link'];
@@ -238,20 +238,24 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
   if ($component = $display->getComponent('mentor_info')) {
     /** @var \Drupal\Core\Session\AccountInterface $mentor */
     $mentor = $entity->getOwner();
-    if ($mentor && $mentor->isAuthenticated()) {
+    $markup = [];
+    $markup[] = muser_project_get_mentor_info_markup($mentor);
+    if ($entity->field_additional_mentors->count()) {
+      foreach ($entity->field_additional_mentors as $item) {
+        $markup[] .= muser_project_get_mentor_info_markup($item->entity);
+      } // Loop thru additional mentors.
+    } // Got additional mentors?
+    if ($markup = array_filter($markup)) {
       $build['mentor_info'] = [
         '#type' => 'markup',
         '#weight' => $component['weight'],
+        '#markup' => '<div class="field field--name-field-mentor-info field--label-above">
+  <div class="field__label">' . \Drupal::translation()->formatPlural(count($markup), 'Mentor', 'Mentors') . '</div>
+  <div class="field__items">
+    <div class="field__item">' . implode('</div><div class="field__item">', $markup) . '</div>
+  </div>
+</div>',
       ];
-      $name = Html::escape($mentor->getDisplayName())
-        . ' '
-        . muser_system_get_mentor_star($mentor)
-        . muser_system_get_mentor_star($mentor, TRUE);
-      $build['mentor_info']['#markup'] = muser_system_get_display_only_field('field_mentor_name', t('Mentor name'), $name)
-        . muser_system_get_display_only_field('field_mentor_email', t('Mentor email'), Html::escape($mentor->getEmail()));
-      if ($mentor->field_lab_affiliation->value) {
-        $build['mentor_info']['#markup'] .= muser_system_get_display_only_field('field_mentor_position', t('Mentor position'), Html::escape($mentor->field_lab_affiliation->value));
-      }
     }
   } // Show Mentor info?
 
@@ -402,6 +406,29 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
 
   } // Show "Activate" link?
 
+}
+
+/**
+ * Get markup for a mentor to show with Project.
+ *
+ * @param \Drupal\Core\Session\AccountInterface $mentor
+ *
+ * @return string
+ */
+function muser_project_get_mentor_info_markup(AccountInterface $mentor) {
+  if (!$mentor || !$mentor->isAuthenticated()) {
+    return '';
+  }
+  $name = Html::escape($mentor->getDisplayName())
+    . ' '
+    . muser_system_get_mentor_star($mentor)
+    . muser_system_get_mentor_star($mentor, TRUE);
+  $markup = muser_system_get_display_only_field('field_mentor_name', '', $name)
+    . muser_system_get_display_only_field('field_mentor_email', '', Html::escape($mentor->getEmail()));
+  if ($mentor->field_lab_affiliation->value) {
+    $markup .= muser_system_get_display_only_field('field_mentor_position', '', Html::escape($mentor->field_lab_affiliation->value));
+  }
+  return $markup;
 }
 
 function muser_project_get_current_round($load_node = FALSE) {
@@ -1186,8 +1213,15 @@ function muser_project_allow_flagging_access($operation, FlaggingInterface $flag
     case 'update_status':
       /** @var  \Drupal\node\Entity\Node $project */
       $project = muser_project_get_project_for_flagging($flagging);
-      if ($flagging->field_is_submitted->value && $project->getOwnerId() == $account->id()) {
-        // Application is submitted and they own the project.
+      $additional_mentors = [];
+      if ($project->field_additional_mentors->count()) {
+        foreach ($project->field_additional_mentors as $item) {
+          $additional_mentors[$item->target_id] = TRUE;
+        } // Loop thru additional mentors.
+      } // Got additional mentors?
+      if ($flagging->field_is_submitted->value
+        && ($project->getOwnerId() == $account->id() || !empty($additional_mentors[$account->id()]))) {
+        // Application is submitted and they own the project or are and additional mentor.
         return TRUE;
       }
       break;
@@ -1528,4 +1562,20 @@ function muser_project_get_application_contract_link(EntityInterface $entity) {
 
   return $build;
 
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function muser_project_views_data_alter(array &$data) {
+  $data['node_field_data']['allowed_mentor'] = [
+    'title' => t('Allowed mentor'),
+    'argument' => [
+      'title' => t('Allowed mentor'),
+      'help' => t('Provides a custom argument for project nodes by their Author or Additional allowed mentors.'),
+      'table' => 'node__field_additional_mentors',
+      'field' => 'field_additional_mentor_target_id',
+      'id' => 'allowed_mentor',
+    ],
+  ];
 }
