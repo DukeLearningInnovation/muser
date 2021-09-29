@@ -2,3 +2,6 @@ manage muser settings:
   title: 'Manage Muser settings'
   description: 'Allows administrators to manage Muser site configuration settings.'
   restrict access: TRUE
+export muser applications:
+  title: 'Export Muser applications'
+  description: 'Allows mentors to export applications.'

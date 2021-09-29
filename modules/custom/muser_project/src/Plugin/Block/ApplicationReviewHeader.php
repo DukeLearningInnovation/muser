@@ -104,6 +104,9 @@ class ApplicationReviewHeader extends BlockBase implements ContainerFactoryPlugi
         if (!empty($info['todo'])) {
           $text .= '<p>' . $info['todo'] . '</p>';
         }
+        if (!empty($info['downloads'])) {
+          $text .= '<p>' . $info['downloads'] . '</p>';
+        }
       }
     }
 
@@ -173,14 +176,20 @@ class ApplicationReviewHeader extends BlockBase implements ContainerFactoryPlugi
     $text = $this->formatPlural($counts->submitted,
       'You have 1 submitted application',
       'You have @count submitted applications')->__toString();
+    $downloads_text = '';
 
     $types = [];
+    $downloads = [];
     if (!empty($counts->pending)) {
       $types[] = Link::createFromRoute($this->t('@count pending', ['@count' => $counts->pending]), 'view.applications.page_new', ['user' => $account->id()])
+        ->toString();
+      $downloads[] = Link::createFromRoute($this->t('Download @count pending', ['@count' => $counts->pending]), 'muser_system.export_applications', ['stage' => 'pending'])
         ->toString();
     }
     if (!empty($counts->in_review)) {
       $types[] = Link::createFromRoute($this->t('@count in review', ['@count' => $counts->in_review]), 'view.applications.page_review', ['user' => $account->id()])
+        ->toString();
+      $downloads[] = Link::createFromRoute($this->t('Download @count in review', ['@count' => $counts->in_review]), 'muser_system.export_applications', ['stage' => 'in-review'])
         ->toString();
     }
     if (!empty($counts->accepted)) {
@@ -194,6 +203,9 @@ class ApplicationReviewHeader extends BlockBase implements ContainerFactoryPlugi
     if ($types) {
       $text .= ' - ' . implode(', ', $types);
     }
+    if ($downloads) {
+      $downloads_text = '<i class="far fa-file-pdf"></i> ' . implode(', ', $downloads);
+    }
 
     if (!empty($counts->no_decision)) {
       $todo = $this->formatPlural($counts->no_decision,
@@ -205,7 +217,7 @@ class ApplicationReviewHeader extends BlockBase implements ContainerFactoryPlugi
       $todo = $this->t('You have completed your application review. <em>Well done!</em> Students will see a gold star next to your name for any projects that you post during the next round.')->__toString();
     }
 
-    return ['text' => $text, 'todo' => $todo];
+    return ['text' => $text, 'todo' => $todo, 'downloads' => $downloads_text];
 
   }
 

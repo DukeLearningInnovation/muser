@@ -50,8 +50,8 @@ class BasicController extends ControllerBase {
   /**
    * Show essay guidelines.
    *
-   * @return \Symfony\Component\HttpFoundation\RedirectResponse
-   *   Redirect to Muser config page.
+   * @return array
+   *   Build array.
    */
   public function essayGuidelines() {
 
