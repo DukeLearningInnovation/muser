@@ -6,6 +6,9 @@
  */
 
 use Drupal\user\Entity\User;
+use Drupal\Core\Config\FileStorage;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
 
 /**
  * Implements hook_install().
@@ -25,4 +28,102 @@ function muser_install() {
   // menu links are valid.
   \Drupal::service('router.builder')->rebuildIfNeeded();
 
+}
+
+/**
+ * Be sure the fields we're expecting are there, and create if not.
+ *
+ * Source: https://thinkshout.com/blog/2020/11/populating-fields/
+ *
+ * ASSUMPTIONS:
+ * - You've already created these field configs, probably through the GUI.
+ * - They're stored in ../config.
+ *
+ * @param array $entitytypes_fields
+ *   A 3-dimensional array. The first level is entity types, the second is
+ * bundles, and the third is the fields you want to ensure. E.g.
+ * [
+ *   'node' => [
+ *     'page' => [
+ *       'field_foo',
+ *       'field_bar',
+ *     ],
+ *     'article' => [
+ *       'field_bar',
+ *     ],
+ *   ],
+ * ]
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function muser_ensure_fields(array $entitytypes_fields) {
+  $config_directory = new FileStorage('../config/sync');
+  foreach ($entitytypes_fields as $entitytype => $bundles) {
+    foreach ($bundles as $bundle => $fields) {
+      foreach ($fields as $field) {
+        $field_storage_name = 'field.storage.' . $entitytype . '.' . $field;
+        $config_record = $config_directory->read($field_storage_name);
+        if (!FieldStorageConfig::loadByName($config_record['entity_type'], $config_record['field_name'])) {
+          FieldStorageConfig::create($config_record)->save();
+        }
+        $field_config_name = 'field.field.' . $entitytype . '.' . $bundle . '.' . $field;
+        $config_record = $config_directory->read($field_config_name);
+        if (!FieldConfig::loadByName($config_record['entity_type'], $config_record['bundle'], $config_record['field_name'])) {
+          FieldConfig::create($config_record)->save();
+        }
+      } // Loop thru fields.
+    } // Loop thru bundles.
+  } // Loop thru entity types.
+}
+
+/**
+ * Add new fields, update views.
+ */
+function muser_update_8001(&$sandbox) {
+  $entitytypes_fields = [
+    'node' => [
+      'project' => [
+        'field_use_contract',
+      ],
+    ],
+    'flagging' => [
+      'favorites' => [
+        'field_contract_signed_mentor',
+        'field_contract_signed_student',
+      ],
+    ],
+  ];
+  muser_ensure_fields($entitytypes_fields);
+  muser_sql_view_creation();
+}
+
+/**
+ * Add contract star field to user entity.
+ */
+function muser_update_8002(&$sandbox) {
+  $entitytypes_fields = [
+    'user' => [
+      'user' => [
+        'field_has_contract_star',
+      ],
+    ],
+  ];
+  muser_ensure_fields($entitytypes_fields);
+}
+
+/**
+ * Add contract star to all users.
+ */
+function muser_post_update_add_user_contract_stars(&$sandbox) {
+  $uids = \Drupal::entityQuery('user')
+    ->condition('uid', 1, '>')
+    ->execute();
+  if ($uids) {
+    $storage_handler = \Drupal::entityTypeManager()->getStorage('user');
+    foreach ($uids as $uid) {
+      $user = $storage_handler->load($uid);
+      $user->field_has_contract_star->value = 1;
+      $user->save();
+    } // Loop thru users.
+  } // Got users?
 }

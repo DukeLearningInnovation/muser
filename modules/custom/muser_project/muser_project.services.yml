@@ -19,3 +19,8 @@ services:
     arguments: ['@current_user']
     tags:
       - { name: access_check, applies_to: _muser_project_user_access_check }
+  muser_project.contract_access_check:
+    class: \Drupal\muser_project\Access\AcceptContractAccess
+    arguments: ['@current_user']
+    tags:
+      - { name: access_check, applies_to: _accept_contract_access_check }

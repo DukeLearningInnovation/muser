@@ -68,6 +68,26 @@ function muser_system_views_data() {
       'title' => t('Rejected count'),
       'help' => t('Number of rejected applications.'),
     ],
+    'contract_required' => [
+      'title' => t('Contract required count'),
+      'help' => t('Number of applications requiring contracts.'),
+    ],
+    'contract_signed_mentor' => [
+      'title' => t('Contract accepted by mentor count'),
+      'help' => t('Number of applications where mentor accept contracts.'),
+    ],
+    'contract_signed_student' => [
+      'title' => t('Contract accepted by student count'),
+      'help' => t('Number of applications where student accept contracts.'),
+    ],
+    'contract_required_mentor' => [
+      'title' => t('Contract acceptance required by mentor count'),
+      'help' => t('Number of applications where mentor must accept contracts.'),
+    ],
+    'contract_required_students' => [
+      'title' => t('Contract acceptance required by students count'),
+      'help' => t('Number of applications where students must accept contracts.'),
+    ],
   ];
 
   foreach ($count_fields as $field_name => $info) {
@@ -90,21 +110,41 @@ function muser_system_views_data() {
   $data['muser_applications_counts']['requires_decision'] = [
     'title' => t('Applications require decision'),
     'help' => t('Shows if there are applications that have not been either accepted or rejected.'),
-    'field' => array(
+    'field' => [
       'title' => t('Applications require decision'),
       'help' => t('Shows if there are applications that have not been either accepted or rejected.'),
       'id' => 'requires_decision',
-    ),
-    'sort' => array(
-      'title' => t('Applications require decision'),
-      'help' => t('Filters based on if there are applications that have not been either accepted or rejected.'),
-      'id' => 'requires_decision',
-    ),
-    'filter' => array(
+    ],
+    'sort' => [
       'title' => t('Applications require decision'),
       'help' => t('Sorts based on if there are applications that have not been either accepted or rejected.'),
       'id' => 'requires_decision',
-    ),
+    ],
+    'filter' => [
+      'title' => t('Applications require decision'),
+      'help' => t('Filters based on if there are applications that have not been either accepted or rejected.'),
+      'id' => 'requires_decision',
+    ],
+  ];
+
+  $data['muser_applications_counts']['requires_contracts'] = [
+    'title' => t('Applications require contracts'),
+    'help' => t('Shows if there are applications that have not had required contracts accepted.'),
+    'field' => [
+      'title' => t('Applications require contracts'),
+      'help' => t('Shows if there are applications that have not had required contracts accepted.'),
+      'id' => 'requires_contracts',
+    ],
+    'sort' => [
+      'title' => t('Applications require contracts'),
+      'help' => t('Sorts based on if there are applications that have not had required contracts accepted.'),
+      'id' => 'requires_contracts',
+    ],
+    'filter' => [
+      'title' => t('Applications require contracts'),
+      'help' => t('Filters based on if there are applications that have not had required contracts accepted.'),
+      'id' => 'requires_contracts',
+    ],
   ];
 
   return $data;

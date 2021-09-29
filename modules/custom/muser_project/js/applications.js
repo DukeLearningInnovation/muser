@@ -123,7 +123,7 @@
         });
       });
 
-      let toggle_application = function(application) {
+      let toggle_application = function (application) {
         application.toggleClass('application--closed application--open');
         let toggle_application_button = application.find('.toggle-application');
 
@@ -141,6 +141,27 @@
 
         return false;
       }
+
+      // Open the item set in the URL hash.
+      $('body').once('hash--processed').each(function () {
+        let hash = window.location.hash;
+        if (hash.indexOf('#open__') !== -1) {
+          let application_wrapper = $(hash);
+          if (application_wrapper.length > 0) {
+            toggle_application(application_wrapper);
+            let toolbar1 = $('#toolbar-bar')
+            let toolbar2 = $('.toolbar-tray.is-active.toolbar-tray-horizontal');
+            let offset = application_wrapper.offset().top;
+            if (toolbar1.length) {
+              offset -= toolbar1.height();
+            }
+            if (toolbar2.length) {
+              offset -= toolbar2.height();
+            }
+            $(document).scrollTop(offset);
+          }
+        }
+      });
 
     }
   };

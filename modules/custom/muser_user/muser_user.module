@@ -110,8 +110,9 @@ function muser_user_form_user_form_alter(&$form, \Drupal\Core\Form\FormStateInte
       unset($form['field_user_type']['widget']['#options']['admin']);
     }
 
-    // Hide the Mentor star from non-admins.
+    // Hide the Mentor stars from non-admins.
     $form['field_has_star']['#access'] = FALSE;
+    $form['field_has_contract_star']['#access'] = FALSE;
 
     $form['#attached']['library'][] = 'muser_user/user-type';
 

@@ -142,6 +142,8 @@ function muser_system_form_node_round_form_alter(&$form, FormStateInterface $for
     $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_sign_contracts_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_sign_contracts_start_email']['widget']['value']['#disabled'] = TRUE;
   }
   $form['#validate'][] = 'muser_system_round_form_validate';
 }
@@ -162,6 +164,8 @@ function muser_system_form_node_round_edit_form_alter(&$form, FormStateInterface
     $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
     $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_sign_contracts_end_email']['widget']['value']['#disabled'] = TRUE;
+    $form['field_sign_contracts_start_email']['widget']['value']['#disabled'] = TRUE;
   }
   elseif (empty($form['field_is_current']['widget']['value']['#default_value'])) {
     // Only allow admins to un-set the "Is current" field because we need the
@@ -198,6 +202,7 @@ function muser_system_round_form_validate($form, FormStateInterface &$form_state
   $accept = $form_state->getValue('field_accept_applications')[0];
   $apply = $form_state->getValue('field_apply')[0];
   $post = $form_state->getValue('field_post_projects')[0];
+  $contracts = $form_state->getValue('field_sign_contracts')[0];
 
   if ($start['value'] instanceof DrupalDateTime && $post['value'] instanceof DrupalDateTime) {
     // Start date must be before posting period.
@@ -220,6 +225,14 @@ function muser_system_round_form_validate($form, FormStateInterface &$form_state
     $d = $apply['end_value']->diff($accept['value']);
     if ($d->invert) {
       $form_state->setErrorByName('field_accept_applications', t('The Accept period cannot start until the Application period ends.'));
+    }
+  }
+
+  if ($contracts['value'] instanceof DrupalDateTime && $accept['end_value'] instanceof DrupalDateTime) {
+    // Accept period before Contracts  period.https://home.muser.duke.edu/
+    $d = $accept['end_value']->diff($contracts['value']);
+    if ($d->invert) {
+      $form_state->setErrorByName('field_sign_contracts', t('The Contract period cannot start until the Accept period ends.'));
     }
   }
 
@@ -344,19 +357,25 @@ function muser_system_set_current_round() {
   // @todo - Update mentor stars here. What else?
   if ($current_round_nid) {
     // @todo - This should be done as a batch.
-    $query = \Drupal::database()->select('muser_applications_counts', 'ac');
-    $query->addField('ac', 'project_uid');
-    $query->addExpression('SUM(ac.no_decision)', 'num_no_decision');
-    $query->condition('ac.round_nid', $current_round_nid);
-    $query->groupBy('ac.project_uid');
-    $result = $query->execute();
-    foreach ($result as $row) {
-      if ($account = User::load($row->project_uid)) {
-        // Give them star if they have no decisions to make, remove if they do.
-        $account->field_has_star->value = (empty($row->num_no_decision)) ? 1: 0;
-        $account->save();
-      }
-    } // Loop thru users.
+    $count_fields = [
+      'SUM(ac.no_decision)' => 'field_has_star',
+      'SUM(ac.contract_required_mentor)' => 'field_has_contract_star',
+    ];
+    foreach ($count_fields as  $expression => $field_name) {
+      $query = \Drupal::database()->select('muser_applications_counts', 'ac');
+      $query->addField('ac', 'project_uid');
+      $query->addExpression($expression, 'num_items');
+      $query->condition('ac.round_nid', $current_round_nid);
+      $query->groupBy('ac.project_uid');
+      $result = $query->execute();
+      foreach ($result as $row) {
+        if ($account = User::load($row->project_uid)) {
+          // Give them star if they have no contracts / decisions to make, remove if they do.
+          $account->{$field_name}->value = (empty($row->num_items)) ? 1: 0;
+          $account->save();
+        }
+      } // Loop thru users.
+    } // Loop thru fields.
   } // Was there a previous current round?
 
   return $new;
@@ -393,12 +412,22 @@ function muser_system_get_display_only_field($field_name, $label, $value, $label
   . '</div></div>';
 }
 
-function muser_system_get_mentor_star(AccountInterface $account) {
-  if ($account->field_has_star->value) {
-    $star = '<i class="fa-1x fas fa-star mentor-status-icon--star"></i>';
+function muser_system_get_mentor_star(AccountInterface $account, $contract_star = FALSE) {
+  if ($contract_star) {
+    $field_name = 'field_has_contract_star';
+    $class_prefix = 'mentor-contract-status-icon';
+    $title = t('Contract star');
   }
   else {
-    $star = '<span class="mentor-status-icon--no-star"></span>';
+    $field_name = 'field_has_star';
+    $class_prefix = 'mentor-status-icon';
+    $title = t('Mentor star');
+  }
+  if ($account->{$field_name}->value) {
+    $star = '<i title="' . $title . '" class="fa-1x fas fa-star ' . $class_prefix . ' ' . $class_prefix . '--star"></i>';
+  }
+  else {
+    $star = '<span class="' . $class_prefix . '--no-star"></span>';
   }
   return $star;
 }
