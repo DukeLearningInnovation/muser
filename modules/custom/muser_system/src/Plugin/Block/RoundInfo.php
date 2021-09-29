@@ -138,7 +138,7 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
     ];
 
     $dates = [];
-    $user_tz = new \DateTimeZone(drupal_get_user_timezone());
+    $user_tz = new \DateTimeZone(date_default_timezone_get());
     $now = new DrupalDateTime();
 
     foreach ($fields as $field => $text) {

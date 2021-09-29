@@ -22,6 +22,7 @@ use Drupal\flag\FlagInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Utility\Environment;
 
 define('MUSER_CONTRACT_ICON', '<i class="far fa-handshake"></i>');
 define('MUSER_STAR_ICON', '<i title="Mentor star" class="far fa-star"></i>');
@@ -1355,7 +1356,7 @@ function muser_project_entity_predelete(EntityInterface $entity) {
     if ($nids) {
       // Try to allocate enough time to run all the deletions.
       // @todo this should be a batch / queue
-      drupal_set_time_limit(0);
+      Environment::setTimeLimit(0);
 
       foreach($nids as $nid) {
         if ($node = Node::load($nid)) {
