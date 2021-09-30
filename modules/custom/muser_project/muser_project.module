@@ -23,6 +23,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Environment;
+use Drupal\muser_project\GetApplicationCountText;
 
 define('MUSER_CONTRACT_ICON', '<i class="far fa-handshake"></i>');
 define('MUSER_STAR_ICON', '<i title="Mentor star" class="far fa-star"></i>');
@@ -180,7 +181,7 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
       . t('@spaces sp.', ['@spaces' => intval($count)])
       . '</span>';
     $build['project_availability'][] = [
-      '#lazy_builder' => ['muser_project_get_application_count_text', [$project_round_nid, $entity->id()]],
+      '#lazy_builder' => [GetApplicationCountText::class . ':lazyBuilder', [$project_round_nid, $entity->id()]],
       '#create_placeholder' => TRUE,
     ];
     $build['project_availability'][]['#markup'] = '</div></div></div>';
