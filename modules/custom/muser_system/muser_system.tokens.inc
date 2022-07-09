@@ -88,23 +88,27 @@ function muser_system_token_info() {
     'description' => t('Ending date/time of application review period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
     'dynamic' => TRUE,
   ];
-  $info['tokens']['muser']['contract-period-start'] = [
-    'name' => t('Contract period start'),
-    'description' => t('Starting date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
-    'dynamic' => TRUE,
-  ];
-  $info['tokens']['muser']['contract-period-end'] = [
-    'name' => t('Contract period end'),
-    'description' => t('Ending date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
-    'dynamic' => TRUE,
-  ];
+
+  if (_muser_system_contracts_enabled()) {
+    $info['tokens']['muser']['contract-period-start'] = [
+      'name' => t('Contract period start'),
+      'description' => t('Starting date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
+      'dynamic' => TRUE,
+    ];
+    $info['tokens']['muser']['contract-period-end'] = [
+      'name' => t('Contract period end'),
+      'description' => t('Ending date/time of contract period. Can specify an optional date format. See the <a href="@url" target="_blank">PHP manual</a> for available options.', ['@url' => 'http://php.net/manual/function.date.php']),
+      'dynamic' => TRUE,
+    ];
+    $info['tokens']['muser']['application-contract-accept-url'] = [
+      'name' => t('Contract accept URL'),
+      'description' => t('URL for Mentor/Student to indicate that they accepted contract.'),
+    ];
+  }
+
   $info['tokens']['muser']['review-applications-url'] = [
     'name' => t('Applications review URL'),
     'description' => t('URL for Mentor to review applications for their projects.'),
-  ];
-  $info['tokens']['muser']['application-contract-accept-url'] = [
-    'name' => t('Contract accept URL'),
-    'description' => t('URL for Mentor/Student to indicate that they accepted contract.'),
   ];
   // Return them.
   return $info;
@@ -126,11 +130,14 @@ function muser_system_tokens($type, $tokens, array $data, array $options, Bubble
       'post-projects-end',
       'application-start',
       'application-end',
-      'contract-period-start',
-      'contract-period-end',
       'review-applications-start',
       'review-applications-end',
     ];
+    if (_muser_system_contracts_enabled()) {
+      $date_token_names[] = 'contract-period-start';
+      $date_token_names[] = 'contract-period-end';
+    }
+
     foreach ($date_token_names as $date_token_name) {
       if ($date_tokens = \Drupal::token()->findWithPrefix($tokens, $date_token_name)) {
         foreach ($date_tokens as $format => $original) {

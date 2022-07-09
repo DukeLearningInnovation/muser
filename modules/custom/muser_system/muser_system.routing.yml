@@ -75,3 +75,11 @@ muser_system.export_applications:
     _controller: '\Drupal\muser_system\Controller\MuserPdfExportController::build'
   requirements:
     _permission: 'export muser applications'
+
+muser_system.reports:
+  path: '/admin/reports/muser'
+  defaults:
+    _title: 'Muser reports'
+    _controller: '\Drupal\muser_system\Controller\BasicController::reports'
+  requirements:
+    _permission: 'view muser reports'

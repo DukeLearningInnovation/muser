@@ -6,12 +6,14 @@ dependencies:
     - field.field.user.user.field_about_me
     - field.field.user.user.field_do_not_send_emails
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_contract_star
     - field.field.user.user.field_has_star
     - field.field.user.user.field_how_hear_about
     - field.field.user.user.field_lab_affiliation
     - field.field.user.user.field_last_name
     - field.field.user.user.field_major
     - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_needs_review
     - field.field.user.user.field_netid
     - field.field.user.user.field_programs
     - field.field.user.user.field_resume
@@ -30,12 +32,14 @@ hidden:
   field_about_me: true
   field_do_not_send_emails: true
   field_first_name: true
+  field_has_contract_star: true
   field_has_star: true
   field_how_hear_about: true
   field_lab_affiliation: true
   field_last_name: true
   field_major: true
   field_mentor_yesno: true
+  field_needs_review: true
   field_netid: true
   field_programs: true
   field_resume: true

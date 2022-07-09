@@ -14,6 +14,6 @@ plugin: muser_user_menu
 settings:
   id: muser_user_menu
   label: 'Muser user menu block'
-  provider: muser_user
   label_display: '0'
+  provider: muser_user
 visibility: {  }

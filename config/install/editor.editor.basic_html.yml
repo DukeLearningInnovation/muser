@@ -33,6 +33,7 @@ settings:
         -
           name: 'Block Formatting'
           items:
+            - detail
             - Format
         -
           name: Tools

@@ -16,20 +16,20 @@ plugin: muser_application_review_header_block
 settings:
   id: muser_application_review_header_block
   label: 'Muser Application review header block'
-  provider: muser_project
   label_display: '0'
+  provider: muser_project
 visibility:
   request_path:
     id: request_path
-    pages: "/mentor/*/applications\r\n/mentor/*/applications/*"
     negate: false
     context_mapping: {  }
+    pages: "/mentor/*/applications\r\n/mentor/*/applications/*"
   user_role:
     id: user_role
+    negate: false
+    context_mapping:
+      user: '@user.current_user_context:current_user'
     roles:
       administrator: administrator
       site_admin: site_admin
       mentor: mentor
-    negate: false
-    context_mapping:
-      user: '@user.current_user_context:current_user'

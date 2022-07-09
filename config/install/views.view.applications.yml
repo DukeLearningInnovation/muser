@@ -12,6 +12,7 @@ dependencies:
     - better_exposed_filters
     - entity_reference_exposed_filters
     - flag
+    - muser_project
     - node
     - options
     - user
@@ -24,78 +25,12 @@ base_table: node_field_data
 base_field: nid
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: role
-        options:
-          role:
-            administrator: administrator
-            site_admin: site_admin
-            mentor: mentor
-      cache:
-        type: tag
-        options: {  }
-      query:
-        type: views_query
-        options:
-          disable_sql_rewrite: false
-          distinct: false
-          replica: false
-          query_comment: ''
-          query_tags: {  }
-      exposed_form:
-        type: bef
-        options:
-          submit_button: Apply
-          reset_button: true
-          reset_button_label: 'Clear all filters'
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-          input_required: false
-          text_input_required: 'Select any filter and click on Apply to see results'
-          bef:
-            general:
-              autosubmit: false
-              autosubmit_exclude_textfield: false
-              autosubmit_hide: false
-              input_required: false
-              text_input_required: 'Select any filter and click on Apply to see results'
-              text_input_required_format: basic_html
-              allow_secondary: false
-              secondary_label: 'Advanced options'
-            filter:
-              eref_node_titles:
-                plugin_id: bef
-                select_all_none: false
-                select_all_none_nested: false
-                advanced:
-                  collapsible: true
-                  is_secondary: false
-                  placeholder_text: ''
-                  rewrite:
-                    filter_rewrite_values: ''
-                  sort_options: false
-          text_input_required_format: basic_html
-      pager:
-        type: none
-        options:
-          items_per_page: 0
-          offset: 0
-      style:
-        type: default
-      row:
-        type: fields
-        options:
-          default_field_elements: false
-          inline: {  }
-          separator: ''
-          hide_empty: false
+      title: Applications
       fields:
         rendered_entity_1:
           id: rendered_entity_1
@@ -104,6 +39,8 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          entity_type: flagging
+          plugin_id: rendered_entity
           label: ''
           exclude: false
           alter:
@@ -146,220 +83,56 @@ display:
           empty_zero: false
           hide_alter_empty: true
           view_mode: default
-          entity_type: flagging
-          plugin_id: rendered_entity
-      filters:
-        status:
-          value: '1'
-          table: node_field_data
-          field: status
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-          id: status
-          expose:
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-          group: 1
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          value:
-            project_round: project_round
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          group: 1
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-        field_is_current_value:
-          id: field_is_current_value
-          table: node__field_is_current
-          field: field_is_current_value
-          relationship: field_round
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: boolean
-        field_status_value:
-          id: field_status_value
-          table: flagging__field_status
-          field: field_status_value
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            pending: pending
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          plugin_id: list_field
-        field_is_submitted_value:
-          id: field_is_submitted_value
-          table: flagging__field_is_submitted
-          field: field_is_submitted_value
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: boolean
-        eref_node_titles:
-          id: eref_node_titles
-          table: node_field_data
-          field: eref_node_titles
-          relationship: field_project
-          group_type: group
-          admin_label: ''
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: Project
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: project
-            required: false
-            remember: false
-            multiple: true
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              site_admin: '0'
-              mentor: '0'
-              student: '0'
-            reduce: 0
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          entity_type: node
-          plugin_id: eref_node_titles
-          sort_order: '1'
-          sort_by: '1'
-          get_unpublished: '1'
-          get_filter_no_results: '1'
-      sorts:
-        uuid:
-          id: uuid
-          table: flagging
-          field: uuid
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          order: ASC
-          exposed: false
-          expose:
-            label: ''
-          entity_type: flagging
-          entity_field: uuid
-          plugin_id: standard
-      title: Applications
-      header: {  }
-      footer: {  }
+      pager:
+        type: none
+        options:
+          offset: 0
+          items_per_page: 0
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: 'Clear all filters'
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          input_required: false
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              text_input_required: 'Select any filter and click on Apply to see results'
+              text_input_required_format: basic_html
+            filter:
+              eref_node_titles:
+                plugin_id: bef
+                advanced:
+                  sort_options: false
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                  collapsible: true
+                  is_secondary: false
+                select_all_none: false
+                select_all_none_nested: false
+      access:
+        type: role
+        options:
+          role:
+            administrator: administrator
+            site_admin: site_admin
+            mentor: mentor
+      cache:
+        type: tag
+        options: {  }
       empty:
         area:
           id: area
@@ -368,51 +141,38 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: text
           empty: true
-          tokenize: false
           content:
             value: 'No new applications found.'
             format: basic_html
-          plugin_id: text
-      relationships:
-        flag_relationship:
-          id: flag_relationship
-          table: node_field_data
-          field: flag_relationship
-          relationship: none
+          tokenize: false
+      sorts:
+        uuid:
+          id: uuid
+          table: flagging
+          field: uuid
+          relationship: flag_relationship
           group_type: group
-          admin_label: Flags
-          required: true
-          flag: favorites
-          user_scope: any
-          entity_type: node
-          plugin_id: flag_relationship
-        field_project:
-          id: field_project
-          table: node__field_project
-          field: field_project
-          relationship: none
-          group_type: group
-          admin_label: 'field_project: Content'
-          required: true
+          admin_label: ''
+          entity_type: flagging
+          entity_field: uuid
           plugin_id: standard
-        field_round:
-          id: field_round
-          table: node__field_round
-          field: field_round
-          relationship: none
-          group_type: group
-          admin_label: 'field_round: Content'
-          required: true
-          plugin_id: standard
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: uuid
+          exposed: false
       arguments:
-        uid:
-          id: uid
+        allowed_mentor:
+          id: allowed_mentor
           table: node_field_data
-          field: uid
+          field: allowed_mentor
           relationship: field_project
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: allowed_mentor
           default_action: 'access denied'
           exception:
             value: all
@@ -427,8 +187,8 @@ display:
           summary_options:
             base_path: ''
             count: true
-            items_per_page: 25
             override: false
+            items_per_page: 25
           summary:
             sort_order: asc
             number_of_records: 0
@@ -439,67 +199,30 @@ display:
             fail: 'not found'
           validate_options: {  }
           break_phrase: false
-          not: false
-          entity_type: node
-          entity_field: uid
-          plugin_id: numeric
-      display_extenders: {  }
-      use_ajax: true
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
-    cache_metadata:
-      max-age: -1
-      contexts:
-        - 'languages:language_interface'
-        - url
-        - 'user.node_grants:view'
-        - user.roles
-      tags:
-        - 'config:core.entity_view_display.flagging.favorites.default'
-        - 'config:core.entity_view_display.flagging.favorites.full'
-  page_accepted:
-    display_plugin: page
-    id: page_accepted
-    display_title: 'Accepted applications'
-    position: 3
-    display_options:
-      display_extenders: {  }
-      path: mentor/%user/applications/accepted
-      display_description: ''
-      menu:
-        type: tab
-        title: 'Accepted applications'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 22
-        context: '0'
-        menu_name: main
+          not: 0
       filters:
         status:
-          value: '1'
+          id: status
           table: node_field_data
           field: status
-          plugin_id: boolean
           entity_type: node
           entity_field: status
-          id: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
           expose:
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-          group: 1
         type:
           id: type
           table: node_field_data
           field: type
-          value:
-            project_round: project_round
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          value:
+            project_round: project_round
           group: 1
           expose:
             operator_limit_selection: false
@@ -511,6 +234,7 @@ display:
           relationship: field_round
           group_type: group
           admin_label: ''
+          plugin_id: boolean
           operator: '='
           value: '1'
           group: 1
@@ -521,14 +245,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -541,7 +265,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: boolean
         field_status_value:
           id: field_status_value
           table: flagging__field_status
@@ -549,9 +272,10 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          plugin_id: list_field
           operator: or
           value:
-            accepted: accepted
+            pending: pending
           group: 1
           exposed: false
           expose:
@@ -560,6 +284,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -567,8 +293,6 @@ display:
             remember_roles:
               authenticated: authenticated
             reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -582,7 +306,6 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          plugin_id: list_field
         field_is_submitted_value:
           id: field_is_submitted_value
           table: flagging__field_is_submitted
@@ -590,6 +313,7 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          plugin_id: boolean
           operator: '='
           value: '1'
           group: 1
@@ -600,14 +324,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -620,7 +344,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: boolean
         eref_node_titles:
           id: eref_node_titles
           table: node_field_data
@@ -628,6 +351,8 @@ display:
           relationship: field_project
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: eref_node_titles
           operator: or
           value: {  }
           group: 1
@@ -638,6 +363,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: project
             required: false
             remember: false
@@ -650,8 +377,6 @@ display:
               mentor: '0'
               student: '0'
             reduce: 0
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -665,35 +390,82 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          entity_type: node
-          plugin_id: eref_node_titles
           sort_order: '1'
           sort_by: '1'
           get_unpublished: '1'
           get_filter_no_results: '1'
-      defaults:
-        filters: false
-        filter_groups: false
-        empty: false
-        fields: false
       filter_groups:
         operator: AND
         groups:
           1: AND
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
+      style:
+        type: default
+      row:
+        type: fields
+        options:
+          default_field_elements: false
+          inline: {  }
+          separator: ''
+          hide_empty: false
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: true
+          replica: false
+          query_tags: {  }
+      relationships:
+        flag_relationship:
+          id: flag_relationship
+          table: node_field_data
+          field: flag_relationship
           relationship: none
           group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: false
-          content:
-            value: 'No accepted applications found.'
-            format: basic_html
-          plugin_id: text
+          admin_label: Flags
+          entity_type: node
+          plugin_id: flag_relationship
+          required: true
+          flag: favorites
+          user_scope: any
+        field_project:
+          id: field_project
+          table: node__field_project
+          field: field_project
+          relationship: none
+          group_type: group
+          admin_label: 'field_project: Content'
+          plugin_id: standard
+          required: true
+        field_round:
+          id: field_round
+          table: node__field_round
+          field: field_round
+          relationship: none
+          group_type: group
+          admin_label: 'field_round: Content'
+          plugin_id: standard
+          required: true
+      use_ajax: true
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.roles
+      tags:
+        - 'config:core.entity_view_display.flagging.favorites.default'
+        - 'config:core.entity_view_display.flagging.favorites.full'
+  page_accepted:
+    id: page_accepted
+    display_title: 'Accepted applications'
+    display_plugin: page
+    position: 3
+    display_options:
       fields:
         rendered_entity_1:
           id: rendered_entity_1
@@ -702,6 +474,8 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          entity_type: flagging
+          plugin_id: rendered_entity
           label: ''
           exclude: false
           alter:
@@ -744,8 +518,235 @@ display:
           empty_zero: false
           hide_alter_empty: true
           view_mode: full
-          entity_type: flagging
-          plugin_id: rendered_entity
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No accepted applications found.'
+            format: basic_html
+          tokenize: false
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            project_round: project_round
+          group: 1
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_is_current_value:
+          id: field_is_current_value
+          table: node__field_is_current
+          field: field_is_current_value
+          relationship: field_round
+          group_type: group
+          admin_label: ''
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_status_value:
+          id: field_status_value
+          table: flagging__field_status
+          field: field_status_value
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          plugin_id: list_field
+          operator: or
+          value:
+            accepted: accepted
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+        field_is_submitted_value:
+          id: field_is_submitted_value
+          table: flagging__field_is_submitted
+          field: field_is_submitted_value
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        eref_node_titles:
+          id: eref_node_titles
+          table: node_field_data
+          field: eref_node_titles
+          relationship: field_project
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: eref_node_titles
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Project
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: project
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              site_admin: '0'
+              mentor: '0'
+              student: '0'
+            reduce: 0
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          sort_order: '1'
+          sort_by: '1'
+          get_unpublished: '1'
+          get_filter_no_results: '1'
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        empty: false
+        fields: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: mentor/%user/applications/accepted
+      menu:
+        type: tab
+        title: 'Accepted applications'
+        description: ''
+        weight: 22
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -757,23 +758,24 @@ display:
         - 'config:core.entity_view_display.flagging.favorites.default'
         - 'config:core.entity_view_display.flagging.favorites.full'
   page_new:
-    display_plugin: page
     id: page_new
     display_title: 'New applications'
+    display_plugin: page
     position: 1
     display_options:
-      display_extenders: {  }
-      path: mentor/%user/applications/new
       display_description: ''
+      display_extenders:
+        ajax_history: {  }
+      path: mentor/%user/applications/new
       menu:
         type: 'default tab'
         title: 'New applications'
         description: ''
-        expanded: false
-        parent: ''
         weight: 20
-        context: '0'
+        expanded: false
         menu_name: main
+        parent: ''
+        context: '0'
       tab_options:
         type: normal
         title: Applications
@@ -790,46 +792,100 @@ display:
         - 'config:core.entity_view_display.flagging.favorites.default'
         - 'config:core.entity_view_display.flagging.favorites.full'
   page_rejected:
-    display_plugin: page
     id: page_rejected
     display_title: 'Rejected applications'
+    display_plugin: page
     position: 4
     display_options:
-      display_extenders: {  }
-      path: mentor/%user/applications/rejected
-      display_description: ''
-      menu:
-        type: tab
-        title: 'Rejected applications'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 23
-        context: '0'
-        menu_name: main
+      fields:
+        rendered_entity_1:
+          id: rendered_entity_1
+          table: flagging
+          field: rendered_entity
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          entity_type: flagging
+          plugin_id: rendered_entity
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          view_mode: full
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No rejected applications found.'
+            format: basic_html
+          tokenize: false
       filters:
         status:
-          value: '1'
+          id: status
           table: node_field_data
           field: status
-          plugin_id: boolean
           entity_type: node
           entity_field: status
-          id: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
           expose:
             operator: ''
             operator_limit_selection: false
             operator_list: {  }
-          group: 1
         type:
           id: type
           table: node_field_data
           field: type
-          value:
-            project_round: project_round
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          value:
+            project_round: project_round
           group: 1
           expose:
             operator_limit_selection: false
@@ -841,6 +897,7 @@ display:
           relationship: field_round
           group_type: group
           admin_label: ''
+          plugin_id: boolean
           operator: '='
           value: '1'
           group: 1
@@ -851,14 +908,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -871,7 +928,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: boolean
         field_status_value:
           id: field_status_value
           table: flagging__field_status
@@ -879,6 +935,7 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          plugin_id: list_field
           operator: or
           value:
             rejected: rejected
@@ -890,6 +947,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -897,8 +956,6 @@ display:
             remember_roles:
               authenticated: authenticated
             reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -912,7 +969,6 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          plugin_id: list_field
         field_is_submitted_value:
           id: field_is_submitted_value
           table: flagging__field_is_submitted
@@ -920,6 +976,7 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          plugin_id: boolean
           operator: '='
           value: '1'
           group: 1
@@ -930,14 +987,14 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
             multiple: false
             remember_roles:
               authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -950,7 +1007,6 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: boolean
         eref_node_titles:
           id: eref_node_titles
           table: node_field_data
@@ -958,6 +1014,8 @@ display:
           relationship: field_project
           group_type: group
           admin_label: ''
+          entity_type: node
+          plugin_id: eref_node_titles
           operator: or
           value: {  }
           group: 1
@@ -968,6 +1026,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: project
             required: false
             remember: false
@@ -980,8 +1040,6 @@ display:
               mentor: '0'
               student: '0'
             reduce: 0
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -995,87 +1053,31 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          entity_type: node
-          plugin_id: eref_node_titles
           sort_order: '1'
           sort_by: '1'
           get_unpublished: '1'
           get_filter_no_results: '1'
-      defaults:
-        filters: false
-        filter_groups: false
-        empty: false
-        fields: false
       filter_groups:
         operator: AND
         groups:
           1: AND
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: false
-          content:
-            value: 'No rejected applications found.'
-            format: basic_html
-          plugin_id: text
-      fields:
-        rendered_entity_1:
-          id: rendered_entity_1
-          table: flagging
-          field: rendered_entity
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          view_mode: full
-          entity_type: flagging
-          plugin_id: rendered_entity
+      defaults:
+        empty: false
+        fields: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: mentor/%user/applications/rejected
+      menu:
+        type: tab
+        title: 'Rejected applications'
+        description: ''
+        weight: 23
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:
@@ -1087,240 +1089,11 @@ display:
         - 'config:core.entity_view_display.flagging.favorites.default'
         - 'config:core.entity_view_display.flagging.favorites.full'
   page_review:
-    display_plugin: page
     id: page_review
     display_title: 'Application review'
+    display_plugin: page
     position: 2
     display_options:
-      display_extenders: {  }
-      path: mentor/%user/applications/in-review
-      display_description: ''
-      menu:
-        type: tab
-        title: 'Application review'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: 21
-        context: '0'
-        menu_name: main
-      filters:
-        status:
-          value: '1'
-          table: node_field_data
-          field: status
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-          id: status
-          expose:
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-          group: 1
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          value:
-            project_round: project_round
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
-          group: 1
-          expose:
-            operator_limit_selection: false
-            operator_list: {  }
-        field_is_current_value:
-          id: field_is_current_value
-          table: node__field_is_current
-          field: field_is_current_value
-          relationship: field_round
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: boolean
-        field_status_value:
-          id: field_status_value
-          table: flagging__field_status
-          field: field_status_value
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          operator: or
-          value:
-            in_review: in_review
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          plugin_id: list_field
-        field_is_submitted_value:
-          id: field_is_submitted_value
-          table: flagging__field_is_submitted
-          field: field_is_submitted_value
-          relationship: flag_relationship
-          group_type: group
-          admin_label: ''
-          operator: '='
-          value: '1'
-          group: 1
-          exposed: false
-          expose:
-            operator_id: ''
-            label: ''
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: ''
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: boolean
-        eref_node_titles:
-          id: eref_node_titles
-          table: node_field_data
-          field: eref_node_titles
-          relationship: field_project
-          group_type: group
-          admin_label: ''
-          operator: or
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: ''
-            label: Project
-            description: ''
-            use_operator: false
-            operator: ''
-            identifier: project
-            required: false
-            remember: false
-            multiple: true
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              site_admin: '0'
-              mentor: '0'
-              student: '0'
-            reduce: 0
-            operator_limit_selection: false
-            operator_list: {  }
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          reduce_duplicates: false
-          entity_type: node
-          plugin_id: eref_node_titles
-          sort_order: '1'
-          sort_by: '1'
-          get_unpublished: '1'
-          get_filter_no_results: '1'
-      defaults:
-        filters: false
-        filter_groups: false
-        empty: false
-        fields: false
-      filter_groups:
-        operator: AND
-        groups:
-          1: AND
-      empty:
-        area:
-          id: area
-          table: views
-          field: area
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: true
-          tokenize: false
-          content:
-            value: 'No applications in review found.'
-            format: basic_html
-          plugin_id: text
       fields:
         rendered_entity_1:
           id: rendered_entity_1
@@ -1329,6 +1102,8 @@ display:
           relationship: flag_relationship
           group_type: group
           admin_label: ''
+          entity_type: flagging
+          plugin_id: rendered_entity
           label: ''
           exclude: false
           alter:
@@ -1371,8 +1146,235 @@ display:
           empty_zero: false
           hide_alter_empty: true
           view_mode: full
-          entity_type: flagging
-          plugin_id: rendered_entity
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: 'No applications in review found.'
+            format: basic_html
+          tokenize: false
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            project_round: project_round
+          group: 1
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+        field_is_current_value:
+          id: field_is_current_value
+          table: node__field_is_current
+          field: field_is_current_value
+          relationship: field_round
+          group_type: group
+          admin_label: ''
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_status_value:
+          id: field_status_value
+          table: flagging__field_status
+          field: field_status_value
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          plugin_id: list_field
+          operator: or
+          value:
+            in_review: in_review
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+        field_is_submitted_value:
+          id: field_is_submitted_value
+          table: flagging__field_is_submitted
+          field: field_is_submitted_value
+          relationship: flag_relationship
+          group_type: group
+          admin_label: ''
+          plugin_id: boolean
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        eref_node_titles:
+          id: eref_node_titles
+          table: node_field_data
+          field: eref_node_titles
+          relationship: field_project
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: eref_node_titles
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: ''
+            label: Project
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: project
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              site_admin: '0'
+              mentor: '0'
+              student: '0'
+            reduce: 0
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          sort_order: '1'
+          sort_by: '1'
+          get_unpublished: '1'
+          get_filter_no_results: '1'
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      defaults:
+        empty: false
+        fields: false
+        filters: false
+        filter_groups: false
+      display_description: ''
+      display_extenders: {  }
+      path: mentor/%user/applications/in-review
+      menu:
+        type: tab
+        title: 'Application review'
+        description: ''
+        weight: 21
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:

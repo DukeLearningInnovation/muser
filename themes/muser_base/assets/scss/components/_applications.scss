@@ -97,6 +97,9 @@
     svg {
       font-size: $icon-size;
     }
+    i {
+      font-size: $icon-size - 6;
+    }
   }
 
   .contract-status__label,
@@ -106,6 +109,7 @@
     transform: translateY(1px);
   }
   .contract-status__icon {
+    i,
     svg {
       opacity: 0.9;
       transform: translateY(2px);

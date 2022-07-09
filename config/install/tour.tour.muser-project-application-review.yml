@@ -20,96 +20,85 @@ tips:
     id: application-review-main
     plugin: text
     label: 'List of applications'
-    body: 'View and review all <b>Applications</b> that Students have submitted for your projects.'
     weight: 1
+    body: 'View and review all <b>Applications</b> that Students have submitted for your projects.'
   application-review-new:
     id: application-review-new
     plugin: text
     label: 'New applications'
-    body: 'Here you will find application essays from students interested in your project. The essays are "blind" in that you will not see the names of the applicants.'
     weight: 2
-    attributes:
-      data-class: 'block-local-tasks-block .tabs li:nth-of-type(1)'
+    selector: '.block-local-tasks-block .tabs li:nth-of-type(1)'
+    body: 'Here you will find application essays from students interested in your project. The essays are "blind" in that you will not see the names of the applicants.'
   application-review-in-review:
     id: application-review-in-review
     plugin: text
     label: 'Application review'
-    body: 'Personal and academic information for students chosen for review is found here. You may assess their transcripts, resume and personal statement, and ensure they meet any additional requirements (class year, work study status, etc.).<br/><br/>After review, you may change the applicant’s status to "Rejected" or "Accepted".'
     weight: 3
-    attributes:
-      data-class: 'block-local-tasks-block .tabs li:nth-of-type(2)'
+    selector: '.block-local-tasks-block .tabs li:nth-of-type(2)'
+    body: 'Personal and academic information for students chosen for review is found here. You may assess their transcripts, resume and personal statement, and ensure they meet any additional requirements (class year, work study status, etc.).<br/><br/>After review, you may change the applicant’s status to "Rejected" or "Accepted".'
   application-review-accepted:
     id: application-review-accepted
     plugin: text
     label: 'Accepted applications'
-    body: 'Here are the applications of students you have chosen for your projects. They will be informed of your decision, but their contact information is included should you want to reach out directly.'
     weight: 4
-    attributes:
-      data-class: 'block-local-tasks-block .tabs li:nth-of-type(3)'
+    selector: '.block-local-tasks-block .tabs li:nth-of-type(3)'
+    body: 'Here are the applications of students you have chosen for your projects. They will be informed of your decision, but their contact information is included should you want to reach out directly.'
   application-review-rejected:
     id: application-review-rejected
     plugin: text
     label: 'Rejected applications'
-    body: 'Here are the applications of students you have not chosen for your projects. They will be informed of your decision, but their contact information is included.'
     weight: 5
-    attributes:
-      data-class: 'block-local-tasks-block .tabs li:nth-of-type(4)'
+    selector: '.block-local-tasks-block .tabs li:nth-of-type(4)'
+    body: 'Here are the applications of students you have not chosen for your projects. They will be informed of your decision, but their contact information is included.'
   application-review-filters:
     id: application-review-filters
     plugin: text
     label: 'Project filter'
-    body: 'If you have more than one project, you may filter applications by project.'
     weight: 6
-    attributes:
-      data-class: 'view-filters details'
+    selector: '.view-filters details'
+    body: 'If you have more than one project, you may filter applications by project.'
   application-review-applications:
     id: application-review-applications
     plugin: text
     label: Applications
-    body: 'All applications are listed here in a collapsed format.'
     weight: 7
-    attributes:
-      data-class: 'view-applications article'
+    selector: '.view-applications article'
+    body: 'All applications are listed here in a collapsed format.'
   application-review-toggle:
     id: application-review-toggle
     plugin: text
     label: 'View the application'
-    body: 'Select the caret to open and view the entire application. Select it again to close the application.'
     weight: 8
-    location: left
-    attributes:
-      data-class: 'views-row article .toggle-application'
+    position: left-start
+    selector: '.views-row article .toggle-application'
+    body: 'Select the caret to open and view the entire application. Select it again to close the application.'
   application-review-status:
     id: application-review-status
     plugin: text
     label: 'Application status'
-    body: 'The status of each application is shown here.'
     weight: 9
-    location: left
-    attributes:
-      data-class: 'views-row article .application-status'
+    position: left-start
+    selector: '.views-row article .application-status'
+    body: 'The status of each application is shown here.'
   application-review-essay:
     id: application-review-essay
     plugin: text
     label: 'Applicant essay'
-    body: 'The applicant''s essay is shown in full.'
     weight: 10
-    attributes:
-      data-class: 'views-row article .field--name-field-essay'
+    selector: '.views-row article .field--name-field-essay'
+    body: 'The applicant''s essay is shown in full.'
   application-review-info:
     id: application-review-info
     plugin: text
     label: 'Applicant information'
-    body: 'Once you''ve reviewed the application essay and changed the status, you will see more information about the applicant.'
     weight: 11
-    attributes:
-      data-class: 'views-row article .applicant-info'
+    selector: '.views-row article .applicant-info'
+    body: 'Once you''ve reviewed the application essay and changed the status, you will see more information about the applicant.'
   application-review-status-change:
     id: application-review-status-change
     plugin: text
     label: 'Change status'
-    body: 'After reviewing the application, you may select the button to change the status of the application to "In review" where you''ll see more information about the applicant, "Rejected", or "Accepted".'
     weight: 12
-    location: left
-    attributes:
-      data-class: 'views-row article .application__status-change'
+    position: left-start
+    selector: '.views-row article .application__status-change'
+    body: 'After reviewing the application, you may select the button to change the status of the application to "In review" where you''ll see more information about the applicant, "Rejected", or "Accepted".'

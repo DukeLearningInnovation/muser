@@ -14,15 +14,15 @@ bundle: project_round
 mode: teaser
 content:
   flag_favorites:
-    weight: 10
     settings: {  }
     third_party_settings: {  }
+    weight: 10
     region: content
   links:
-    weight: 0
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_project: true
   field_round: true

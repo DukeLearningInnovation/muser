@@ -4,6 +4,7 @@ dependencies: {  }
 id: test
 label: Test
 description: 'Test server configuration'
+weight: 0
 folder: ../config/test
 module: {  }
 theme: {  }
@@ -11,4 +12,3 @@ blacklist: {  }
 graylist: {  }
 graylist_dependents: true
 graylist_skip_equal: true
-weight: 0

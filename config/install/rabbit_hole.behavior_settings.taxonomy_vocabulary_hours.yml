@@ -4,7 +4,10 @@ dependencies:
   config:
     - taxonomy.vocabulary.hours
 id: taxonomy_vocabulary_hours
+entity_type_id: taxonomy_vocabulary
+entity_id: hours
 action: page_not_found
 allow_override: 0
 redirect: ''
 redirect_code: 301
+redirect_fallback_action: access_denied

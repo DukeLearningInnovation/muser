@@ -2,14 +2,14 @@ name: Muser
 type: profile
 description: 'A Drupal installation profile for Muser sites.'
 core_version_requirement: ^8 || ^9
+version: '9.x-dev'
 
 distribution:
   name: Muser
 
 # Required modules.
 dependencies:
-
-  # Core
+  # Core modules.
   - automated_cron
   - big_pipe
   - block
@@ -34,10 +34,12 @@ dependencies:
   - link
   - menu_link_content
   - menu_ui
+  - mysql
   - node
   - options
   - page_cache
   - path
+  - path_alias
   - rdf
   - rest
   - serialization
@@ -52,13 +54,14 @@ dependencies:
   - views
   - views_ui
 
-  # Contrib
+  # Contrib modules.
   - admin_toolbar
   - admin_toolbar_links_access_filter
   - admin_toolbar_tools
   - better_exposed_filters
   - chosen
   - chosen_lib
+  - ckeditor_details
   - config_filter
   - config_ignore
   - config_split
@@ -72,19 +75,25 @@ dependencies:
   - flag
   - flag_conditional_confirm
   - fontawesome_iconpicker
-  - google_analytics
+  - fontawesome_iconpicker_enhanced
   - honeypot
+  - jquery_ui
+  - jquery_ui_datepicker
+  - jquery_ui_slider
+  - jquery_ui_touch_punch
   - link_attributes
   - masquerade
   - maxlength
   - metatag
   - pathauto
   - queue_mail
+  - queue_mail_language
   - rabbit_hole
   - realname
   - redirect
   - rh_taxonomy
   - roleassign
+  - smart_trim
   - token
   - views_ajax_history
   - views_bulk_operations
@@ -99,5 +108,5 @@ dependencies:
 themes:
   - classy
   - muser_base
-  - seven
+  - claro
   - stable

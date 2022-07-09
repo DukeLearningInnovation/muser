@@ -14,31 +14,31 @@ bundle: project_round
 mode: default
 content:
   field_project:
-    weight: 103
+    type: entity_reference_revisions_entity_view
     label: above
     settings:
       view_mode: teaser
       link: ''
     third_party_settings: {  }
-    type: entity_reference_revisions_entity_view
+    weight: 103
     region: content
   field_round:
-    weight: 102
+    type: entity_reference_label
     label: inline
     settings:
       link: true
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 102
     region: content
   flag_favorites:
-    weight: 10
     settings: {  }
     third_party_settings: {  }
+    weight: 10
     region: content
   links:
-    weight: 100
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 100
+    region: content
 hidden:
   langcode: true

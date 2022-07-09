@@ -3,3 +3,5 @@ type: module
 description: Muser System module.
 core_version_requirement: ^8 || ^9
 package: Muser
+dependencies:
+  - fontawesome_iconpicker_enhanced:fontawesome_iconpicker_enhanced

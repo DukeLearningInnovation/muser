@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_additional_mentors
+    - node.type.project
+id: node.project.field_additional_mentors
+field_name: field_additional_mentors
+entity_type: node
+bundle: project
+label: 'Additional mentors'
+description: "Here you can add additional Mentor users that will be able to access applications for this project.<br>\r\nStart typing a mentor's name and the field will autocomplete."
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: mentors_autocomplete
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

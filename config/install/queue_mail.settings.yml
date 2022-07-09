@@ -1,3 +1,5 @@
 queue_mail_keys: "muser_system_post_projects_start\r\nmuser_system_post_projects_end\r\nmuser_system_review_applications_start\r\nmuser_system_review_applications_end\r\nmuser_system_after_round\r\nmuser_system_student_accepted\r\nmuser_system_student_rejected\r\n"
 queue_mail_queue_time: 45
-queue_mail_queue_wait_time: 2
+queue_mail_queue_wait_time: 0
+threshold: 50
+requeue_interval: 10800

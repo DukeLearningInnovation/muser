@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_use_contract
+    - node.type.project
+id: node.project.field_use_contract
+field_name: field_use_contract
+entity_type: node
+bundle: project
+label: 'Use Mentor-Student contract on this project?'
+description: 'Check this if there will be a Mentor-Student contract on this project. At the end of the Round, reminder emails will be sent to both the mentor and student(s) involved.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

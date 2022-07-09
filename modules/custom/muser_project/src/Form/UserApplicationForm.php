@@ -159,15 +159,16 @@ class UserApplicationForm extends FormBase {
       return $form;
     }
 
-    if (!$this->submissionDateOk()) {
-      \Drupal::messenger()
-        ->addWarning($this->t('Applications are not being accepted at this time.'));
-    }
-
+    $is_ajax = (!empty($_GET['ajax_form']));
     $form['#project_round'] = $this->projectRound;
     $form['#flagging'] = $this->flaggingEntity;
     $essay = $this->flaggingEntity->field_essay->value;
     $submitted = $this->flaggingEntity->field_is_submitted->value;
+
+    if (!$is_ajax && !$this->submissionDateOk()) {
+      \Drupal::messenger()
+        ->addWarning($this->t('Applications are not being accepted at this time.'));
+    }
 
     $form['#is_submitted'] = $submitted;
     $form['#attributes']['data-submitted'] = $submitted;
@@ -181,7 +182,7 @@ class UserApplicationForm extends FormBase {
       . '</div>',
     ];
 
-    if (!$this->submissionDateOk() || $submitted) {
+    if (!$is_ajax && (!$this->submissionDateOk() || $submitted)) {
       $class = (!$essay) ? 'essay-text--empty' : '';
       if (!$essay) {
         $essay = $this->t('- No essay -');
@@ -206,7 +207,7 @@ class UserApplicationForm extends FormBase {
       ];
     }
 
-    if ($this->submissionAllowed()) {
+    if ($is_ajax || $this->submissionAllowed()) {
       $form['guidelines'] = [
         '#type' => 'link',
         '#url' => Url::fromRoute('muser_system.essay_guidelines'),
@@ -247,7 +248,7 @@ class UserApplicationForm extends FormBase {
       }
     }
     else {
-      if ($this->submissionAllowed()) {
+      if ($is_ajax || $this->submissionAllowed()) {
         $form['actions']['save'] = [
           '#type' => 'submit',
           '#value' => $this->t('Submit application'),
@@ -256,7 +257,7 @@ class UserApplicationForm extends FormBase {
           '#ajax' => $ajax,
         ];
       }
-      if ($this->submissionDateOk()) {
+      if ($is_ajax || $this->submissionDateOk()) {
         $form['actions']['draft'] = [
           '#type' => 'submit',
           '#value' => $this->t('Save as draft'),

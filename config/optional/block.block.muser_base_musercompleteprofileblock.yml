@@ -15,11 +15,11 @@ plugin: muser_complete_profile_block
 settings:
   id: muser_complete_profile_block
   label: 'Muser complete profile block'
-  provider: muser_user
   label_display: '0'
+  provider: muser_user
 visibility:
   request_path:
     id: request_path
-    pages: '/user/*/edit'
     negate: true
     context_mapping: {  }
+    pages: '/user/*/edit'

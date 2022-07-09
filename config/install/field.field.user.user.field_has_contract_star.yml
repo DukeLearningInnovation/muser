@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_has_contract_star
+  module:
+    - user
+id: user.user.field_has_contract_star
+field_name: field_has_contract_star
+entity_type: user
+bundle: user
+label: 'Contract-starred mentor'
+description: 'This star will automatically be set each time a Round changes, based on their handling of contracts in the previous Round.'
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

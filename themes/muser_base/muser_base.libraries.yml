@@ -9,10 +9,6 @@ fonts:
     theme:
       //fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,700i: { type: external }  # Body default
 
-fontawesome:
-  js:
-    //cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js: { }
-
 global-js:
   dependencies:
     - core/drupal

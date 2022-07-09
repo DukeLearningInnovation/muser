@@ -10,7 +10,7 @@ field_name: field_categories
 entity_type: node
 bundle: project
 label: 'Project categories'
-description: 'Please select the academic subjects most directly related to this project. Students will be able to filter potential projects by category.'
+description: 'Please select the academic subjects most directly related to this project. Students will be able to sort potential projects by category.'
 required: true
 translatable: false
 default_value: {  }

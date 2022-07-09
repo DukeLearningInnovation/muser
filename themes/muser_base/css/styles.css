@@ -954,6 +954,7 @@ input[type="number"] {
     width: 26px;
     margin: -3px;
     padding: 3px; }
+  .checkbox__wrapper .fa-layers i,
   .checkbox__wrapper .fa-layers svg {
     margin: 0; }
   .checkbox__wrapper .checkbox__box {
@@ -1022,8 +1023,13 @@ input[type="number"] {
   top: 0;
   bottom: 0;
   font-size: 22px; }
+  .radio__filled-circle i,
   .radio__filled-circle svg {
     font-size: 22px; }
+  .radio__filled-circle .radio__dot {
+    position: absolute;
+    top: 0;
+    left: 0; }
 
 input[type="radio"] ~ .radio__button .radio__dot {
   -webkit-transition-property: opacity, color;
@@ -1982,7 +1988,9 @@ details.form-wrapper {
   color: var(--text-color);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px; }
+  .view-id-applications .view-filters .views-exposed-form .search__icon i,
   .view-id-applications .view-filters .views-exposed-form .search__icon svg,
+  .region-hero-options .views-exposed-form .search__icon i,
   .region-hero-options .views-exposed-form .search__icon svg {
     opacity: 0.6;
     -webkit-transition-property: opacity;
@@ -1991,8 +1999,12 @@ details.form-wrapper {
             transition-duration: 0.25s;
     -webkit-transition-timing-function: ease-in-out;
             transition-timing-function: ease-in-out; }
+  .view-id-applications .view-filters .views-exposed-form .search__icon i:hover,
+  .view-id-applications .view-filters .views-exposed-form .search__icon i:focus,
   .view-id-applications .view-filters .views-exposed-form .search__icon svg:hover,
   .view-id-applications .view-filters .views-exposed-form .search__icon svg:focus,
+  .region-hero-options .views-exposed-form .search__icon i:hover,
+  .region-hero-options .views-exposed-form .search__icon i:focus,
   .region-hero-options .views-exposed-form .search__icon svg:hover,
   .region-hero-options .views-exposed-form .search__icon svg:focus {
     opacity: 0.8; }
@@ -2481,12 +2493,16 @@ ul.tabs {
     .application__header .contract-status svg,
     .application__header .application-status svg {
       font-size: 24px; }
+    .application__header .contract-status i,
+    .application__header .application-status i {
+      font-size: 18px; }
   .application__header .contract-status__label,
   .application__header .application-status__label {
     margin-left: 4px;
     white-space: nowrap;
     -webkit-transform: translateY(1px);
             transform: translateY(1px); }
+  .application__header .contract-status__icon i,
   .application__header .contract-status__icon svg {
     opacity: 0.9;
     -webkit-transform: translateY(2px);
@@ -2835,9 +2851,11 @@ ul.tabs {
     font-size: 18px;
     margin-right: 4px;
     position: relative; }
+    .project__favorite .favorite__icon i,
     .project__favorite .favorite__icon svg {
       max-width: 100%;
-      height: auto; }
+      height: auto;
+      font-size: 20px; }
   @media (max-width: 600px) {
     .project__favorite .favorite__text {
       display: none; }
@@ -2926,6 +2944,7 @@ ul.tabs {
   display: -ms-flexbox;
   display: flex; }
 
+.field--name-field-categories i,
 .field--name-field-categories .svg-inline--fa,
 .project-detail__icon {
   font-size: 18px;
@@ -3122,6 +3141,7 @@ ul.tabs {
   cursor: pointer;
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg); }
+  .contextual-links__dots i,
   .contextual-links__dots svg {
     max-width: 100%;
     height: auto; }
@@ -3382,6 +3402,7 @@ ul.tabs {
 
 .node--view-mode-application .contract-status__icon {
   font-size: 20px; }
+  .node--view-mode-application .contract-status__icon i,
   .node--view-mode-application .contract-status__icon svg {
     opacity: 0.9; }
 
@@ -3412,6 +3433,11 @@ ul.tabs {
     display: block;
     color: #444;
     height: 25px; }
+  .application-status i {
+    font-size: 18px;
+    line-height: 25px;
+    display: block;
+    color: #444; }
   .application-status .application-status__label {
     margin-left: 4px;
     white-space: nowrap; }
@@ -3442,23 +3468,29 @@ ul.tabs {
       opacity: 1; } }
   .application-status.application-status--submitted {
     color: var(--warning-message-color); }
+    .application-status.application-status--submitted i,
     .application-status.application-status--submitted svg {
       color: var(--warning-message-color); }
   .application-status.application-status--accepted {
     color: var(--status-message-color); }
+    .application-status.application-status--accepted i,
     .application-status.application-status--accepted svg {
       color: var(--status-message-color); }
   .application-status.application-status--rejected {
     color: var(--text-color); }
+    .application-status.application-status--rejected i,
     .application-status.application-status--rejected svg {
       color: #444; }
     .view-applications .application-status.application-status--rejected {
       color: var(--error-message-color); }
+      .view-applications .application-status.application-status--rejected i,
       .view-applications .application-status.application-status--rejected svg {
         color: var(--error-message-color); }
   .application-status.application-status--in-review, .application-status.application-status--in_review {
     color: var(--text-color); }
-    .application-status.application-status--in-review svg, .application-status.application-status--in_review svg {
+    .application-status.application-status--in-review i,
+    .application-status.application-status--in-review svg, .application-status.application-status--in_review i,
+    .application-status.application-status--in_review svg {
       color: #444; }
 
 .page-title {

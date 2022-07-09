@@ -61,6 +61,13 @@ class MuserPdfExportController extends ControllerBase {
   protected $loggerFactory;
 
   /**
+   * Include uploaded resume, transcript in document?
+   *
+   * @var bool
+   */
+  protected $includeUploadedDcouments = FALSE;
+
+  /**
    * The controller constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -209,11 +216,54 @@ class MuserPdfExportController extends ControllerBase {
       $pdf->Ln();
 
       if ($display == 'page_review') {
-        if ($resume = $applicant->field_resume->entity) {
-          $this->addFile($pdf, $resume);
+        if ($this->includeUploadedDcouments) {
+          // Attempt to include the actual documents in the PDF.
+          // Not overly reliable due to the various formats of PDFs, docs, etc.
+          if ($resume = $applicant->field_resume->entity) {
+            $this->addFile($pdf, $resume);
+          }
+          if ($transcript = $applicant->field_transcript->entity) {
+            $this->addFile($pdf, $transcript);
+          }
         }
-        if ($transcript = $applicant->field_transcript->entity) {
-          $this->addFile($pdf, $transcript);
+        else {
+          // Don't include docs, just say if they're there.
+          $docs_uploaded = [];
+          $docs_uploaded['resume'] = $applicant->field_resume->entity;
+          $docs_uploaded['transcript'] = $applicant->field_transcript->entity;
+          $docs_uploaded = array_filter($docs_uploaded);
+
+          $pdf->SetFont('Arial', 'B', 12);
+          $pdf->Cell(40, 10, $this->t('Documents'));
+          $pdf->SetFont('Arial', '', 12);
+          $pdf->Ln();
+          $num_docs = count($docs_uploaded);
+          $text = [];
+          if ($num_docs == 2) {
+            $text[] = $this->t('This student opted to upload both a resume and a transcript.');
+            $text[] = $this->t("These can be viewed along with the student's full application and profile on the website under Mentor tasks > Applications.");
+          }
+          elseif ($num_docs == 1) {
+            if ($docs_uploaded['resume']) {
+              $uploaded = $this->t('resume');
+              $not_uploaded = $this->t('transcript');
+            }
+            else {
+              $uploaded = $this->t('transcript');
+              $not_uploaded = $this->t('resume');
+            }
+            $text[] = $this->t('This student opted to upload their @uploaded but not their @not_uploaded.', [
+              '@uploaded' => $uploaded,
+              '@not_uploaded' => $not_uploaded,
+            ]);
+            $text[] = $this->t("Their @uploaded can be viewed along with their full application and profile on the website under Mentor tasks > Applications.", [
+              '@uploaded' => $uploaded,
+            ]);
+          }
+          else {
+            $text[] = $this->t('This student opted not to upload their resume or transcript.');
+          }
+          $pdf->Write(5, implode("\n", $text));
         }
       } // In review?
 

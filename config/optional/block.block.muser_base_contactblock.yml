@@ -17,12 +17,13 @@ plugin: contact_block
 settings:
   id: contact_block
   label: 'Contact block'
-  provider: contact_block
   label_display: '0'
+  provider: contact_block
   contact_form: basic_contact_form
+  form_display: default
 visibility:
   request_path:
     id: request_path
-    pages: /contact-us
     negate: false
     context_mapping: {  }
+    pages: /contact-us

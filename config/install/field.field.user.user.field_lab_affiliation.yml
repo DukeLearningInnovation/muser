@@ -10,7 +10,7 @@ field_name: field_lab_affiliation
 entity_type: user
 bundle: user
 label: 'Mentor''s position'
-description: 'Examples: Lab Manager, Graduate Student, Principal Investigator, etc.'
+description: "Please enter either \"faculty\", \"staff\", or \"graduate student\" and then you are welcome to add additional details in parentheses.\r\n<br> For example:  staff (project leader)"
 required: false
 translatable: false
 default_value: {  }

@@ -17,7 +17,7 @@ libraries:
   - muser_base/global-styling
   - muser_base/fonts
   - muser_base/global-js
-  - muser_base/fontawesome
+  - fontawesome_iconpicker_enhanced/fontawesome-css
   - core/jquery
   - core/jquery.once
   - core/drupal

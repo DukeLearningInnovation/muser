@@ -142,6 +142,12 @@ class ScheduledEmails {
         continue;
       }
 
+      if (!_muser_system_contracts_enabled() && strpos($type, 'contract_reminder_') === 0) {
+        // Contracts are disabled.
+        \Drupal::logger('muser_system')->info('Not sending @type email as contracts are disabled.', ['@type' => $type]);
+        continue;
+      }
+
       $field_data = $this->round->get($info['date_field'])->get(0)->getValue();
 
       if ($offset = $this->config->get($type . '_email_offset')) {

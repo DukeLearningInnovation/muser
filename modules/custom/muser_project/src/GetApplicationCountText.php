@@ -24,7 +24,7 @@ class GetApplicationCountText implements TrustedCallbackInterface {
    * @param int $project_nid
    *   Project nid.
    */
-  public static function lazyBuilder(int $nid, int $project_nid) {
+  public static function lazyBuilder($nid, int $project_nid) {
     return [
       '#cache' => [
         'tags' => ['project_application_count:' . $project_nid],

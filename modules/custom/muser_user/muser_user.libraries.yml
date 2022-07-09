@@ -11,3 +11,13 @@ user-type:
   dependencies:
     - core/jquery
     - core/jquery.once
+
+review-profile:
+  css:
+    theme:
+      css/review-profile.css: {}
+  js:
+    js/review-profile.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once

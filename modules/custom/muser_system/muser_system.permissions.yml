@@ -5,3 +5,7 @@ manage muser settings:
 export muser applications:
   title: 'Export Muser applications'
   description: 'Allows mentors to export applications.'
+view muser reports:
+  title: 'View muser reports'
+  description: 'Allows administrators to view Muser reports.'
+  restrict access: TRUE

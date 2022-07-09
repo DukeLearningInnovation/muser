@@ -3,6 +3,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.flagging.full
+    - field.field.flagging.favorites.field_contract_date_mentor
+    - field.field.flagging.favorites.field_contract_date_student
+    - field.field.flagging.favorites.field_contract_signed_mentor
+    - field.field.flagging.favorites.field_contract_signed_student
     - field.field.flagging.favorites.field_essay
     - field.field.flagging.favorites.field_is_submitted
     - field.field.flagging.favorites.field_notification_sent
@@ -16,149 +20,158 @@ third_party_settings:
     group_details_bar:
       children:
         - project_availability
+      label: 'Details bar'
       parent_name: ''
+      region: content
       weight: 3
       format_type: html_element
       format_settings:
-        label: 'Details bar'
+        classes: 'application__details-bar details-bar'
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: 'application__details-bar details-bar'
-      label: 'Details bar'
-      region: content
     group_main_content:
       children:
         - group_titel
         - group_content
+      label: 'Main content'
       parent_name: ''
+      region: content
       weight: 0
       format_type: html_element
       format_settings:
-        id: ''
         classes: application__main
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Main content'
-      region: content
     group_titel:
       children:
         - project_info
         - field_status
         - group_status_links
+        - application_contract_link
+      label: 'Title area'
       parent_name: group_main_content
+      region: content
       weight: 9
       format_type: html_element
       format_settings:
-        id: ''
         classes: application__header
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Title area'
-      region: content
     group_status_links:
       children:
         - update_status_link
+      label: 'Status links'
       parent_name: group_titel
+      region: content
       weight: 12
       format_type: html_element
       format_settings:
-        id: ''
         classes: application__status-change
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Status links'
-      region: content
     group_content:
       children:
         - group_application_body_height
+      label: Content
       parent_name: group_main_content
-      weight: 10
+      region: content
+      weight: 11
       format_type: html_element
       format_settings:
-        id: ''
         classes: application__body
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: Content
-      region: content
     group_application_body_height:
       children:
         - applicant_info
         - field_essay
+      label: 'Application body height'
       parent_name: group_content
+      region: content
       weight: 4
       format_type: html_element
       format_settings:
-        id: ''
         classes: application__body-height
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-      label: 'Application body height'
-      region: content
 id: flagging.favorites.full
 targetEntityType: flagging
 bundle: favorites
 mode: full
 content:
   applicant_info:
-    weight: 3
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 3
+    region: content
+  application_contract_link:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 13
+    region: content
   field_essay:
-    weight: 4
+    type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: basic_string
+    weight: 4
     region: content
   field_status:
-    weight: 11
+    type: status_with_icon
     label: hidden
     settings: {  }
     third_party_settings: {  }
-    type: status_with_icon
-    region: content
-  project_availability:
-    weight: 5
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  project_info:
-    weight: 10
-    region: content
-    settings: {  }
-    third_party_settings: {  }
-  update_status_link:
     weight: 11
     region: content
+  project_availability:
     settings: {  }
     third_party_settings: {  }
+    weight: 5
+    region: content
+  project_info:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 10
+    region: content
+  update_status_link:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 11
+    region: content
 hidden:
+  field_contract_date_mentor: true
+  field_contract_date_student: true
+  field_contract_signed_mentor: true
+  field_contract_signed_student: true
   field_is_submitted: true
   field_notification_sent: true

@@ -14,85 +14,75 @@ tips:
     id: projects-main
     plugin: text
     label: 'List of projects'
-    body: 'View all active <b>Projects</b> here and see what interests you.'
     weight: 1
+    body: 'View all active <b>Projects</b> here and see what interests you.'
   projects-filters:
     id: projects-filters
     plugin: text
     label: Filters
-    body: 'You can search and filter the list by the categories here.'
     weight: 2
-    attributes:
-      data-class: block-views-exposed-filter-blockprojects-page
+    selector: .block-views-exposed-filter-blockprojects-page
+    body: 'You can search and filter the list by the categories here.'
   projects-filters-search:
     id: projects-filters-search
     plugin: text
     label: Search
-    body: 'Use this search field to find Projects by keyword. Enter a term and then select the search icon.'
     weight: 3
-    attributes:
-      data-class: 'form-item-search .search__icon'
+    selector: '.form-item-search .search__icon'
+    body: 'Use this search field to find Projects by keyword. Enter a term and then select the search icon.'
   projects-filters-compensation:
     id: projects-filters-compensation
     plugin: text
     label: Compensation
-    body: 'This explains how (or if) you''ll be paid. If a position is designated as work-study, you must be work-study eligible.'
     weight: 4
-    attributes:
-      data-class: details--compensation
+    selector: .details--compensation
+    body: 'This explains how (or if) you''ll be paid. If a position is designated as work-study, you must be work-study eligible.'
   projects-filters-year:
     id: projects-filters-year
     plugin: text
     label: Year
-    body: 'Only students in the designated years are eligible to apply.'
     weight: 5
-    attributes:
-      data-class: details--student-ranks
+    selector: .details--student-ranks
+    body: 'Only students in the designated years are eligible to apply.'
   projects-filters-hours:
     id: projects-filters-hours
     plugin: text
     label: Hours
-    body: 'Here are how many hours per week you''ll be expected to work.'
     weight: 6
-    attributes:
-      data-class: details--student-hours
+    selector: .details--student-hours
+    body: 'Here are how many hours per week you''ll be expected to work.'
   projects-filters-categories:
     id: projects-filters-categories
     plugin: text
     label: 'Project category'
-    body: 'The checked subjects are directly related to the project.'
     weight: 7
-    attributes:
-      data-class: details--categories
+    selector: .details--categories
+    body: 'The checked subjects are directly related to the project.'
   projects-details-bar:
     id: projects-details-bar
     plugin: text
     label: 'Details bar'
-    body: 'Check how many spots are open in each project and how many people have already applied. See how many hours you''ll be required to work and if there is a possibility for extra time. Determine if the project reflects your research interests.'
     weight: 8
-    attributes:
-      data-class: details-bar
+    selector: .details-bar
+    body: 'Check how many spots are open in each project and how many people have already applied. See how many hours you''ll be required to work and if there is a possibility for extra time. Determine if the project reflects your research interests.'
   projects-view:
     id: projects-view
     plugin: text
     label: 'View a project'
-    body: 'See something interesting? Select the project title to learn more.'
     weight: 9
-    attributes:
-      data-class: 'node--type-project .field--name-title'
+    selector: '.node--type-project .field--name-title'
+    body: 'See something interesting? Select the project title to learn more.'
   projects-add-favorites:
     id: projects-add-favorites
     plugin: text
     label: Favorites
-    body: 'Select this to save a project to your list of favorites.  Later, you can apply for this, and any other project, directly from your list.  Change your mind?  Select it again to remove the project from your list.'
     weight: 10
-    attributes:
-      data-class: 'flag-favorites a'
+    selector: '.flag-favorites a'
+    body: 'Select this to save a project to your list of favorites.  Later, you can apply for this, and any other project, directly from your list.  Change your mind?  Select it again to remove the project from your list.'
   projects-my-applications:
     id: projects-my-applications
     plugin: text
     label: 'My applications list'
-    body: 'Access your list of favorites and submit applications by selecting "My applications" in the main menu.'
     weight: 11
-    attributes:
-      data-class: 'block-muser-user-menu .menu--student'
+    selector: '.block-muser-user-menu .menu--student'
+    body: 'Access your list of favorites and submit applications by selecting "My applications" in the main menu.'

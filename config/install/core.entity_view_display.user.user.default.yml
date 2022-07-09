@@ -5,12 +5,14 @@ dependencies:
     - field.field.user.user.field_about_me
     - field.field.user.user.field_do_not_send_emails
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_contract_star
     - field.field.user.user.field_has_star
     - field.field.user.user.field_how_hear_about
     - field.field.user.user.field_lab_affiliation
     - field.field.user.user.field_last_name
     - field.field.user.user.field_major
     - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_needs_review
     - field.field.user.user.field_netid
     - field.field.user.user.field_programs
     - field.field.user.user.field_resume
@@ -29,16 +31,16 @@ third_party_settings:
       children:
         - field_first_name
         - field_last_name
+      label: 'Personal Information'
       parent_name: ''
+      region: content
       weight: 1
       format_type: details
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         open: true
         required_fields: false
-      label: 'Personal Information'
-      region: content
     group_student_info:
       children:
         - field_yr_in_college
@@ -47,132 +49,134 @@ third_party_settings:
         - field_about_me
         - field_resume
         - field_transcript
+      label: 'Student Information'
       parent_name: ''
+      region: content
       weight: 2
       format_type: details
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         open: true
         required_fields: false
-      label: 'Student Information'
-      region: content
     group_mentor_info:
       children:
         - field_netid
         - field_lab_affiliation
+      label: 'Mentor Information'
       parent_name: ''
+      region: content
       weight: 3
       format_type: details
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         open: true
         required_fields: false
-      label: 'Mentor Information'
-      region: content
 id: user.user.default
 targetEntityType: user
 bundle: user
 mode: default
 content:
   field_about_me:
-    weight: 5
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    type: text_default
+    weight: 6
     region: content
   field_first_name:
     type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 0
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_lab_affiliation:
-    weight: 6
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 6
     region: content
   field_last_name:
     type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
     weight: 1
     region: content
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
   field_major:
-    weight: 3
+    type: entity_reference_label
     label: above
     settings:
       link: false
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 3
     region: content
   field_netid:
-    weight: 5
+    type: string
     label: above
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    type: string
+    weight: 5
     region: content
   field_programs:
-    weight: 4
+    type: entity_reference_label
     label: above
     settings:
       link: false
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 4
     region: content
   field_resume:
+    type: file_default
+    label: above
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
     weight: 7
-    settings:
-      use_description_as_link_text: true
-    third_party_settings: {  }
     region: content
-    type: file_default
-    label: above
   field_transcript:
-    weight: 8
+    type: file_default
     label: above
     settings:
       use_description_as_link_text: true
     third_party_settings: {  }
-    type: file_default
+    weight: 8
     region: content
   field_user_type:
     type: list_default
-    weight: 0
-    region: content
     label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 0
+    region: content
   field_yr_in_college:
-    weight: 2
+    type: entity_reference_label
     label: above
     settings:
       link: false
     third_party_settings: {  }
-    type: entity_reference_label
+    weight: 2
     region: content
   masquerade:
-    weight: 4
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 4
+    region: content
 hidden:
   contact_email: true
   field_do_not_send_emails: true
+  field_has_contract_star: true
   field_has_star: true
   field_how_hear_about: true
   field_mentor_yesno: true
+  field_needs_review: true
   langcode: true
   member_for: true
   realname: true

@@ -4,9 +4,9 @@ dependencies:
   module:
     - help
   theme:
-    - seven
-id: seven_help
-theme: seven
+    - claro
+id: claro_help
+theme: claro
 region: help
 weight: 0
 provider: null
@@ -14,6 +14,6 @@ plugin: help_block
 settings:
   id: help_block
   label: Help
-  provider: help
   label_display: '0'
+  provider: help
 visibility: {  }

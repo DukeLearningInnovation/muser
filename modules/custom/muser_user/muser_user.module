@@ -81,6 +81,10 @@ function muser_user_profile_is_complete(Drupal\user\Entity\User $account) {
   return ($account->field_user_type->value) ? TRUE : FALSE;
 }
 
+function muser_user_profile_needs_review(Drupal\user\Entity\User $account) {
+  return ($account->field_needs_review->value) ? TRUE : FALSE;
+}
+
 /**
  * Implements hook_form_FORM_ID_alter().
  */

@@ -9,7 +9,7 @@ field_name: field_lab_name
 entity_type: node
 bundle: project
 label: 'Name of research group, project, or lab'
-description: 'Where the work will be done (e.g. The Selden Lab).'
+description: 'Where will the work be performed? For example, in a library/archive, flexibly wherever access to internet, art studio, lab.'
 required: true
 translatable: false
 default_value: {  }

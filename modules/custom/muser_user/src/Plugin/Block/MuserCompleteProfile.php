@@ -62,7 +62,6 @@ class MuserCompleteProfile extends BlockBase implements ContainerFactoryPluginIn
     $build = [
       '#cache' => [
         'contexts' => [
-          'user.roles',
           'user',
         ],
       ],

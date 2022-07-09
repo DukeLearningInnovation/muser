@@ -9,7 +9,7 @@ field_name: field_pi_name
 entity_type: node
 bundle: project
 label: 'Name of project director or principal investigator'
-description: ''
+description: 'In some cases, this may be the same as the mentor posting the project.'
 required: true
 translatable: false
 default_value: {  }

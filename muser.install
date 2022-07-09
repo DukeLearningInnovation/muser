@@ -127,3 +127,31 @@ function muser_post_update_add_user_contract_stars(&$sandbox) {
     } // Loop thru users.
   } // Got users?
 }
+
+/**
+ * Add needs review field to user entity.
+ */
+function muser_update_8003(&$sandbox) {
+  $entitytypes_fields = [
+    'user' => [
+      'user' => [
+        'field_needs_review',
+      ],
+    ],
+  ];
+  muser_ensure_fields($entitytypes_fields);
+}
+
+/**
+ * Set initial value for profile needs_review.
+ */
+function muser_post_update_set_needs_review(&$sandbox) {
+  $results = \Drupal::entityQuery('user')
+    ->execute();
+  foreach ($results as $uid) {
+    if ($account = User::load($uid)) {
+      $account->field_needs_review->value = 1;
+      $account->save();
+    }
+  } // Loop thru users.
+}

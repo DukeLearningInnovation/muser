@@ -15,11 +15,11 @@ plugin: muser_hero_text_block
 settings:
   id: muser_hero_text_block
   label: 'Muser hero text block'
-  provider: muser_system
   label_display: '0'
+  provider: muser_system
 visibility:
   request_path:
     id: request_path
-    pages: '<front>'
     negate: false
     context_mapping: {  }
+    pages: '<front>'

@@ -4,6 +4,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.application
     - field.field.node.project.body
+    - field.field.node.project.field_additional_mentors
     - field.field.node.project.field_categories
     - field.field.node.project.field_compensation
     - field.field.node.project.field_contact_email
@@ -20,11 +21,12 @@ dependencies:
     - field.field.node.project.field_student_qualifications
     - field.field.node.project.field_student_ranks_applicable
     - field.field.node.project.field_techniques_learned
+    - field.field.node.project.field_use_contract
     - field.field.node.project.field_why_lab
     - node.type.project
   module:
     - field_group
-    - text
+    - smart_trim
     - user
 third_party_settings:
   field_group:
@@ -54,7 +56,6 @@ third_party_settings:
       weight: 1
       format_type: html_element
       format_settings:
-        label: 'Main content'
         element: div
         show_label: false
         label_element: h3
@@ -105,6 +106,11 @@ targetEntityType: node
 bundle: project
 mode: application
 content:
+  application_contract_link:
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   application_form:
     weight: 22
     region: content
@@ -117,10 +123,21 @@ content:
     third_party_settings: {  }
   body:
     label: hidden
-    type: text_summary_or_trimmed
+    type: smart_trim
     weight: 21
     settings:
       trim_length: 200
+      trim_type: chars
+      trim_suffix: …
+      wrap_class: trimmed
+      more_text: More
+      more_class: more-link
+      summary_handler: full
+      trim_options:
+        text: true
+        trim_zero: false
+      wrap_output: false
+      more_link: false
     third_party_settings: {  }
     region: content
   categories:
@@ -145,6 +162,7 @@ content:
     third_party_settings: {  }
 hidden:
   activate_link: true
+  field_additional_mentors: true
   field_categories: true
   field_compensation: true
   field_contact_email: true
@@ -161,6 +179,7 @@ hidden:
   field_student_qualifications: true
   field_student_ranks_applicable: true
   field_techniques_learned: true
+  field_use_contract: true
   field_why_lab: true
   langcode: true
   links: true

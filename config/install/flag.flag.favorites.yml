@@ -10,7 +10,6 @@ bundles:
   - project_round
 entity_type: node
 global: false
-weight: 0
 flag_short: 'Add to Favorites'
 flag_long: 'Add to Favorites'
 flag_message: ''
@@ -18,6 +17,7 @@ unflag_short: 'Remove from Favorites'
 unflag_long: 'Remove from Favorites'
 unflag_message: ''
 unflag_denied_text: ''
+weight: 0
 flag_type: 'entity:node'
 link_type: confirm_on_condition
 flagTypeConfig:

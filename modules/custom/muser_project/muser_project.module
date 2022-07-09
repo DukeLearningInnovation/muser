@@ -24,6 +24,7 @@ use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Environment;
 use Drupal\muser_project\GetApplicationCountText;
+use Drupal\views\ViewExecutable;
 
 define('MUSER_CONTRACT_ICON', '<i class="far fa-handshake"></i>');
 define('MUSER_STAR_ICON', '<i title="Mentor star" class="far fa-star"></i>');
@@ -132,7 +133,8 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
   if ($entity->getEntityTypeId() == 'node' && $entity->bundle() == 'project') {
 
     if ($view_mode == 'full') {
-      if ($entity->field_use_contract->value) {
+
+      if (_muser_system_contracts_enabled() && $entity->field_use_contract->value) {
         $build['field_use_contract'][0]['#markup'] = MUSER_CONTRACT_ICON . ' ' . t('This project will use a Mentor-Student contract.');
       }
       else {
@@ -299,7 +301,7 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
     }
   } // Show Application status and submitted?
 
-  if ($component = $display->getComponent('application_contract_link')) {
+  if (_muser_system_contracts_enabled() && $component = $display->getComponent('application_contract_link')) {
     $build['application_contract_link'] = muser_project_get_application_contract_link($entity);
     $build['application_contract_link']['#weight'] = $component['weight'];
   } // Show contract link?
@@ -309,7 +311,7 @@ function muser_project_entity_view(array &$build, EntityInterface $entity, Entit
     $build['project_info'] = [
       '#weight' => $component['weight'],
     ];
-    $contract_icon = ($project->field_use_contract->value) ? MUSER_CONTRACT_ICON . ' ' : '';
+    $contract_icon = (_muser_system_contracts_enabled() && $project->field_use_contract->value) ? MUSER_CONTRACT_ICON . ' ' : '';
     $starred_mentor_icon = ($project->getOwner()->field_has_star->value) ? MUSER_STAR_ICON . ' ' : '';
     $build['project_info']['#markup'] = '<h3 class="application__project-title">'
       . $contract_icon
@@ -604,9 +606,14 @@ function muser_project_round_in_period($round_nid, $period = 'posting', $allow_i
     'posting' => 'field_post_projects',
     'application' => 'field_apply',
     'acceptance' => 'field_accept_applications',
-    'contract' => 'field_sign_contracts',
-    'after' => 'field_sign_contracts',
+    'after' => 'field_accept_applications',
   ];
+
+  if (_muser_system_contracts_enabled()) {
+    $period_field['contract'] = 'field_sign_contracts';
+    $period_field['after'] = 'field_sign_contracts';
+  }
+
   if (empty($period_field[$period])) {
     return FALSE;
   }
@@ -618,23 +625,34 @@ function muser_project_round_in_period($round_nid, $period = 'posting', $allow_i
     return FALSE;
   }
 
+  $date_field = $round->get($field)->get(0);
+  if (empty($date_field) || empty($date_field->getValue())) {
+    // This can be the case when the contract fields are not filled out after
+    // switching from contracts disabled to enabled.
+    // If we want to see if the round is in a field that has no dates, it isn't.
+    if ($period === 'after') {
+      $date_field = $round->get('field_accept_applications')->get(0);
+    }
+    else {
+      return FALSE;
+    }
+  }
+  $field_data = $date_field->getValue();
+
   if ($period == 'before') {
     // Looking at "before" period (between round start and project posting).
     // Use start and end from separate fields.
-    $field_data = $round->get($field)->get(0)->getValue();
     $begining = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
-    $field_data = $round->get('field_post_projects')->get(0)->getValue();
-    $end = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
+    $field_data_end = $round->get('field_post_projects')->get(0)->getValue();
+    $end = new DrupalDateTime($field_data_end['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
   }
   elseif ($period == 'after') {
     // Looking at "after" period (after application acceptance).
     // Use start from acceptance field and current time+.
-    $field_data = $round->get($field)->get(0)->getValue();
     $begining = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
     $end = new DrupalDateTime('+1 day');
   }
   else {
-    $field_data = $round->get($field)->get(0)->getValue();
     $begining = new DrupalDateTime($field_data['value'], DateTimeItemInterface::STORAGE_TIMEZONE);
     $end = new DrupalDateTime($field_data['end_value'], DateTimeItemInterface::STORAGE_TIMEZONE);
   }
@@ -673,8 +691,12 @@ function muser_project_round_period_change_time($period = 'posting', $round_nid 
     'posting' => 'field_post_projects',
     'application' => 'field_apply',
     'acceptance' => 'field_accept_applications',
-    'contract' => 'field_sign_contracts',
   ];
+
+  if (_muser_system_contracts_enabled()) {
+    $period_field['contract'] = 'field_sign_contracts';
+  }
+
   if (empty($period_field[$period])) {
     return 0;
   }
@@ -710,7 +732,14 @@ function muser_project_round_period_change_time($period = 'posting', $round_nid 
 }
 
 function muser_project_get_current_period($round_nid) {
-  $periods = ['before', 'posting', 'application', 'acceptance', 'contract', 'after'];
+  $periods = ['before', 'posting', 'application', 'acceptance'];
+
+  if (_muser_system_contracts_enabled()) {
+    $periods[] = 'contract';
+  }
+
+  $periods[] = 'after';
+
   if ($round_nid) {
     foreach ($periods as $period) {
       if (muser_project_round_in_period($round_nid, $period, FALSE)) {
@@ -730,9 +759,9 @@ function muser_project_form_node_form_alter(&$form, FormStateInterface $form_sta
   }
   // No revision log for projects.
   $form['revision_information']['#access'] = FALSE;
+  $config = \Drupal::config('muser_system.settings');
 
-  if ($form_id == 'node_project_edit_form' || $form_id == 'node_project_form') {
-    $config = \Drupal::config('muser_system.settings');
+  if (($form_id == 'node_project_edit_form' || $form_id == 'node_project_form') && _muser_system_contracts_enabled()) {
 
     if ($new_contract_label = $config->get('contract_label')) {
       $form['field_use_contract']['widget']['value']['#title'] = check_markup($new_contract_label, 'basic_html');
@@ -749,6 +778,9 @@ function muser_project_form_node_form_alter(&$form, FormStateInterface $form_sta
     $form['field_use_contract']['#attributes']['data-contract-modal-text'] = $config->get('contract_modal_text') ? check_markup($config->get('contract_modal_text')['value'], $config->get('contract_modal_text')['format']) : "";
     $form['field_use_contract']['#attributes']['data-contract-modal-text-confirm'] = t('Enter the text "@enable_text" to accept.', ['@enable_text' => $form['field_use_contract']['#attributes']['data-contract-short-confirmation-text']]);
     $form['#attached']['library'][] = 'muser_project/contract-confirm';
+  }
+  else {
+    $form['field_use_contract']['#access'] = FALSE;
   }
 
   if ($form_id == 'node_project_form') {
@@ -780,6 +812,19 @@ function muser_project_form_node_form_alter(&$form, FormStateInterface $form_sta
 
 }
 
+/**
+ * Implements hook_views_pre_view().
+ */
+function muser_project_views_pre_view(ViewExecutable $view, $display_id, array &$args) {
+  if ($view->id() != 'administer_applications' && $view->id() != 'application_counts') {
+    return;
+  }
+  // Set the default for the Round to the current Round.
+  $filters = $view->display_handler->getOption('filters');
+  $filters['nid']['value']['value'] = muser_project_get_current_round();
+  $view->display_handler->setOption('filters', $filters);
+}
+
 function muser_project_form_views_exposed_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   switch ($form['#id']) {
     case (strpos($form['#id'], 'views-exposed-form-applications-page-') === 0):
@@ -797,14 +842,45 @@ function muser_project_form_views_exposed_form_alter(&$form, FormStateInterface 
       $form['mentor']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
       $form['student']['#description'] = NULL;
       $form['student']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
+      _muser_project_form_views_exposed_form_create_round_select($form);
       break;
     case 'views-exposed-form-application-counts-page-1':
       $form['uid']['#after_build'][] = '_muser_system_user_autocomplete_after_build';
+      _muser_project_form_views_exposed_form_create_round_select($form);
       break;
     default:
       return;
   }
 } // End muser_project_form_views_exposed_form_alter()
+
+function _muser_project_form_views_exposed_form_create_round_select(&$form) {
+
+  $rounds = &drupal_static(__FUNCTION__, []);
+
+  if (!$rounds) {
+    $query = \Drupal::database()->select('node_field_data', 'nfd');
+    $query->addField('nfd', 'nid');
+    $query->addField('nfd', 'title');
+    $query->addField('ic', 'field_is_current_value', ' is_current');
+    $query->join('node__field_start_date', 'sd', 'sd.entity_id = nfd.nid');
+    $query->join('node__field_is_current', 'ic', 'ic.entity_id = nfd.nid');
+    $query->condition('nfd.status', 1);
+    $query->orderBy('sd.field_start_date_value', 'DESC');
+    $results = $query->execute();
+    foreach ($results as $row) {
+      $title = $row->title;
+      if ($row->is_current) {
+        $title .= ' (' . t('Current') . ')';
+      }
+      $rounds[$row->nid] = $title;
+    }
+  } // Got rounds alrady?
+
+  $form['round']['#type'] = 'select';
+  $form['round']['#options'] = $rounds;
+  $form['round']['#size'] = 1;
+
+}
 
 function _muser_project_add_views_filters_code(&$form) {
   foreach ($form['#info'] as $item) {
@@ -907,7 +983,7 @@ function muser_project_preprocess_page_title(&$variables) {
   $route_match = \Drupal::service('current_route_match');
   if ($node = $route_match->getParameter('node')) {
     if (method_exists($node, 'bundle') && $node->bundle() == 'project') {
-      if ($node->field_use_contract->value) {
+      if (_muser_system_contracts_enabled() && $node->field_use_contract->value) {
         $variables['contract_icon'] = MUSER_CONTRACT_ICON . ' ';
       }
       if ($node->getOwner()->field_has_star->value) {
@@ -919,7 +995,7 @@ function muser_project_preprocess_page_title(&$variables) {
 
 function muser_project_preprocess_node(&$variables) {
   if ($variables['node']->bundle() == 'project') {
-    $variables['contract_icon'] = ($variables['node']->field_use_contract->value) ? MUSER_CONTRACT_ICON . ' ' : '';
+    $variables['contract_icon'] = (_muser_system_contracts_enabled() && $variables['node']->field_use_contract->value) ? MUSER_CONTRACT_ICON . ' ' : '';
     $variables['mentor_star_icon'] = ($variables['node']->getOwner()->field_has_star->value) ? MUSER_STAR_ICON . ' ' : '';
     if ($variables['view_mode'] == 'application') {
       $variables['attributes']['id'] = 'open__' . $variables['node']->id();
@@ -1230,11 +1306,10 @@ function muser_project_allow_flagging_access($operation, FlaggingInterface $flag
     case 'accept_contract':
       /** @var  \Drupal\node\Entity\Node $project */
       $project = muser_project_get_project_for_flagging($flagging);
-
       // Need to check round?
 //      $access = ($round && muser_project_round_in_period($round->id(), 'contract');
-
-      if ($project && $project->field_use_contract->value
+      if (_muser_system_contracts_enabled()
+        && $project && $project->field_use_contract->value
         && $flagging && $flagging->field_is_submitted->value
         && $flagging->field_status->value == 'accepted'
         && ($project->getOwnerId() == $account->id() || $flagging->getOwnerId() == $account->id())) {

@@ -1,0 +1,22 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_contract_start_studnt_mail
+    - node.type.round
+id: node.round.field_contract_start_studnt_mail
+field_name: field_contract_start_studnt_mail
+entity_type: node
+bundle: round
+label: 'Sign contracts start email sent (Student)'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'Yes'
+  off_label: 'No'
+field_type: boolean

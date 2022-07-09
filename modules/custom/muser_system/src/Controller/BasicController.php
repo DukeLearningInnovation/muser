@@ -3,6 +3,7 @@
 namespace Drupal\muser_system\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Link;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -10,6 +11,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\flag\Entity\Flagging;
 use Drupal\node\Entity\Node;
 use Drupal\node\NodeInterface;
+use Drupal\views\Views;
 
 /**
  * Controller for basic Muser pages.
@@ -170,6 +172,76 @@ class BasicController extends ControllerBase {
       return Flagging::load($fid);
     }
     return NULL;
+  }
+
+  /**
+   * Show reports landing page.
+   *
+   * @return array
+   *   Build array.
+   */
+  public function reports() {
+
+    $reports = [
+      [
+        'title' => $this->t('Applications'),
+        'view' => 'administer_applications',
+        'display' => 'page_1',
+        'export_display' => 'export',
+      ],
+      [
+        'title' => $this->t('Application counts'),
+        'view' => 'application_counts',
+        'display' => 'page_1',
+        'export_display' => 'export',
+      ],
+    ];
+
+    $report_links = [];
+    foreach ($reports as $report) {
+      $report_links[] = [
+        'link' => Link::createFromRoute($report['title'], 'view.' . $report['view'] . '.' . $report['display'])->toString(),
+        'export' => Link::createFromRoute($this->t('Download CSV'), 'view.' . $report['view'] . '.' . $report['export_display'])->toString(),
+      ];
+    } // Loop thru reports.
+
+    $round_links = [];
+
+    $view = Views::getView('rounds');
+    $view->setDisplay('page_1');
+    $view->setCurrentPage(0);
+    $view->render();
+    if ($view->result) {
+      foreach ($view->result as $row) {
+        $round = [
+          'name' => $row->_entity->label(),
+          'links' => [],
+        ];
+        if ($row->_entity->field_is_current->value) {
+          $round['name'] .= ' (' . $this->t('Current') . ')';
+        }
+
+        $options = [
+          'round' => $row->_entity->id(),
+        ];
+        foreach ($reports as $report) {
+          $round['links'][] = [
+            'link' => Link::createFromRoute($report['title'], 'view.' . $report['view'] . '.' . $report['display'], $options)->toString(),
+            'export' => Link::createFromRoute($this->t('CSV'), 'view.' . $report['view'] . '.' . $report['export_display'], $options)->toString(),
+          ];
+        } // Loop thru reports.
+
+        $round_links[] = $round;
+
+      } // Loop thru rows.
+    } // Got rounds>
+
+    return [
+      '#theme' => 'muser_reports',
+      '#report_links' => $report_links,
+      '#round_links' => $round_links,
+    ];
+
   }
 
 }

@@ -17,10 +17,9 @@ custom_text_color: ''
 custom_status_message_color: ''
 custom_error_message_color: ''
 custom_warning_message_color: ''
-custom_message_text_color: ''
-custom_text_over_primary_color: ''
-custom_text_over_secondary_color: ''
+logo_header_style: normal_header_normal_logo
 custom_message_status_text_color: ''
 custom_message_warning_text_color: ''
 custom_message_error_text_color: ''
-logo_header_style: normal_header_normal_logo
+custom_text_over_primary_color: ''
+custom_text_over_secondary_color: ''

@@ -1,0 +1,21 @@
+<h3>{{ 'Available reports'|t }}</h3>
+<ul>
+{% for report in report_links %}
+  <li>{{ report.link }} - <span class="csv-feed views-data-export-feed">{{ report.export }}</span></li>
+{% endfor %}
+</ul>
+
+{% if round_links %}
+  <h3>{{ 'Recent rounds'|t }}</h3>
+  <ul>
+    {% for round in round_links %}
+      <li>{{ round.name }}
+      {% for report in  round.links %}
+        - <span class="report-type">
+        {{ report.link }} <span class="csv-feed views-data-export-feed">[{{ report.export }}]</span>
+        </span>
+      {% endfor %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

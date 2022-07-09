@@ -15,11 +15,11 @@ plugin: muser_round_info_block
 settings:
   id: muser_round_info_block
   label: 'Muser round info block'
-  provider: muser_system
   label_display: '0'
+  provider: muser_system
 visibility:
   request_path:
     id: request_path
-    pages: '<front>'
     negate: false
     context_mapping: {  }
+    pages: '<front>'

@@ -10,8 +10,8 @@ id: node.project.field_why_lab
 field_name: field_why_lab
 entity_type: node
 bundle: project
-label: 'Why join this research group or lab?'
-description: 'Explain why this research group or lab is a particularly dynamic and interesting place to work. Why is this project important? What other research is ongoing?'
+label: 'What is the context and setting for this research?'
+description: 'Explain why this opportunity is important given the broader context for the research. Provide information about whether the opportunity is in a research group or lab or if it is an individual experience with a mentor (or both).'
 required: false
 translatable: false
 default_value: {  }

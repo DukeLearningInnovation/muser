@@ -9,10 +9,10 @@ field_name: field_resume
 entity_type: user
 type: file
 settings:
+  target_type: file
   display_field: false
   display_default: true
   uri_scheme: private
-  target_type: file
 module: file
 locked: false
 cardinality: 1

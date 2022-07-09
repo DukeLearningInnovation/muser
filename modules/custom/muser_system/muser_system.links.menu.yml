@@ -9,3 +9,9 @@ muser_system.email_settings:
   parent: muser_system.config
   description: 'Manage email settings for the Muser site.'
   route_name: muser_system.email_settings
+
+muser_system.reports:
+  title: 'Muser reports'
+  parent: system.admin_reports
+  description: 'View Muser site reports.'
+  route_name: muser_system.reports

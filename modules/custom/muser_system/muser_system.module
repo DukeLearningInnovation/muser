@@ -5,6 +5,7 @@
  * Contains muser_system.module.
  */
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
@@ -33,11 +34,53 @@ function muser_system_theme() {
         'title' => NULL,
         'dates' => NULL,
         'mentor_title' => NULL,
+        'show_contract_dates' => NULL,
         'student_title' => NULL,
       ],
       'template' => 'muser-round-info',
     ],
+    'muser_reports' => [
+      'variables' => [
+        'report_links' => NULL,
+        'round_links' => NULL,
+      ],
+      'template' => 'muser-reports',
+    ],
   ];
+}
+
+function _muser_system_contracts_enabled($check_dates_set = TRUE) {
+  $contracts_enabled = &drupal_static(__FUNCTION__);
+  $index = ($check_dates_set) ? 1 : 0;
+  if (!isset($contracts_enabled[$index])) {
+    $config = \Drupal::config('muser_system.settings');
+    $contracts_enabled[$index] = $config->get('contracts_enabled');
+    if ($contracts_enabled[$index] && $check_dates_set) {
+      // Contracts are enabled, but need to check that dates are set.
+      if ($current_round = muser_project_get_current_round(TRUE)) {
+        if (!$current_round->get('field_sign_contracts')->get(0)) {
+          // No dates set-- contracts can't be enabled.
+          $contracts_enabled[$index] = FALSE;
+        } // Contract dates set?
+      }
+      else {
+        // No round set-- contracts can't be enabled.
+        $contracts_enabled[$index] = FALSE;
+      } // Got a current round?
+    } // Need to check that dates are set?
+  }
+  return $contracts_enabled[$index];
+}
+
+function _muser_system_can_change_contracts_enabled() {
+  $can_change_contract_enabled = FALSE;
+  $current_round_nid = muser_project_get_current_round();
+  if ($period = muser_project_get_current_period($current_round_nid)) {
+    if ($period === "before" || $period === "after") {
+      $can_change_contract_enabled = TRUE;
+    }
+  }
+  return $can_change_contract_enabled;
 }
 
 /**
@@ -50,7 +93,7 @@ function muser_system_form_taxonomy_overview_terms_alter(&$form, FormStateInterf
   if (!$vocabulary || $vocabulary->id() != 'categories') {
     return;
   }
-  $form['#attached']['library'][] = 'muser_system/fontawesome-css';
+  $form['#attached']['library'][] = 'fontawesome_iconpicker_enhanced/fontawesome-css';
   foreach (Element::children($form['terms']) as $key) {
     /** @var Drupal\taxonomy\Entity\Term $term */
     $term = $form['terms'][$key]['#term'];
@@ -69,7 +112,7 @@ function muser_system_form_taxonomy_term_form_alter(&$form, FormStateInterface $
   if (!empty($form['field_icon'])) {
     // Use our own custom code for the fontawesome iconpicker.
     $form['field_icon']['widget'][0]['value']['#attached']['library'] = [
-      'muser_system/fontawesome-iconpicker'
+      'fontawesome_iconpicker_enhanced/fontawesome-iconpicker'
     ];
     $form['field_icon']['widget'][0]['value']['#attributes']['autocomplete'] = 'off';
   }
@@ -135,16 +178,26 @@ function muser_system_form_node_round_form_alter(&$form, FormStateInterface $for
   $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
   $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
   if (!\Drupal::service('settings')::get('manage_all_round_fields')) {
-    $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_review_apps_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_sign_contracts_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_sign_contracts_start_email']['widget']['value']['#disabled'] = TRUE;
+    _muser_system_form_node_round_edit_disable_email_fields($form);
   }
+
+  if (!_muser_system_contracts_enabled()) {
+    $form['field_sign_contracts']['#access'] = FALSE;
+
+    $form['field_contract_end_studnt_mail']['#access'] = FALSE;
+    $form['field_contract_end_mentor_mail']['#access'] = FALSE;
+    $form['field_contract_start_studnt_mail']['#access'] = FALSE;
+    $form['field_contract_start_mentor_mail']['#access'] = FALSE;
+  }
+
+  $form['contracts_warning']['#type'] = "markup";
+  if (_muser_system_contracts_enabled()) {
+    $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--enabled">' . t('Contracts are currently <strong>enabled</strong>. You will not be able to disable them once the round has started. If you don\'t want to use contracts, you can disable them on the <a href="@settings_page_link#edit-contracts-enabled" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+  }
+  else {
+    $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled">' . t('Contracts are currently <strong>disabled</strong>. You will not be able to enable them once the round has started. If you want to use contracts, you can enable them on the <a href="@settings_page_link#edit-contracts-enabled" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+  }
+
   $form['#validate'][] = 'muser_system_round_form_validate';
 }
 
@@ -157,15 +210,7 @@ function muser_system_form_node_round_edit_form_alter(&$form, FormStateInterface
   $form['field_is_current']['widget']['value']['#description'] = t('This value is set automatically based on the dates below.');
   if (!\Drupal::service('settings')::get('manage_all_round_fields')) {
     $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
-    $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_review_apps_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_sign_contracts_end_email']['widget']['value']['#disabled'] = TRUE;
-    $form['field_sign_contracts_start_email']['widget']['value']['#disabled'] = TRUE;
+    _muser_system_form_node_round_edit_disable_email_fields($form);
   }
   elseif (empty($form['field_is_current']['widget']['value']['#default_value'])) {
     // Only allow admins to un-set the "Is current" field because we need the
@@ -173,9 +218,62 @@ function muser_system_form_node_round_edit_form_alter(&$form, FormStateInterface
     // current round.
     $form['field_is_current']['widget']['value']['#disabled'] = TRUE;
   }
+
+  if (!_muser_system_contracts_enabled()) {
+    $form['field_sign_contracts']['#access'] = FALSE;
+
+    $form['field_contract_end_studnt_mail']['#access'] = FALSE;
+    $form['field_contract_end_mentor_mail']['#access'] = FALSE;
+    $form['field_contract_start_studnt_mail']['#access'] = FALSE;
+    $form['field_contract_start_mentor_mail']['#access'] = FALSE;
+  }
+
+  $form['contracts_warning']['#type'] = "markup";
+
+  $current_period_text = muser_project_get_current_period(muser_project_get_current_round());
+  if (_muser_system_contracts_enabled()) {
+    if (empty($current_period_text)) {
+      $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled contracts-warning--canchange">' . t('Contracts are currently <strong>enabled</strong>. You will not be able to disable them once the round has started. If you don\'t want to use contracts, you can disable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+    }
+    else {
+      if (_muser_system_can_change_contracts_enabled()) {
+        $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled contracts-warning--canchange">' . t('Contracts are currently <strong>enabled</strong>. You will not be able to disable them once the round has started. If you don\'t want to use contracts, you can disable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+      }
+      else {
+        $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--enabled contracts-warning--cannotchange">' . t('Contracts are currently <strong>enabled</strong>. You can not disable them as the current round is in the "@current_phase" phase. If you don\'t want to use contracts for future rounds, you can disable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a> once the current round is over.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString(), "@current_phase" => $current_period_text]) . '</div>';
+      }
+    }
+  }
+  else {
+    if (empty($current_period_text)) {
+      $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled contracts-warning--canchange">' . t('Contracts are currently <strong>disabled</strong>. You will not be able to enable them once the round has started. If you want to use contracts, you can enable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+    }
+    else {
+      if (_muser_system_can_change_contracts_enabled()) {
+        $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled contracts-warning--canchange">' . t('Contracts are currently <strong>disabled</strong>. You will not be able to enable them once the round has started. If you want to use contracts, you can enable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a>.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString()]) . '</div>';
+      }
+      else {
+        $form['contracts_warning']['#markup'] = '<div class="contracts-warning contracts-warning--disabled contracts-warning--cannotchange">' . t('Contracts are currently <strong>disabled</strong>. You can not enable them as the current round is in the "@current_phase" phase. If you want to use contracts for future rounds, you can enable them on the <a href="@settings_page_link#edit-contracts" target="_blank">Muser settings page</a> once the current round is over.', ['@settings_page_link' => \Drupal\Core\Url::fromRoute('muser_system.config')->toString(), "@current_phase" => $current_period_text]) . '</div>';
+      }
+    }
+  }
+
   $form['#validate'][] = 'muser_system_round_form_validate';
 }
 
+function _muser_system_form_node_round_edit_disable_email_fields(&$form) {
+  $form['field_post_projects_start_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_post_projects_end_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_review_apps_start_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_review_apps_end_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_after_round_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_accepted_student_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_rejected_student_email']['widget']['value']['#disabled'] = TRUE;
+  $form['field_contract_end_mentor_mail']['widget']['value']['#disabled'] = TRUE;
+  $form['field_contract_end_studnt_mail']['widget']['value']['#disabled'] = TRUE;
+  $form['field_contract_start_mentor_mail']['widget']['value']['#disabled'] = TRUE;
+  $form['field_contract_start_studnt_mail']['widget']['value']['#disabled'] = TRUE;
+}
 /**
  * Formats a name and email address so it can be used by mail().
  *
@@ -228,12 +326,17 @@ function muser_system_round_form_validate($form, FormStateInterface &$form_state
     }
   }
 
-  if ($contracts['value'] instanceof DrupalDateTime && $accept['end_value'] instanceof DrupalDateTime) {
-    // Accept period before Contracts  period.https://home.muser.duke.edu/
-    $d = $accept['end_value']->diff($contracts['value']);
-    if ($d->invert) {
-      $form_state->setErrorByName('field_sign_contracts', t('The Contract period cannot start until the Accept period ends.'));
+  if (_muser_system_contracts_enabled()) {
+    if ($contracts['value'] instanceof DrupalDateTime && $accept['end_value'] instanceof DrupalDateTime) {
+      // Accept period before Contracts period.
+      $d = $accept['end_value']->diff($contracts['value']);
+      if ($d->invert) {
+        $form_state->setErrorByName('field_sign_contracts', t('The Contract period cannot start until the Accept period ends.'));
+      }
     }
+  }
+  else {
+    $form_state->setValueForElement(["#parents" => ['field_sign_contracts']], [['value' => NULL, 'end_value' => NULL]]);
   }
 
   $nid = $form_state->getFormObject()->getEntity()->id();
@@ -376,6 +479,18 @@ function muser_system_set_current_round() {
         }
       } // Loop thru users.
     } // Loop thru fields.
+
+
+    $results = \Drupal::entityQuery('user')
+      ->condition('field_needs_review', 1, '<>')
+      ->execute();
+    foreach ($results as $uid) {
+      if ($account = User::load($uid)) {
+        $account->field_needs_review->value = 1;
+        $account->save();
+      }
+    } // Loop thru users.
+
   } // Was there a previous current round?
 
   return $new;
@@ -420,6 +535,9 @@ function muser_system_get_display_only_field($field_name, $label, $value, $label
 
 function muser_system_get_mentor_star(AccountInterface $account, $contract_star = FALSE) {
   if ($contract_star) {
+    if (!_muser_system_contracts_enabled()) {
+      return '';
+    }
     $field_name = 'field_has_contract_star';
     $class_prefix = 'mentor-contract-status-icon';
     $title = t('Contract star');
@@ -462,4 +580,52 @@ function muser_system_views_pre_render(ViewExecutable $view) {
       \Drupal::routeMatch()->getRouteObject()->setDefault('_title', $title);
     } // Got a title for the Blog?
   }
+
+  if (isset($view) && ($view->storage->id() == 'application_counts') && !_muser_system_contracts_enabled()) {
+    $view->display_handler->view->field['field_use_contract']->options['exclude'] = TRUE;
+    $view->display_handler->view->field['requires_contracts']->options['exclude'] = TRUE;
+  }
+
+  if (isset($view) && ($view->storage->id() == 'administer_projects') && !_muser_system_contracts_enabled()) {
+    $view->display_handler->view->filter['field_use_contract_value']->options['exposed'] = FALSE;
+    // todo do this in a hook_form alter
+  }
 }
+
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function muser_system_preprocess_node(&$variables) {
+  if ($variables['node']->bundle() == 'round') {
+    if (!_muser_system_contracts_enabled()) {
+      $variables['content']['field_sign_contracts']['#access'] = FALSE;
+
+      $variables['content']['field_contract_end_studnt_mail']['#access'] = FALSE;
+      $variables['content']['field_contract_end_mentor_mail']['#access'] = FALSE;
+      $variables['content']['field_contract_start_studnt_mail']['#access'] = FALSE;
+      $variables['content']['field_contract_start_mentor_mail']['#access'] = FALSE;
+    }
+  }
+}
+
+
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function muser_system_entity_extra_field_info() {
+  $extra = [];
+
+  $extra['node']['round']['form']['contracts_warning'] = [
+    'label' => t('Contracts Warning'),
+    'description' => t('A warning about the inability to change contract enabled status mid-round'),
+    'visible' => FALSE,
+  ];
+  return $extra;
+}
+
+
+//function muser_system_entity_edit(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+//
+//}

@@ -6,10 +6,10 @@ jquery_selector: 'select:visible'
 search_contains: false
 disable_search: false
 allow_single_deselect: false
-placeholder_text_multiple: 'Choose some options'
-placeholder_text_single: 'Choose an option'
-no_results_text: 'No results match'
 disabled_themes:
   bartik: '0'
   seven: '0'
 chosen_include: 2
+placeholder_text_multiple: 'Choose some options'
+placeholder_text_single: 'Choose an option'
+no_results_text: 'No results match'

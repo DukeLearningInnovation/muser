@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - muser_user
+  theme:
+    - muser_base
+id: muserreviewprofileblock
+theme: muser_base
+region: hero
+weight: 0
+provider: null
+plugin: muser_review_profile_block
+settings:
+  id: muser_review_profile_block
+  label: 'Muser review profile block'
+  label_display: '0'
+  provider: muser_user
+visibility: {  }

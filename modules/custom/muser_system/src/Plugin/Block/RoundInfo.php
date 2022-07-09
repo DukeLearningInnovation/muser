@@ -63,7 +63,7 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
 
     $build = [
       '#cache' => [
-        'tags' => ['current_round'],
+        'tags' => ['current_round', 'user.roles'],
       ],
     ];
     if ($round_nid = muser_project_get_current_round()) {
@@ -78,16 +78,45 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
           '#theme' => 'status_messages',
           '#message_list' => [
             'warning' => [
-              $this->t('There is no <em>current Round</em> set. You may <a href="@manage_url">manage Rounds</a> or <a href="@create_url">create a new Round</a>.', ['@manage_url' => $manage_url, '@create_url' => $create_url])
+              $this->t('There is no <em>current Round</em> set. You may <a href="@manage_url">manage Rounds</a> or <a href="@create_url">create a new Round</a>.', [
+                '@manage_url' => $manage_url,
+                '@create_url' => $create_url,
+              ]),
             ],
           ],
           '#cache' => [
-            'tags' => ['current_round'],
+            'tags' => ['current_round', 'user.roles'],
           ],
         ];
       }
       return $build;
     }
+
+    if (_muser_system_contracts_enabled(FALSE)) {
+      if ($this->currentUser->hasPermission('create round content')) {
+        if (!$round->get('field_sign_contracts')->get(0)) {
+          $update_url = Url::fromRoute('entity.node.edit_form', ['node' => $round->id()])
+            ->toString();
+          $build['contracts_error'] = [
+            '#theme' => 'status_messages',
+            '#message_list' => [
+              'error' => [
+                $this->t('Contracts are enabled, but contract dates are not set for the current Round. You should <a href="@update_url">update the current Round</a> to set the contract dates.', [
+                  '@update_url' => $update_url,
+                ]),
+              ],
+            ],
+            '#cache' => [
+              'tags' => [
+                'node:' . $round_nid,
+                'current_round',
+                'user.roles',
+              ],
+            ],
+          ];
+        } // Contract dates set?
+      } // Can they manage rounds?
+    } // Contracts enabled?
 
     $build[] = [
       '#theme' => 'muser_round_info',
@@ -95,10 +124,12 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
       '#dates' => $this->getDates($round),
       '#mentor_title' => $this->t('For Research Mentors'),
       '#student_title' => $this->t('For Students'),
+      '#show_contract_dates' => _muser_system_contracts_enabled(),
       '#cache' => [
         'tags' => [
           'node:' . $round_nid,
           'current_round',
+          'user.roles',
         ],
       ],
     ];
@@ -142,7 +173,10 @@ class RoundInfo extends BlockBase implements ContainerFactoryPluginInterface {
     $now = new DrupalDateTime();
 
     foreach ($fields as $field => $text) {
-      $values = $round->get($field)->get(0)->getValue();
+      if (!$date_field = $round->get($field)->get(0)) {
+        continue;
+      }
+      $values = $date_field->getValue();
       foreach (['value', 'end_value'] as $type) {
         $date = new DrupalDateTime($values[$type], DateTimeItemInterface::STORAGE_TIMEZONE);
         $date->setTimezone($user_tz);

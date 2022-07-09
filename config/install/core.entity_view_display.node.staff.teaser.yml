@@ -18,22 +18,24 @@ bundle: staff
 mode: teaser
 content:
   body:
-    label: hidden
     type: text_summary_or_trimmed
-    weight: 1
+    label: hidden
     settings:
       trim_length: 200
     third_party_settings: {  }
+    weight: 1
     region: content
   field_image:
     type: image
-    weight: 0
-    region: content
     label: hidden
     settings:
-      image_style: staff_headshot
       image_link: ''
+      image_style: staff_headshot
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   field_weight: true
   langcode: true

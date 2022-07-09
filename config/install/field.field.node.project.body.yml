@@ -11,7 +11,7 @@ field_name: body
 entity_type: node
 bundle: project
 label: 'Project description'
-description: 'Please provide an overview of your project. What is the goal of the research? What tasks and techniques will be utilized? How will students participate?<br/>Select the "Edit summary" link above to specify the short description shown on the <em>Projects</em> page. If not set, it will use a trimmed value of full description.'
+description: "Please provide an overview of your project. What is the goal of the research? What tasks and techniques will be utilized? How will students participate? Will this be a large group, small group, or individual project? What is the nature of the experience? Is this an experiment, observational study, unstructured exploration, a deep dive into literature, etc.?\r\n<br/>Select the \"Edit summary\" link above to specify the short description shown on the <em>Projects</em> page. If not set, it will use a trimmed value of full description."
 required: false
 translatable: true
 default_value: {  }

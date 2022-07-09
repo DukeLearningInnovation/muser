@@ -12,14 +12,14 @@ bundle: categories
 mode: default
 content:
   field_icon:
+    type: fontawesome_iconpicker
     weight: 1
+    region: content
     settings:
-      type: input_search
       size: 20
       placeholder: ''
+      type: input_search
     third_party_settings: {  }
-    type: fontawesome_iconpicker
-    region: content
   langcode:
     type: language_select
     weight: 2
@@ -37,10 +37,10 @@ content:
     third_party_settings: {  }
   status:
     type: boolean_checkbox
-    settings:
-      display_label: true
     weight: 100
     region: content
+    settings:
+      display_label: true
     third_party_settings: {  }
 hidden:
   description: true

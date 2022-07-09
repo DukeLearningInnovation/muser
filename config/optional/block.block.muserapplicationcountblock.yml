@@ -16,18 +16,18 @@ plugin: muser_application_count
 settings:
   id: muser_application_count
   label: 'Muser application count block'
-  provider: muser_user
   label_display: '0'
+  provider: muser_user
 visibility:
   request_path:
     id: request_path
-    pages: "/student/*/applications\r\n/projects"
     negate: false
     context_mapping: {  }
+    pages: "/student/*/applications\r\n/projects"
   user_role:
     id: user_role
-    roles:
-      student: student
     negate: false
     context_mapping:
       user: '@user.current_user_context:current_user'
+    roles:
+      student: student

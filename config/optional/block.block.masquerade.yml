@@ -14,7 +14,7 @@ plugin: masquerade
 settings:
   id: masquerade
   label: Masquerade
-  provider: masquerade
   label_display: visible
+  provider: masquerade
   show_unmasquerade_link: true
 visibility: {  }

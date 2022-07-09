@@ -147,6 +147,7 @@
 
   .contract-status__icon {
     font-size: $font-size + 4;
+    i,
     svg {
       opacity: 0.9;
       //transform: translateY(2px);
@@ -208,6 +209,12 @@
     color: #444;
     height: $line-height;
   }
+  i {
+    font-size: $icon-size - 6;
+    line-height: $line-height;
+    display: block;
+    color: #444;
+  }
   position: relative;
   .application-status__label {
     margin-left: $site-padding / 4;
@@ -237,28 +244,33 @@
   }
   &.application-status--submitted {
     color: $warning-color;
+    i,
     svg {
       color: $warning-color;
     }
   }
   &.application-status--accepted {
     color: $status-color;
+    i,
     svg {
       color: $status-color;
     }
   }
   &.application-status--rejected {
     //color: $error-color;
+    //i,
     //svg {
     //  color: $error-color;
     //}
     color: $text-color;
+    i,
     svg {
       color: #444;
     }
 
     @at-root .view-applications & {
       color: $error-color;
+      i,
       svg {
         color: $error-color;
       }
@@ -267,6 +279,7 @@
   &.application-status--in-review,
   &.application-status--in_review {
     color: $text-color;
+    i,
     svg {
       color: #444;
     }

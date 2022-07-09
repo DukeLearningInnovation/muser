@@ -2,42 +2,74 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.flagging.favorites.field_contract_date_mentor
+    - field.field.flagging.favorites.field_contract_date_student
+    - field.field.flagging.favorites.field_contract_signed_mentor
+    - field.field.flagging.favorites.field_contract_signed_student
     - field.field.flagging.favorites.field_essay
     - field.field.flagging.favorites.field_is_submitted
     - field.field.flagging.favorites.field_notification_sent
     - field.field.flagging.favorites.field_status
     - flag.flag.favorites
+  module:
+    - datetime
 id: flagging.favorites.default
 targetEntityType: flagging
 bundle: favorites
 mode: default
 content:
+  field_contract_date_mentor:
+    type: datetime_default
+    weight: 5
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_contract_date_student:
+    type: datetime_default
+    weight: 7
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_contract_signed_mentor:
+    type: boolean_checkbox
+    weight: 4
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  field_contract_signed_student:
+    type: boolean_checkbox
+    weight: 6
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_essay:
+    type: string_textarea
     weight: 0
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: string_textarea
-    region: content
   field_is_submitted:
+    type: boolean_checkbox
     weight: 1
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_notification_sent:
+    type: boolean_checkbox
     weight: 3
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_status:
+    type: options_select
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
 hidden: {  }

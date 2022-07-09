@@ -37,6 +37,15 @@ muser_system.settings:
     hero_block_mentor:
       label: 'Hero block text for Mentors'
       type: sequence
+    per_round_review_profile:
+      label: 'Show review profile pop-up?'
+      type: boolean
+    per_round_review_profile_text_student:
+      value: "Review profile pop-up content for students"
+      type: sequence
+    per_round_review_profile_text_mentor:
+      value: "Review profile pop-up content for mentors"
+      type: sequence
     application_essay_guidelines:
       label: 'Essay guidelines'
       type: sequence

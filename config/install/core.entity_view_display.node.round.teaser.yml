@@ -7,6 +7,10 @@ dependencies:
     - field.field.node.round.field_accepted_student_email
     - field.field.node.round.field_after_round_email
     - field.field.node.round.field_apply
+    - field.field.node.round.field_contract_end_mentor_mail
+    - field.field.node.round.field_contract_end_studnt_mail
+    - field.field.node.round.field_contract_start_mentor_mail
+    - field.field.node.round.field_contract_start_studnt_mail
     - field.field.node.round.field_is_current
     - field.field.node.round.field_num_app_per_student
     - field.field.node.round.field_post_projects
@@ -15,6 +19,7 @@ dependencies:
     - field.field.node.round.field_rejected_student_email
     - field.field.node.round.field_review_apps_end_email
     - field.field.node.round.field_review_apps_start_email
+    - field.field.node.round.field_sign_contracts
     - field.field.node.round.field_start_date
     - node.type.round
   module:
@@ -25,15 +30,19 @@ bundle: round
 mode: teaser
 content:
   links:
-    weight: 100
     settings: {  }
     third_party_settings: {  }
+    weight: 100
     region: content
 hidden:
   field_accept_applications: true
   field_accepted_student_email: true
   field_after_round_email: true
   field_apply: true
+  field_contract_end_mentor_mail: true
+  field_contract_end_studnt_mail: true
+  field_contract_start_mentor_mail: true
+  field_contract_start_studnt_mail: true
   field_is_current: true
   field_num_app_per_student: true
   field_post_projects: true
@@ -42,5 +51,6 @@ hidden:
   field_rejected_student_email: true
   field_review_apps_end_email: true
   field_review_apps_start_email: true
+  field_sign_contracts: true
   field_start_date: true
   langcode: true

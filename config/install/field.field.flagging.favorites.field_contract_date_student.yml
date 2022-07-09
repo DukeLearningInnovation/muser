@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.flagging.field_contract_date_student
+    - flag.flag.favorites
+  module:
+    - datetime
+id: flagging.favorites.field_contract_date_student
+field_name: field_contract_date_student
+entity_type: flagging
+bundle: favorites
+label: 'Contract date (Student)'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

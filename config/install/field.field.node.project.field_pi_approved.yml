@@ -9,7 +9,7 @@ field_name: field_pi_approved
 entity_type: node
 bundle: project
 label: 'Has the project director or principal investigator approved of this project?'
-description: 'Please do not post a project until everyone involved has approved the proposal.'
+description: 'If you (the mentor) are also the project director or PI, please check this box. If not, please do not post a project until a supervisor has approved of the project.'
 required: true
 translatable: false
 default_value:

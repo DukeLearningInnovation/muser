@@ -5,12 +5,14 @@ dependencies:
     - field.field.user.user.field_about_me
     - field.field.user.user.field_do_not_send_emails
     - field.field.user.user.field_first_name
+    - field.field.user.user.field_has_contract_star
     - field.field.user.user.field_has_star
     - field.field.user.user.field_how_hear_about
     - field.field.user.user.field_lab_affiliation
     - field.field.user.user.field_last_name
     - field.field.user.user.field_major
     - field.field.user.user.field_mentor_yesno
+    - field.field.user.user.field_needs_review
     - field.field.user.user.field_netid
     - field.field.user.user.field_programs
     - field.field.user.user.field_resume
@@ -30,16 +32,16 @@ third_party_settings:
         - field_last_name
         - field_how_hear_about
         - field_do_not_send_emails
+      label: 'Personal Information'
+      region: content
       parent_name: ''
       weight: 2
       format_type: fieldset
       format_settings:
-        description: ''
-        id: ''
         classes: ''
+        id: ''
+        description: ''
         required_fields: false
-      label: 'Personal Information'
-      region: content
     group_student_info:
       children:
         - field_yr_in_college
@@ -48,44 +50,45 @@ third_party_settings:
         - field_about_me
         - field_resume
         - field_transcript
+      label: 'Student Information'
+      region: content
       parent_name: ''
       weight: 3
       format_type: fieldset
       format_settings:
-        description: 'Please fill out all fields in order to apply for projects. This information will become part of your applications.'
-        id: ''
         classes: ''
+        id: ''
+        description: 'Please fill out all fields in order to apply for projects. This information will become part of your applications.'
         required_fields: false
-      label: 'Student Information'
-      region: content
     group_mentor_info:
       children:
         - field_netid
         - field_lab_affiliation
         - field_has_star
+        - field_has_contract_star
+      label: 'Mentor Information'
+      region: content
       parent_name: ''
       weight: 4
       format_type: fieldset
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: 'You only need to fill out these fields if you are a mentor.'
         required_fields: false
-      label: 'Mentor Information'
-      region: content
     group_login_information:
       children:
         - account
+      label: 'Login information'
+      region: content
       parent_name: ''
       weight: 1
       format_type: fieldset
       format_settings:
-        id: ''
         classes: ''
+        id: ''
         description: ''
         required_fields: true
-      label: 'Login information'
-      region: content
 id: user.user.default
 targetEntityType: user
 bundle: user
@@ -97,28 +100,35 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_about_me:
+    type: text_textarea
     weight: 5
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: text_textarea
-    region: content
   field_do_not_send_emails:
+    type: boolean_checkbox
     weight: 6
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_first_name:
+    type: string_textfield
     weight: 3
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
+  field_has_contract_star:
+    type: boolean_checkbox
+    weight: 7
     region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
   field_has_star:
     type: boolean_checkbox
     weight: 6
@@ -127,73 +137,73 @@ content:
       display_label: true
     third_party_settings: {  }
   field_how_hear_about:
+    type: options_buttons
     weight: 5
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_buttons
-    region: content
   field_lab_affiliation:
+    type: string_textfield
     weight: 5
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_last_name:
+    type: string_textfield
     weight: 4
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_major:
+    type: options_select
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_netid:
+    type: string_textfield
     weight: 4
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_programs:
+    type: options_buttons
     weight: 4
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_buttons
-    region: content
   field_resume:
+    type: file_generic
     weight: 6
+    region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-    region: content
-    type: file_generic
   field_transcript:
+    type: file_generic
     weight: 7
+    region: content
     settings:
       progress_indicator: throbber
     third_party_settings: {  }
-    type: file_generic
-    region: content
   field_user_type:
+    type: options_buttons
     weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_buttons
-    region: content
   field_yr_in_college:
+    type: options_buttons
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_buttons
-    region: content
   language:
     weight: 5
     region: content
@@ -202,6 +212,7 @@ content:
 hidden:
   contact: true
   field_mentor_yesno: true
+  field_needs_review: true
   google_analytics: true
   langcode: true
   path: true
