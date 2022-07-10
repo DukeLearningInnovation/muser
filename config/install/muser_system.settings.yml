@@ -36,7 +36,7 @@ application_status_in_review:
   value: "<p>Fully review these applicants, possibly including an interview. At this stage, mentors see applicant information. Before accepting applicants, mentors should contact students directly to ensure they are still available and interested.</p>\r\n"
   format: basic_html
 application_status_rejected:
-  value: "<p>These applications are rejected .</p>\r\n"
+  value: "<p>These applications are rejected.</p>\r\n"
   format: basic_html
 application_status_accepted:
   value: "<p>These applicants are accepted to the position.</p>\r\n"
