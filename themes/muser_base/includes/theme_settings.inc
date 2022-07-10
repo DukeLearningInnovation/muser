@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\File\FileSystemInterface;
 
 function _muser_base_form_system_theme_settings_alter(&$form, &$form_state, $form_id = NULL) {
   // Work-around for a core bug affecting admin themes. See issue #943212.
@@ -388,7 +389,7 @@ function muser_base_create_accent_css($values = NULL) {
   $site_css_dir = 'public://site-css/';
 
   $file_system = \Drupal::service('file_system');
-  $file_system->prepareDirectory($site_css_dir);
+  $file_system->prepareDirectory($site_css_dir, FileSystemInterface::CREATE_DIRECTORY);
   $file_system->saveData($css, $site_css_dir . 'site-variables.css', TRUE);
 }
 
