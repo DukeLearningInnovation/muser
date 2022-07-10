@@ -74,7 +74,9 @@ function _muser_system_contracts_enabled($check_dates_set = TRUE) {
 
 function _muser_system_can_change_contracts_enabled() {
   $can_change_contract_enabled = FALSE;
-  $current_round_nid = muser_project_get_current_round();
+  if (!$current_round_nid = muser_project_get_current_round()) {
+    return TRUE;
+  }
   if ($period = muser_project_get_current_period($current_round_nid)) {
     if ($period === "before" || $period === "after") {
       $can_change_contract_enabled = TRUE;
