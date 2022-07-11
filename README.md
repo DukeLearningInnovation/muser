@@ -20,19 +20,16 @@ The Muser site can be configured to send out emails automatically to:
 
 Muser uses a custom theme that allows you to select one of various pre-set color schemes or to choose the exact colors to match your school's color palette.
 
-## Cron jobs
-Set up the following cron jobs (update paths as needed):
+## Installation
+
+To install the site code, use the [muser-drupal-project](https://github.com/jaybeaton/muser-drupal-project) Composer project:
+
 ```
-#
-# Crontab entries for muser
-#
-
-# Check and set the current Round.
-* * * * * cd /app/web && drush muser_system:set-current-round > /dev/null 2>&1
-
-# Check for and send scheduled emails.
-* * * * * cd /app/web && drush muser_system:send-scheduled-emails > /dev/null 2>&1
-
-# Run queue_mail queue worker.
-*/5 * * * * cd /app/web && drush queue:run queue_mail > /dev/null 2>&1
+composer create-project jaybeaton/muser-drupal-project:9.x-dev some-dir --no-interaction
 ```
+
+This will download the Muser code along with Drupal core and all required contributed modules and libraries, and will apply all required patches.
+
+Then, install the Drupal Muser site by visiting your site in a browser and running through the Drupal installation steps.
+
+See the [README](https://github.com/jaybeaton/muser-drupal-project/blob/master/README.md) for more details.
